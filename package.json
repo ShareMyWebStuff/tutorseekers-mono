@@ -1,0 +1,12 @@
+{
+  "name": "tutorseekers-mono",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces":[
+    "apps/*",
+    "packages/*"
+  ],
+  "repository": "https://github.com/ShareMyWebStuff/tutorseekers-mono.git",
+  "author": "Dave Ferguson <dave@harmonydata.co.uk>",
+  "license": "MIT"
+}
