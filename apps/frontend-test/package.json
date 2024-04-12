@@ -1,0 +1,14 @@
+{
+  "name": "frontend-uk",
+  "packageManager": "yarn@4.1.1",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch --conditions=development index.ts",
+    "start": "tsc && node dist/index.js"
+  },
+  "dependencies": {
+    "@tutorseekers/logger": "workspace:^"
+  }
+}

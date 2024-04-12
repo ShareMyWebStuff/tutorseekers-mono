@@ -1,0 +1,803 @@
+{
+ "Resources": {
+  "uktutorseekersvpcD0714111": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.1.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "uk-tutorseekers-vpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/Resource"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet1Subnet8AD8B112": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "eu-west-2a",
+    "CidrBlock": "10.1.0.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "uk-tutorseekers-public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/Subnet"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTable6500A727": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/RouteTable"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTableAssociationAEAAAEF8": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTable6500A727"
+    },
+    "SubnetId": {
+     "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet1Subnet8AD8B112"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/RouteTableAssociation"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet1DefaultRoute5EBA728F": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "uktutorseekersvpcIGW63DB31DC"
+    },
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTable6500A727"
+    }
+   },
+   "DependsOn": [
+    "uktutorseekersvpcVPCGWE3D990E7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/DefaultRoute"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet2SubnetC42E0333": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "eu-west-2b",
+    "CidrBlock": "10.1.1.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "uk-tutorseekers-public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/Subnet"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableB7686843": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/RouteTable"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableAssociationCA15A9D8": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableB7686843"
+    },
+    "SubnetId": {
+     "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet2SubnetC42E0333"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/RouteTableAssociation"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerspublicSubnet2DefaultRoute4E1671E9": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "uktutorseekersvpcIGW63DB31DC"
+    },
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableB7686843"
+    }
+   },
+   "DependsOn": [
+    "uktutorseekersvpcVPCGWE3D990E7"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/DefaultRoute"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerslambdaSubnet1Subnet8478FE6B": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "eu-west-2a",
+    "CidrBlock": "10.1.2.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "uk-tutorseekers-lambda"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/Subnet"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerslambdaSubnet1RouteTable41106C23": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/RouteTable"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerslambdaSubnet1RouteTableAssociationBF68C6AE": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet1RouteTable41106C23"
+    },
+    "SubnetId": {
+     "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet1Subnet8478FE6B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/RouteTableAssociation"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerslambdaSubnet2SubnetE3273F2F": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "eu-west-2b",
+    "CidrBlock": "10.1.3.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "uk-tutorseekers-lambda"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/Subnet"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerslambdaSubnet2RouteTable54EF7944": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/RouteTable"
+   }
+  },
+  "uktutorseekersvpcuktutorseekerslambdaSubnet2RouteTableAssociationAA1509C7": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet2RouteTable54EF7944"
+    },
+    "SubnetId": {
+     "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet2SubnetE3273F2F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/RouteTableAssociation"
+   }
+  },
+  "uktutorseekersvpcuktutorseekersdatabaseSubnet1SubnetA4452D1E": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "eu-west-2a",
+    "CidrBlock": "10.1.4.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "uk-tutorseekers-database"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/Subnet"
+   }
+  },
+  "uktutorseekersvpcuktutorseekersdatabaseSubnet1RouteTable9869FDF5": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/RouteTable"
+   }
+  },
+  "uktutorseekersvpcuktutorseekersdatabaseSubnet1RouteTableAssociationFB865280": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet1RouteTable9869FDF5"
+    },
+    "SubnetId": {
+     "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet1SubnetA4452D1E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/RouteTableAssociation"
+   }
+  },
+  "uktutorseekersvpcuktutorseekersdatabaseSubnet2SubnetAC605535": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "eu-west-2b",
+    "CidrBlock": "10.1.5.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "uk-tutorseekers-database"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/Subnet"
+   }
+  },
+  "uktutorseekersvpcuktutorseekersdatabaseSubnet2RouteTableA653DFA5": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/RouteTable"
+   }
+  },
+  "uktutorseekersvpcuktutorseekersdatabaseSubnet2RouteTableAssociation4F13F35C": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet2RouteTableA653DFA5"
+    },
+    "SubnetId": {
+     "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet2SubnetAC605535"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/RouteTableAssociation"
+   }
+  },
+  "uktutorseekersvpcIGW63DB31DC": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "uk-tutorseekers-vpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/IGW"
+   }
+  },
+  "uktutorseekersvpcVPCGWE3D990E7": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "uktutorseekersvpcIGW63DB31DC"
+    },
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/VPCGW"
+   }
+  },
+  "uktutorseekersvpcRestrictDefaultSecurityGroupCustomResource1A745700": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "uktutorseekersvpcD0714111",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": "216211142709"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "uktutorseekersvpctutorseekersS3Gateway3AABD430": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "RouteTableIds": [
+     {
+      "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet1RouteTable9869FDF5"
+     },
+     {
+      "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet2RouteTableA653DFA5"
+     }
+    ],
+    "ServiceName": {
+     "Fn::Join": [
+      "",
+      [
+       "com.amazonaws.",
+       {
+        "Ref": "AWS::Region"
+       },
+       ".s3"
+      ]
+     ]
+    },
+    "VpcEndpointType": "Gateway",
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/uk-tutorseekers-vpc/tutorseekers-S3-Gateway/Resource"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:aws:ec2:eu-west-2:216211142709:security-group/",
+             {
+              "Fn::GetAtt": [
+               "uktutorseekersvpcD0714111",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-216211142709-eu-west-2",
+     "S3Key": "ee7de53d64cc9d6248fa6aa550f92358f6c907b5efd6f3298aeab1b5e7ea358a.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.ee7de53d64cc9d6248fa6aa550f92358f6c907b5efd6f3298aeab1b5e7ea358a",
+    "aws:asset:property": "Code"
+   }
+  },
+  "tutorseekersuklambdasgBB3A4F07": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "uk lambda security group",
+    "GroupName": "tutorseekers-uk-lambda-sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "uk"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-uk-lambda-sg"
+     },
+     {
+      "Key": "Site",
+      "Value": "tutorseekers"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/tutorseekers-uk-lambda-sg/Resource"
+   }
+  },
+  "tutorseekersuknextsg62EA3A7C": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "uk next security group",
+    "GroupName": "tutorseekers-uk-next-sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "uk next allows http access from anywhere",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     },
+     {
+      "CidrIpv6": "::/0",
+      "Description": "uk next allows http access from anywhere",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "uk next allows https access from anywhere",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     },
+     {
+      "CidrIpv6": "::/0",
+      "Description": "uk next allows https access from anywhere",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "uk next allows nginx access from anywhere",
+      "FromPort": 3000,
+      "IpProtocol": "tcp",
+      "ToPort": 3000
+     },
+     {
+      "CidrIpv6": "::/0",
+      "Description": "uk next allows nginx access from anywhere",
+      "FromPort": 3000,
+      "IpProtocol": "tcp",
+      "ToPort": 3000
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "uk next allows SSH access from anywhere",
+      "FromPort": 22,
+      "IpProtocol": "tcp",
+      "ToPort": 22
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "uk"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-uk-next-sg"
+     },
+     {
+      "Key": "Site",
+      "Value": "tutorseekers"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/tutorseekers-uk-next-sg/Resource"
+   }
+  },
+  "tutorseekersukdatabasesg454BC404": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "uk database security group",
+    "GroupName": "tutorseekers-uk-database-sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Environment",
+      "Value": "uk"
+     },
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-uk-database-sg"
+     },
+     {
+      "Key": "Site",
+      "Value": "tutorseekers"
+     }
+    ],
+    "VpcId": {
+     "Ref": "uktutorseekersvpcD0714111"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/tutorseekers-uk-database-sg/Resource"
+   }
+  },
+  "tutorseekersukdatabasesgfromtutorseekerslclukvpctutorseekersukdatabasesg314A33FB3306B996CBB9": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "uk lambda access to the database group",
+    "FromPort": 3306,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdatabasesg454BC404",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdatabasesg454BC404",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3306
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/tutorseekers-uk-database-sg/from tutorseekerslclukvpctutorseekersukdatabasesg314A33FB:3306"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/32OQW6DQAxFz5L9MCVUPQBFVZQdgoptZQaHOgEPGntAUZS7V21RWLUr+z1/2c7s/vnFpjtYJHHdJRmotbdawV0MLPKBLrO3ZnKmOHFTFqaM7UCuji2jfrutq3xUfId2wM1vLhfxjkDJ8yNsykAzKG47jqwYGPUAigtc16Mr5argPkdkNatpJvfG3eSJdY0+sEYXA+n1EHycfh76Vxy5DyhyNxWKj8GhKaKoHzc88R+jMviZOgyvIGhyEdRaoSfu74Z9h/YsT3OW2n1q091ZiJIQWWlEW/3WL87bYQWBAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-lcl-uk-vpc/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

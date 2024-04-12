@@ -1,0 +1,198 @@
+{
+ "Resources": {
+  "tutorseekersukcertificatecameronguybizF97C50D2": {
+   "Type": "AWS::CertificateManager::Certificate",
+   "Properties": {
+    "DomainName": "cameronguy.biz",
+    "DomainValidationOptions": [
+     {
+      "DomainName": "cameronguy.biz",
+      "HostedZoneId": "Z07773822Z0KFUEH6BEYR"
+     }
+    ],
+    "SubjectAlternativeNames": [
+     "*.cameronguy.biz"
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-uk-certificate-cameronguy-biz"
+     }
+    ],
+    "ValidationMethod": "DNS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/tutorseekers-uk-certificate-cameronguy-biz/Resource"
+   }
+  },
+  "tutorseekersukapidevcameronguybizCE1DE447": {
+   "Type": "AWS::ApiGatewayV2::DomainName",
+   "Properties": {
+    "DomainName": "api-dev.cameronguy.biz",
+    "DomainNameConfigurations": [
+     {
+      "CertificateArn": {
+       "Ref": "tutorseekersukcertificatecameronguybizF97C50D2"
+      },
+      "EndpointType": "REGIONAL"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/tutorseekers-uk-api-dev-cameronguy-biz/Resource"
+   }
+  },
+  "tutorseekersukapistgcameronguybiz9533DB39": {
+   "Type": "AWS::ApiGatewayV2::DomainName",
+   "Properties": {
+    "DomainName": "api-stg.cameronguy.biz",
+    "DomainNameConfigurations": [
+     {
+      "CertificateArn": {
+       "Ref": "tutorseekersukcertificatecameronguybizF97C50D2"
+      },
+      "EndpointType": "REGIONAL"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/tutorseekers-uk-api-stg-cameronguy-biz/Resource"
+   }
+  },
+  "tutorseekersukapiprdcameronguybizEF9FC5C7": {
+   "Type": "AWS::ApiGatewayV2::DomainName",
+   "Properties": {
+    "DomainName": "api.cameronguy.biz",
+    "DomainNameConfigurations": [
+     {
+      "CertificateArn": {
+       "Ref": "tutorseekersukcertificatecameronguybizF97C50D2"
+      },
+      "EndpointType": "REGIONAL"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/tutorseekers-uk-api-prd-cameronguy-biz/Resource"
+   }
+  },
+  "tutorseekersukapidevroute53cameronguybiz33B54EA8": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "tutorseekersukapidevcameronguybizCE1DE447",
+       "RegionalDomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "tutorseekersukapidevcameronguybizCE1DE447",
+       "RegionalHostedZoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z07773822Z0KFUEH6BEYR",
+    "Name": "api-dev.cameronguy.biz.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/tutorseekers-uk-api-dev-route53-cameronguy-biz/Resource"
+   }
+  },
+  "tutorseekersukapistgroute53cameronguybizB4BD1FFF": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "tutorseekersukapistgcameronguybiz9533DB39",
+       "RegionalDomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "tutorseekersukapistgcameronguybiz9533DB39",
+       "RegionalHostedZoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z07773822Z0KFUEH6BEYR",
+    "Name": "api-stg.cameronguy.biz.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/tutorseekers-uk-api-stg-route53-cameronguy-biz/Resource"
+   }
+  },
+  "tutorseekersukapiprdroute53cameronguybiz500F0506": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "tutorseekersukapiprdcameronguybizEF9FC5C7",
+       "RegionalDomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "tutorseekersukapiprdcameronguybizEF9FC5C7",
+       "RegionalHostedZoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z07773822Z0KFUEH6BEYR",
+    "Name": "api.cameronguy.biz.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/tutorseekers-uk-api-prd-route53-cameronguy-biz/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OTQqDMBCFz+I+jlFx32LXXegByjSONloTSaJSQu5eREFX74c3fJOBT/MCeISrjUUzxF/5Bl87FAOryOrZCGK42pcXZJxspUBHIyrsyIAvz46VrbrEwHCSHTpa8bdkULbqoUeU6okjMaNnR0UO/l6R0KbZbndXkwthjzs7sJTnkMb4nT4IPLodfyabXhHH4qQEpnRD0NtkyTikHHjUWyljMysnR4Jq1z855CcTAQEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz--setup-domains-and-certificates/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

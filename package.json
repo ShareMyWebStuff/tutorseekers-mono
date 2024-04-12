@@ -1,12 +1,23 @@
 {
-  "name": "tutorseekers-mono",
-  "version": "1.0.0",
+  "name": "tutorseekers",
+  "packageManager": "yarn@4.1.1",
   "private": true,
-  "workspaces":[
+  "main": "index.js",
+  "type": "module",
+  "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "repository": "https://github.com/ShareMyWebStuff/tutorseekers-mono.git",
-  "author": "Dave Ferguson <dave@harmonydata.co.uk>",
-  "license": "MIT"
+  "scripts": {
+    "build:all": "yarn workspaces foreach build",
+    "clean:all": "yarn workspaces foreach clean",
+    "start": "yarn --cwd apps/frontend-test start",
+    "dev": "yarn --cwd apps/frontend-uk dev"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint": "^8.33.0",
+    "typescript": "^5.4.4"
+  }
 }

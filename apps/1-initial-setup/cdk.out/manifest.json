@@ -1,0 +1,77 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "tutorseekers-cameronguy-biz-create-domains-certificate.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "tutorseekers-cameronguy-biz-create-domains-certificate.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "tutorseekers-cameronguy-biz-create-domains-certificate": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://216211142709/eu-west-2",
+      "properties": {
+        "templateFile": "tutorseekers-cameronguy-biz-create-domains-certificate.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-deploy-role-216211142709-eu-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-cfn-exec-role-216211142709-eu-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-216211142709-eu-west-2/9a79236d63b50f7dffa919fce8633c4018587d22832fad0db77306d51ee5a425.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "tutorseekers-cameronguy-biz-create-domains-certificate.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-lookup-role-216211142709-eu-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "tutorseekers-cameronguy-biz-create-domains-certificate.assets"
+      ],
+      "metadata": {
+        "/tutorseekers-cameronguy-biz-create-domains-certificate/tutorseekers-uk-certificate-cameronguy-biz/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukcertificatecameronguybizF97C50D2"
+          }
+        ],
+        "/tutorseekers-cameronguy-biz-create-domains-certificate/tutorseekers-uk-certificate-cameronguy-biz-arn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukcertificatecameronguybizarn"
+          }
+        ],
+        "/tutorseekers-cameronguy-biz-create-domains-certificate/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/tutorseekers-cameronguy-biz-create-domains-certificate/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/tutorseekers-cameronguy-biz-create-domains-certificate/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "tutorseekers-cameronguy-biz-create-domains-certificate"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

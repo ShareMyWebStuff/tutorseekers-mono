@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es2021",
+    "types": ["node"],
+    "lib": ["es2019"],
+    "rootDir": ".",
+    "outDir": "dist"
+  },
+  "references": [{ "path": "../../packages/project-config" }]
+}

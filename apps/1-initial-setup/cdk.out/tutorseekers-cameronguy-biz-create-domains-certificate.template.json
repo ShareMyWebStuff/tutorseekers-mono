@@ -1,0 +1,82 @@
+{
+ "Resources": {
+  "tutorseekersukcertificatecameronguybizF97C50D2": {
+   "Type": "AWS::CertificateManager::Certificate",
+   "Properties": {
+    "DomainName": "cameronguy.biz",
+    "DomainValidationOptions": [
+     {
+      "DomainName": "cameronguy.biz",
+      "HostedZoneId": "Z07773822Z0KFUEH6BEYR"
+     }
+    ],
+    "SubjectAlternativeNames": [
+     "*.cameronguy.biz"
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-uk-certificate-cameronguy-biz"
+     }
+    ],
+    "ValidationMethod": "DNS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz-create-domains-certificate/tutorseekers-uk-certificate-cameronguy-biz/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02MQQ6CQAxFz8J+pg4YT8ABTPAAppZiCjKYaUcWhLsbQgyu3n9/8SoozxcIBc7qqR38Sx6w3AxpcA3rlBOxw1nvxMmkE0LjESM+OcFSH5+ru/in6+bXbO9s2/qVVhenlqHX06cKUAYIRa8iPuVoMjI0O7/CEgvulAAAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-cameronguy-biz-create-domains-certificate/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "tutorseekersukcertificatecameronguybizarn": {
+   "Value": {
+    "Ref": "tutorseekersukcertificatecameronguybizF97C50D2"
+   },
+   "Export": {
+    "Name": "tutorseekers-uk-certificate-cameronguy-biz-arn"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
