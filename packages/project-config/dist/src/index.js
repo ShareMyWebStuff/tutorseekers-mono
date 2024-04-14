@@ -15,4 +15,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./config"), exports);
+__exportStar(require("./get-certificate-regions"), exports);
+__exportStar(require("./get-vpc-regions"), exports);
 //# sourceMappingURL=index.js.map

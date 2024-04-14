@@ -6,8 +6,8 @@ import { App } from "aws-cdk-lib";
  */
 export const getParameters = (app: App) => {
   // Read in the command line configurations
-  const stage = app.node.tryGetContext("stage");
-  let region = app.node.tryGetContext("region");
+  const stage: string = app.node.tryGetContext("stage");
+  let region: string = app.node.tryGetContext("region");
 
   if (!region || !["all", "uk", "usa", "ie"].includes(region)) {
     console.log("");

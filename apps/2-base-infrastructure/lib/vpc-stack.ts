@@ -12,7 +12,6 @@ import { createVPC, createSecurityGroup } from "@shared/aws-helper-fns";
 
 export class VpcStack extends Stack {
   public readonly vpc: Vpc;
-  // public readonly frontendSG: SecurityGroup;
   public readonly lambdaSG: SecurityGroup;
   public readonly databaseSG: SecurityGroup;
   public readonly nextSG: SecurityGroup;
@@ -22,9 +21,13 @@ export class VpcStack extends Stack {
     id: string,
     prefix: string,
     env: string,
+    frontend: boolean,
+    backend: boolean,
     props?: StackProps,
   ) {
     super(scope, id, props);
+
+    console.log("VPC creating ...");
 
     // this.vpc = new Vpc(this, 'VPC', {
     //   cidr: '10.0.0.0/16',
@@ -39,14 +42,17 @@ export class VpcStack extends Stack {
     // // maxAzs 2
     this.vpc = createVPC(this, prefix, env);
 
-    this.vpc.addGatewayEndpoint(prefix + "-S3-Gateway", {
-      service: GatewayVpcEndpointAwsService.S3,
-      subnets: [
-        {
-          subnetType: SubnetType.PRIVATE_ISOLATED,
-        },
-      ],
-    });
+    // Allow S3 endpoint to the VPC if backend
+    if (backend) {
+      this.vpc.addGatewayEndpoint(prefix + "-S3-Gateway", {
+        service: GatewayVpcEndpointAwsService.S3,
+        subnets: [
+          {
+            subnetType: SubnetType.PRIVATE_ISOLATED,
+          },
+        ],
+      });
+    }
 
     //
     // this.vpc.addInterfaceEndpoint("SecretsManagerEndpoint", {
@@ -67,76 +73,84 @@ export class VpcStack extends Stack {
     //   ],
     // });
 
+    console.log("Here 1");
     const lambdaSG = createSecurityGroup(this, this.vpc, env, prefix, {
       secGrpName: prefix + `-${env}-lambda-sg`,
       secGrpDesc: `${env} lambda security group`,
       ingress: [],
     });
 
-    // buildConfig.nextSG =
-    const nextSG = createSecurityGroup(this, this.vpc, env, prefix, {
-      secGrpName: prefix + `-${env}-next-sg`,
-      secGrpDesc: `${env} next security group`,
-      ingress: [
-        {
-          peer: Peer.anyIpv4(),
-          port: Port.tcp(80),
-          description: `${env} next allows http access from anywhere`,
-        },
-        {
-          peer: Peer.anyIpv6(),
-          port: Port.tcp(80),
-          description: `${env} next allows http access from anywhere`,
-        },
-        {
-          peer: Peer.anyIpv4(),
-          port: Port.tcp(443),
-          description: `${env} next allows https access from anywhere`,
-        },
-        {
-          peer: Peer.anyIpv6(),
-          port: Port.tcp(443),
-          description: `${env} next allows https access from anywhere`,
-        },
-        {
-          peer: Peer.anyIpv4(),
-          port: Port.tcp(3000),
-          description: `${env} next allows nginx access from anywhere`,
-        },
-        {
-          peer: Peer.anyIpv6(),
-          port: Port.tcp(3000),
-          description: `${env} next allows nginx access from anywhere`,
-        },
-        {
-          peer: Peer.anyIpv4(),
-          port: Port.tcp(22),
-          description: `${env} next allows SSH access from anywhere`,
-        },
-      ],
-    });
+    if (frontend) {
+      console.log("Here 2");
+      // const nextSG =
+      createSecurityGroup(this, this.vpc, env, prefix, {
+        secGrpName: prefix + `-${env}-next-sg`,
+        secGrpDesc: `${env} next security group`,
+        ingress: [
+          {
+            peer: Peer.anyIpv4(),
+            port: Port.tcp(80),
+            description: `${env} next allows http access from anywhere`,
+          },
+          {
+            peer: Peer.anyIpv6(),
+            port: Port.tcp(80),
+            description: `${env} next allows http access from anywhere`,
+          },
+          {
+            peer: Peer.anyIpv4(),
+            port: Port.tcp(443),
+            description: `${env} next allows https access from anywhere`,
+          },
+          {
+            peer: Peer.anyIpv6(),
+            port: Port.tcp(443),
+            description: `${env} next allows https access from anywhere`,
+          },
+          {
+            peer: Peer.anyIpv4(),
+            port: Port.tcp(3000),
+            description: `${env} next allows nginx access from anywhere`,
+          },
+          {
+            peer: Peer.anyIpv6(),
+            port: Port.tcp(3000),
+            description: `${env} next allows nginx access from anywhere`,
+          },
+          {
+            peer: Peer.anyIpv4(),
+            port: Port.tcp(22),
+            description: `${env} next allows SSH access from anywhere`,
+          },
+        ],
+      });
+    }
 
-    const databaseSG = createSecurityGroup(this, this.vpc, env, prefix, {
-      secGrpName: prefix + `-${env}-database-sg`,
-      secGrpDesc: `${env} database security group`,
-      ingress: [
-        {
-          peer: this.lambdaSG,
-          port: Port.tcp(3306),
-          description: `${env} lambda access to the database group`,
-        },
-        {
-          peer: this.nextSG,
-          port: Port.tcp(3306),
-          description: `${env} frontend access to the database`,
-        },
-        {
-          peer: null,
-          port: Port.tcp(3306),
-          description: `${env} loop back for database group`,
-        },
-      ],
-    });
+    if (backend) {
+      console.log("Here 3");
+      // const databaseSG =
+      createSecurityGroup(this, this.vpc, env, prefix, {
+        secGrpName: prefix + `-${env}-database-sg`,
+        secGrpDesc: `${env} database security group`,
+        ingress: [
+          {
+            peer: this.lambdaSG,
+            port: Port.tcp(3306),
+            description: `${env} lambda access to the database group`,
+          },
+          {
+            peer: this.nextSG,
+            port: Port.tcp(3306),
+            description: `${env} frontend access to the database`,
+          },
+          {
+            peer: null,
+            port: Port.tcp(3306),
+            description: `${env} loop back for database group`,
+          },
+        ],
+      });
+    }
 
     // buildConfig.createdVPCs.push({
     //   region: buildConfig.region,

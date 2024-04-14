@@ -1130,9 +1130,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tutorseekers/base-infrastructure@workspace:apps/base-infrastructure":
+"@tutorseekers/base-infrastructure@workspace:apps/2-base-infrastructure":
   version: 0.0.0-use.local
-  resolution: "@tutorseekers/base-infrastructure@workspace:apps/base-infrastructure"
+  resolution: "@tutorseekers/base-infrastructure@workspace:apps/2-base-infrastructure"
   dependencies:
     "@aws-sdk/types": "npm:^3.535.0"
     "@shared/aws-helper-fns": "workspace:^"
@@ -1151,9 +1151,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@tutorseekers/frontend-deploy@workspace:apps/frontend-deploy":
+"@tutorseekers/frontend-deploy@workspace:apps/4-frontend-deploy":
   version: 0.0.0-use.local
-  resolution: "@tutorseekers/frontend-deploy@workspace:apps/frontend-deploy"
+  resolution: "@tutorseekers/frontend-deploy@workspace:apps/4-frontend-deploy"
   dependencies:
     "@aws-sdk/types": "npm:^3.535.0"
     "@shared/aws-helper-fns": "workspace:^"
@@ -1172,9 +1172,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@tutorseekers/initial-setup@workspace:apps/initial-setup":
+"@tutorseekers/initial-setup@workspace:apps/1-initial-setup":
   version: 0.0.0-use.local
-  resolution: "@tutorseekers/initial-setup@workspace:apps/initial-setup"
+  resolution: "@tutorseekers/initial-setup@workspace:apps/1-initial-setup"
   dependencies:
     "@aws-sdk/types": "npm:^3.535.0"
     "@shared/aws-helper-fns": "workspace:^"
@@ -3571,24 +3571,6 @@ __metadata:
   resolution: "frontend-uk@workspace:apps/frontend-test"
   dependencies:
     "@tutorseekers/logger": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
-"frontend1@workspace:apps/frontend1":
-  version: 0.0.0-use.local
-  resolution: "frontend1@workspace:apps/frontend1"
-  dependencies:
-    "@types/node": "npm:^20"
-    "@types/react": "npm:^18"
-    "@types/react-dom": "npm:^18"
-    eslint: "npm:^8"
-    eslint-config-next: "npm:14.2.0"
-    next: "npm:14.2.0"
-    postcss: "npm:^8"
-    react: "npm:^18"
-    react-dom: "npm:^18"
-    tailwindcss: "npm:^3.4.1"
-    typescript: "npm:^5"
   languageName: unknown
   linkType: soft
 

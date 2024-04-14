@@ -15,56 +15,40 @@ export declare enum Stage {
 }
 /**
  * Define the regions this project is deployed too.
- *
  */
-export declare const REGIONS: {
-    uk: {
-        region: string;
-        awsRegion: string;
-    };
-    ie: {
+type T_REGIONS = {
+    [key: string]: {
         region: string;
         awsRegion: string;
     };
 };
-export declare const DOMAINS: {
-    domainName: string;
-    deployRegion: string;
-}[];
+export declare const REGIONS: T_REGIONS;
 /**
- * Define the VPC's we need to create
- *
- * region      - look up in the REGIONS constant
- * description - description used in AWS to descrtibe the VPC
+ * Define the domain names we are using
  */
-export declare const VPCS: {
-    uk: {
-        region: string;
+type T_DOMAINS = {
+    [key: number]: {
+        id: number;
+        domainName: string;
         description: string;
     };
 };
-/**
- * Defines the backends we need to create
- */
-export declare const BACKENDS: {
-    uk: {
-        region: string;
-        domain: string;
-    }[];
-};
-/**
- * Defines the frontends and details the backend the frontend connects too
- */
-export declare const FRONTENDS: {
-    uk: {
-        region: string;
-        repo: string;
-        setup: {
-            frontendDomain: string;
+export declare const DOMAINS: T_DOMAINS;
+type T_WEBSITE = {
+    [key: string]: {
+        frontend: {
+            name: string;
+            subDomain: null;
+            domainNameId: number;
+            region: string;
             backend: {
-                domain: string;
+                name: string;
+                subDomain: string;
+                domainNameId: number;
                 region: string;
-            };
+            }[];
         }[];
     };
 };
+export declare const WEBSITE_SETUP: T_WEBSITE;
+export {};

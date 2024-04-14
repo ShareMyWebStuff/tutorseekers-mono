@@ -1,0 +1,20 @@
+{
+  "version": "36.0.0",
+  "files": {
+    "e4aa0714ede913f69673300fd2e652c8d151ce5954a093946112eaba7c3c6517": {
+      "source": {
+        "path": "tutorseekers-uk-cameronguy-biz-create-certificate.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "216211142709-eu-west-2": {
+          "bucketName": "cdk-hnb659fds-assets-216211142709-eu-west-2",
+          "objectKey": "e4aa0714ede913f69673300fd2e652c8d151ce5954a093946112eaba7c3c6517.json",
+          "region": "eu-west-2",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-file-publishing-role-216211142709-eu-west-2"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

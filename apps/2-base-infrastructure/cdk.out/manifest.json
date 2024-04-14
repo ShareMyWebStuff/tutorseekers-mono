@@ -1,0 +1,233 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "tutorseekers-uk-lcl-vpc.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "tutorseekers-uk-lcl-vpc.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "tutorseekers-uk-lcl-vpc": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://216211142709/eu-west-2",
+      "properties": {
+        "templateFile": "tutorseekers-uk-lcl-vpc.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-deploy-role-216211142709-eu-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-cfn-exec-role-216211142709-eu-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-216211142709-eu-west-2/74a12fe6202730b0371a5912b0acc0126a3d5df96e13610dce37682e27b9f6e2.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "tutorseekers-uk-lcl-vpc.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-lookup-role-216211142709-eu-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "tutorseekers-uk-lcl-vpc.assets"
+      ],
+      "metadata": {
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcD0714111"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet1Subnet8AD8B112"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTable6500A727"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTableAssociationAEAAAEF8"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet1DefaultRoute5EBA728F"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet2SubnetC42E0333"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableB7686843"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableAssociationCA15A9D8"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerspublicSubnet2DefaultRoute4E1671E9"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerslambdaSubnet1Subnet8478FE6B"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerslambdaSubnet1RouteTable41106C23"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerslambdaSubnet1RouteTableAssociationBF68C6AE"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerslambdaSubnet2SubnetE3273F2F"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerslambdaSubnet2RouteTable54EF7944"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekerslambdaSubnet2RouteTableAssociationAA1509C7"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekersdatabaseSubnet1SubnetA4452D1E"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekersdatabaseSubnet1RouteTable9869FDF5"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekersdatabaseSubnet1RouteTableAssociationFB865280"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekersdatabaseSubnet2SubnetAC605535"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekersdatabaseSubnet2RouteTableA653DFA5"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcuktutorseekersdatabaseSubnet2RouteTableAssociation4F13F35C"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcIGW63DB31DC"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcVPCGWE3D990E7"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/RestrictDefaultSecurityGroupCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uktutorseekersvpcRestrictDefaultSecurityGroupCustomResource1A745700"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/tutorseekers-uk-lambda-sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersuklambdasgBB3A4F07"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/tutorseekers-uk-next-sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersuknextsg62EA3A7C"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/tutorseekers-uk-lcl-vpc/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "tutorseekers-uk-lcl-vpc"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

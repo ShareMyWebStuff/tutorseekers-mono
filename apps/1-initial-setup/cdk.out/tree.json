@@ -4,13 +4,13 @@
     "id": "App",
     "path": "",
     "children": {
-      "tutorseekers-cameronguy-biz-create-domains-certificate": {
-        "id": "tutorseekers-cameronguy-biz-create-domains-certificate",
-        "path": "tutorseekers-cameronguy-biz-create-domains-certificate",
+      "tutorseekers-uk-cameronguy-biz-create-certificate": {
+        "id": "tutorseekers-uk-cameronguy-biz-create-certificate",
+        "path": "tutorseekers-uk-cameronguy-biz-create-certificate",
         "children": {
           "tutorseekers-uk-hosted-zone-lookup-cameronguy-biz": {
             "id": "tutorseekers-uk-hosted-zone-lookup-cameronguy-biz",
-            "path": "tutorseekers-cameronguy-biz-create-domains-certificate/tutorseekers-uk-hosted-zone-lookup-cameronguy-biz",
+            "path": "tutorseekers-uk-cameronguy-biz-create-certificate/tutorseekers-uk-hosted-zone-lookup-cameronguy-biz",
             "constructInfo": {
               "fqn": "aws-cdk-lib.Resource",
               "version": "2.135.0"
@@ -18,11 +18,11 @@
           },
           "tutorseekers-uk-certificate-cameronguy-biz": {
             "id": "tutorseekers-uk-certificate-cameronguy-biz",
-            "path": "tutorseekers-cameronguy-biz-create-domains-certificate/tutorseekers-uk-certificate-cameronguy-biz",
+            "path": "tutorseekers-uk-cameronguy-biz-create-certificate/tutorseekers-uk-certificate-cameronguy-biz",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "tutorseekers-cameronguy-biz-create-domains-certificate/tutorseekers-uk-certificate-cameronguy-biz/Resource",
+                "path": "tutorseekers-uk-cameronguy-biz-create-certificate/tutorseekers-uk-certificate-cameronguy-biz/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CertificateManager::Certificate",
                   "aws:cdk:cloudformation:props": {
@@ -58,7 +58,7 @@
           },
           "tutorseekers-uk-certificate-cameronguy-biz-arn": {
             "id": "tutorseekers-uk-certificate-cameronguy-biz-arn",
-            "path": "tutorseekers-cameronguy-biz-create-domains-certificate/tutorseekers-uk-certificate-cameronguy-biz-arn",
+            "path": "tutorseekers-uk-cameronguy-biz-create-certificate/tutorseekers-uk-certificate-cameronguy-biz-arn",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnOutput",
               "version": "2.135.0"
@@ -66,11 +66,11 @@
           },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "tutorseekers-cameronguy-biz-create-domains-certificate/CDKMetadata",
+            "path": "tutorseekers-uk-cameronguy-biz-create-certificate/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "tutorseekers-cameronguy-biz-create-domains-certificate/CDKMetadata/Default",
+                "path": "tutorseekers-uk-cameronguy-biz-create-certificate/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.135.0"
@@ -84,7 +84,7 @@
           },
           "BootstrapVersion": {
             "id": "BootstrapVersion",
-            "path": "tutorseekers-cameronguy-biz-create-domains-certificate/BootstrapVersion",
+            "path": "tutorseekers-uk-cameronguy-biz-create-certificate/BootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.135.0"
@@ -92,7 +92,7 @@
           },
           "CheckBootstrapVersion": {
             "id": "CheckBootstrapVersion",
-            "path": "tutorseekers-cameronguy-biz-create-domains-certificate/CheckBootstrapVersion",
+            "path": "tutorseekers-uk-cameronguy-biz-create-certificate/CheckBootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnRule",
               "version": "2.135.0"

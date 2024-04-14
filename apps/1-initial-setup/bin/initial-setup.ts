@@ -4,42 +4,49 @@ import { DomainCertificateStack } from "../lib/domain-certificate-stack";
 import {
   AWS_ACCOUNT_ID,
   PROJECT_PREFIX,
-  VPCS,
-  REGIONS,
-  DOMAINS,
+  getCertificateRegions,
 } from "@tutorseekers/project-config";
 
 const app = new cdk.App();
 
 /**
- *
+ * Handles creating stacks to create
+ * - Certificates for each doomain region in the region its used
  */
 const main = async () => {
-  let stackProps: cdk.StackProps = {
-    env: {
-      region: "eu-west-2",
-      account: AWS_ACCOUNT_ID,
-    },
-  };
+  // Retireve the domain names and regions they need certificates created in
+  const certs = getCertificateRegions();
 
-  console.log(stackProps);
   console.log(PROJECT_PREFIX);
+  console.log(certs);
 
-  // Create the certificates for the domains
-  for (const dom in DOMAINS) {
-    const stackName =
-      PROJECT_PREFIX +
-      "-" +
-      DOMAINS[dom].domainName.replace(".", "-") +
-      "-create-domains-certificate";
+  // Create the certificates for the domains in the required regions
+  // Domains require certificates in each region they are used
+  for (const domainName in certs) {
+    certs[domainName].forEach((region) => {
+      let stackProps: cdk.StackProps = {
+        env: {
+          region: region.awsRegion,
+          account: AWS_ACCOUNT_ID,
+        },
+      };
 
-    new DomainCertificateStack(
-      app,
-      stackName,
-      PROJECT_PREFIX + "-" + DOMAINS[dom].deployRegion,
-      DOMAINS[dom].domainName,
-      stackProps,
-    );
+      const stackName =
+        PROJECT_PREFIX +
+        "-" +
+        region.region +
+        "-" +
+        domainName.replace(".", "-") +
+        "-create-certificate";
+
+      new DomainCertificateStack(
+        app,
+        stackName,
+        PROJECT_PREFIX + "-" + region.region,
+        domainName,
+        stackProps,
+      );
+    });
   }
 };
 

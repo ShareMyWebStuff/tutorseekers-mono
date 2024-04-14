@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FRONTENDS = exports.BACKENDS = exports.VPCS = exports.DOMAINS = exports.REGIONS = exports.Stage = exports.PROJECT_PREFIX = exports.AWS_ACCOUNT_ID = void 0;
+exports.WEBSITE_SETUP = exports.DOMAINS = exports.REGIONS = exports.Stage = exports.PROJECT_PREFIX = exports.AWS_ACCOUNT_ID = void 0;
 /**
  *
  */
@@ -18,62 +18,53 @@ var Stage;
     Stage[Stage["NotSet"] = 99] = "NotSet";
 })(Stage || (exports.Stage = Stage = {}));
 /**
- * Define the regions this project is deployed too.
- *
+ * Regions
  */
+const REGION_UK = "uk";
+const REGION_IRELAND = "ie";
+/**
+ * Domain names
+ */
+const CAMERONGUY_BIZ = 1;
+const CAMERONGUY_IE = 2;
 exports.REGIONS = {
-    uk: {
-        region: "uk",
+    [REGION_UK]: {
+        region: REGION_UK,
         awsRegion: "eu-west-2",
     },
-    ie: {
-        region: "ie",
+    [REGION_IRELAND]: {
+        region: REGION_UK,
         awsRegion: "eu-west-1",
     },
 };
-/**
- * Define the domain names we are using
- *
- */
-var DomainNumber;
-(function (DomainNumber) {
-    DomainNumber[DomainNumber["CAMERONGUY_BIZ"] = 0] = "CAMERONGUY_BIZ";
-})(DomainNumber || (DomainNumber = {}));
-exports.DOMAINS = [{ domainName: "cameronguy.biz", deployRegion: "uk" }];
-/**
- * Define the VPC's we need to create
- *
- * region      - look up in the REGIONS constant
- * description - description used in AWS to descrtibe the VPC
- */
-exports.VPCS = {
-    uk: {
-        region: "uk",
-        description: "UK vpc",
+exports.DOMAINS = {
+    [CAMERONGUY_BIZ]: {
+        id: CAMERONGUY_BIZ,
+        domainName: "cameronguy.biz",
+        description: "Test domain name",
+    },
+    [CAMERONGUY_IE]: {
+        id: CAMERONGUY_IE,
+        domainName: "cameronguy.ie",
+        description: "Test domain name",
     },
 };
-/**
- * Defines the backends we need to create
- */
-exports.BACKENDS = {
-    uk: [
-        { region: "uk", domain: exports.DOMAINS[DomainNumber.CAMERONGUY_BIZ].domainName },
-    ],
-};
-/**
- * Defines the frontends and details the backend the frontend connects too
- */
-exports.FRONTENDS = {
-    uk: {
-        region: "uk",
-        repo: "frontend-uk",
-        setup: [
+exports.WEBSITE_SETUP = {
+    [REGION_UK]: {
+        frontend: [
             {
-                frontendDomain: exports.DOMAINS[DomainNumber.CAMERONGUY_BIZ].domainName,
-                backend: {
-                    domain: exports.DOMAINS[DomainNumber.CAMERONGUY_BIZ].domainName,
-                    region: "uk",
-                },
+                name: "UK Frontend",
+                subDomain: null,
+                domainNameId: CAMERONGUY_BIZ,
+                region: REGION_UK,
+                backend: [
+                // {
+                //   name: "UK Backend API",
+                //   subDomain: "api",
+                //   domainNameId: CAMERONGUY_BIZ,
+                //   region: REGION_UK,
+                // },
+                ],
             },
         ],
     },

@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"/","sources":["src/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAAA,2CAAyB","sourcesContent":["export * from \"./config\";\r\n"]}
+{"version":3,"file":"index.js","sourceRoot":"/","sources":["src/index.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAAA,2CAAyB;AACzB,4DAA0C;AAC1C,oDAAkC","sourcesContent":["export * from \"./config\";\r\nexport * from \"./get-certificate-regions\";\r\nexport * from \"./get-vpc-regions\";\r\n"]}

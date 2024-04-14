@@ -7,7 +7,6 @@ export const PROJECT_PREFIX = "tutorseekers";
 /**
  * Stages
  */
-
 export enum Stage {
   Local = 10,
   Dev = 20,
@@ -17,66 +16,95 @@ export enum Stage {
 }
 
 /**
- * Define the regions this project is deployed too.
- *
+ * Regions
  */
-export const REGIONS = {
-  uk: {
-    region: "uk",
+const REGION_UK = "uk";
+const REGION_IRELAND = "ie";
+
+/**
+ * Domain names
+ */
+const CAMERONGUY_BIZ = 1;
+const CAMERONGUY_IE = 2;
+
+/**
+ * Define the regions this project is deployed too.
+ */
+type T_REGIONS = {
+  [key: string]: {
+    region: string;
+    awsRegion: string;
+  };
+};
+export const REGIONS: T_REGIONS = {
+  [REGION_UK]: {
+    region: REGION_UK,
     awsRegion: "eu-west-2",
   },
-  ie: {
-    region: "ie",
+  [REGION_IRELAND]: {
+    region: REGION_UK,
     awsRegion: "eu-west-1",
   },
 };
 
 /**
  * Define the domain names we are using
- *
  */
-enum DomainNumber {
-  CAMERONGUY_BIZ = 0,
-}
+type T_DOMAINS = {
+  [key: number]: {
+    id: number;
+    domainName: string;
+    description: string;
+  };
+};
 
-export const DOMAINS = [{ domainName: "cameronguy.biz", deployRegion: "uk" }];
-
-/**
- * Define the VPC's we need to create
- *
- * region      - look up in the REGIONS constant
- * description - description used in AWS to descrtibe the VPC
- */
-export const VPCS = {
-  uk: {
-    region: "uk",
-    description: "UK vpc",
+export const DOMAINS: T_DOMAINS = {
+  [CAMERONGUY_BIZ]: {
+    id: CAMERONGUY_BIZ,
+    domainName: "cameronguy.biz",
+    description: "Test domain name",
+  },
+  [CAMERONGUY_IE]: {
+    id: CAMERONGUY_IE,
+    domainName: "cameronguy.ie",
+    description: "Test domain name",
   },
 };
 
-/**
- * Defines the backends we need to create
- */
-export const BACKENDS = {
-  uk: [
-    { region: "uk", domain: DOMAINS[DomainNumber.CAMERONGUY_BIZ].domainName },
-  ],
+// Define the website infrastructure from a region perspective
+type T_WEBSITE = {
+  [key: string]: {
+    frontend: {
+      name: string;
+      subDomain: null;
+      domainNameId: number;
+      region: string;
+      backend: {
+        name: string;
+        subDomain: string;
+        domainNameId: number;
+        region: string;
+      }[];
+    }[];
+  };
 };
 
-/**
- * Defines the frontends and details the backend the frontend connects too
- */
-export const FRONTENDS = {
-  uk: {
-    region: "uk",
-    repo: "frontend-uk",
-    setup: [
+export const WEBSITE_SETUP: T_WEBSITE = {
+  [REGION_UK]: {
+    frontend: [
       {
-        frontendDomain: DOMAINS[DomainNumber.CAMERONGUY_BIZ].domainName,
-        backend: {
-          domain: DOMAINS[DomainNumber.CAMERONGUY_BIZ].domainName,
-          region: "uk",
-        },
+        name: "UK Frontend",
+        subDomain: null,
+        domainNameId: CAMERONGUY_BIZ,
+        region: REGION_UK,
+        backend: [
+          // {
+          //   name: "UK Backend API",
+          //   subDomain: "api",
+          //   domainNameId: CAMERONGUY_BIZ,
+          //   region: REGION_UK,
+          // },
+        ],
       },
     ],
   },
