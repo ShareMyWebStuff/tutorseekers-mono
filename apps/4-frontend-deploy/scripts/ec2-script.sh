@@ -239,8 +239,8 @@ create_deploy_website_script() {
 
     # Clone the repository
     echo "logging \"Clone <<PROJECT_PREFIX>>\"" >> $deployWebsite
-    echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers.co.uk.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
-    # echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers-mono.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
+    # echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers.co.uk.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
+    echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers-mono.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
 # https://github.com/ShareMyWebStuff/tutorseekers-mono.git
 # Fine grain token - https://github.com/settings/personal-access-tokens/973258
 # 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
@@ -253,17 +253,27 @@ create_deploy_website_script() {
 # yarn workspaces focus @tutorseekers/frontend
 # cd apps/frontend
 # yarn build
+    echo "logging \"Install packages\"" >> $deployWebsite
+    echo "yarn" >> $deployWebsite
+    echo "logging \"Focus frontend\"" >> $deployWebsite
+    echo "yarn workspaces focus @tutorseekers/frontend" >> $deployWebsite
+    echo "logging \"Building\"" >> $deployWebsite
+    echo "yarn frontend:build" >> $deployWebsite
+    echo "" >> $deployWebsite
+
+
+
 
 
     # Install the node modules
-    echo "logging \"Run npm install\"" >> $deployWebsite
-    echo "npm install" >> $deployWebsite
-    echo "" >> $deployWebsite
+    # echo "logging \"Run npm install\"" >> $deployWebsite
+    # echo "npm install" >> $deployWebsite
+    # echo "" >> $deployWebsite
 
-    # Build the project
-    echo "logging \"Run npm build\"" >> $deployWebsite
-    echo "npm run build" >> $deployWebsite
-    echo "" >> $deployWebsite
+    # # Build the project
+    # echo "logging \"Run npm build\"" >> $deployWebsite
+    # echo "npm run build" >> $deployWebsite
+    # echo "" >> $deployWebsite
 
     # Change in to the home directory
     echo "cd /home/ubuntu" >> $deployWebsite
@@ -286,7 +296,8 @@ create_deploy_website_script() {
     # Restart pm2
     echo "pm2 delete all" >> $deployWebsite
     echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
-    echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $deployWebsite
+    echo "pm2 start npm --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $deployWebsite
+    # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $deployWebsite
     echo "pm2 save" >> $deployWebsite
 
 
@@ -331,10 +342,10 @@ create_install_node_script
 
 create_deploy_website_script
 
-# . /home/ubuntu/scripts/upgrade_server.sh
+. /home/ubuntu/scripts/upgrade_server.sh
 
-# . /home/ubuntu/scripts/create_nginx_conf.sh
+. /home/ubuntu/scripts/create_nginx_conf.sh
 
-# . /home/ubuntu/scripts/install_node.sh
+. /home/ubuntu/scripts/install_node.sh
 
-# . /home/ubuntu/scripts/deploy_website.sh
+. /home/ubuntu/scripts/deploy_website.sh

@@ -175,18 +175,18 @@ export class FrontendDeployStack extends Stack {
       return cmd;
     });
 
-    const certbotConf = ["hello", "goodbye"];
+    // const certbotConf = ["hello", "goodbye"];
 
-    // // Create the certbot command to create the certificates for each domain name
-    // const certbotConf = domains.map((domain) => {
-    //   const cmd = `certbot --nginx -d ${
-    //     stage === "prd" ? domain : stage + "." + domain
-    //   } -d www.${
-    //     stage === "prd" ? domain : stage + "." + domain
-    //   } --email ${certbotEmail} --agree-tos -n`;
+    // Create the certbot command to create the certificates for each domain name
+    const certbotConf = domains.map((domain) => {
+      const cmd = `certbot --nginx -d ${
+        stage === "prd" ? domain : stage + "." + domain
+      } -d www.${
+        stage === "prd" ? domain : stage + "." + domain
+      } --email ${certbotEmail} --agree-tos -n`;
 
-    //   return cmd;
-    // });
+      return cmd;
+    });
 
     const usrData1 = userDataScript.replace(
       /<<NGINX_CONF_FILES>>/g,
@@ -214,66 +214,66 @@ export class FrontendDeployStack extends Stack {
       },
     );
 
-    // /**
-    //  * Setup the route 53 records for the domain names
-    //  */
-    // domains.forEach((domain) => {
-    //   const hostedZone = R53.HostedZone.fromLookup(
-    //     this,
-    //     projectPrefix +
-    //       "-" +
-    //       region +
-    //       "-" +
-    //       stage +
-    //       "-" +
-    //       domain +
-    //       "-hosted-zone-lookup-fe",
-    //     {
-    //       domainName: domain,
-    //     },
-    //   );
+    /**
+     * Setup the route 53 records for the domain names
+     */
+    domains.forEach((domain) => {
+      const hostedZone = R53.HostedZone.fromLookup(
+        this,
+        projectPrefix +
+          "-" +
+          region +
+          "-" +
+          stage +
+          "-" +
+          domain +
+          "-hosted-zone-lookup-fe",
+        {
+          domainName: domain,
+        },
+      );
 
-    //   // Create route 53 records for the domain name and www.domain name
-    //   // eslint-disable-next-line no-new
-    //   new R53.RecordSet(
-    //     this,
-    //     projectPrefix +
-    //       "-" +
-    //       region +
-    //       "-" +
-    //       stage +
-    //       "-" +
-    //       domain +
-    //       "-next-alias-record",
-    //     {
-    //       zone: hostedZone,
-    //       recordName: stage === "prd" ? `${domain}` : `${stage}.${domain}`,
-    //       recordType: R53.RecordType.A,
-    //       ttl: Duration.seconds(900),
-    //       target: R53.RecordTarget.fromIpAddresses(nextStaticIP.ref),
-    //     },
-    //   );
+      // Create route 53 records for the domain name and www.domain name
+      // eslint-disable-next-line no-new
+      new R53.RecordSet(
+        this,
+        projectPrefix +
+          "-" +
+          region +
+          "-" +
+          stage +
+          "-" +
+          domain +
+          "-next-alias-record",
+        {
+          zone: hostedZone,
+          recordName: stage === "prd" ? `${domain}` : `${stage}.${domain}`,
+          recordType: R53.RecordType.A,
+          ttl: Duration.seconds(900),
+          target: R53.RecordTarget.fromIpAddresses(nextStaticIP.ref),
+        },
+      );
 
-    //   // eslint-disable-next-line no-new
-    //   new R53.RecordSet(
-    //     this,
-    //     projectPrefix +
-    //       "-" +
-    //       region +
-    //       "-" +
-    //       stage +
-    //       "-" +
-    //       domain +
-    //       "-next-www-alias-record",
-    //     {
-    //       zone: hostedZone,
-    //       recordName:
-    //         stage === "prd" ? `www.${domain}` : `www.${stage}.${domain}`,
-    //       recordType: R53.RecordType.A,
-    //       ttl: Duration.seconds(900),
-    //       target: R53.RecordTarget.fromIpAddresses(nextStaticIP.ref),
-    //     },
-    //   );
-    // });
+      // eslint-disable-next-line no-new
+      new R53.RecordSet(
+        this,
+        projectPrefix +
+          "-" +
+          region +
+          "-" +
+          stage +
+          "-" +
+          domain +
+          "-next-www-alias-record",
+        {
+          zone: hostedZone,
+          recordName:
+            stage === "prd" ? `www.${domain}` : `www.${stage}.${domain}`,
+          recordType: R53.RecordType.A,
+          ttl: Duration.seconds(900),
+          target: R53.RecordTarget.fromIpAddresses(nextStaticIP.ref),
+        },
+      );
+    });
   }
 }
