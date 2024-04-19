@@ -11,6 +11,8 @@
 
 # production
 /build
+/cdk.out
+cdk.context.json
 
 # misc
 .DS_Store

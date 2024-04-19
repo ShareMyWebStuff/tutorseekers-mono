@@ -239,8 +239,8 @@ create_deploy_website_script() {
 
     # Clone the repository
     echo "logging \"Clone <<PROJECT_PREFIX>>\"" >> $deployWebsite
-    # echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers.co.uk.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
-    echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers-mono.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
+    echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers.co.uk.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
+    # echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers-mono.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
 # https://github.com/ShareMyWebStuff/tutorseekers-mono.git
 # Fine grain token - https://github.com/settings/personal-access-tokens/973258
 # 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
@@ -249,12 +249,10 @@ create_deploy_website_script() {
     echo "cd <<PROJECT_PREFIX>>_tmp/" >> $deployWebsite
     echo "" >> $deployWebsite
 
-yarn
-
-yarn workspacesfocus @tutorseekers/frontend-deploy
-
-
-
+# yarn
+# yarn workspaces focus @tutorseekers/frontend
+# cd apps/frontend
+# yarn build
 
 
     # Install the node modules

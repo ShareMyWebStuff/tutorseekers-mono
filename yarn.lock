@@ -1172,6 +1172,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@tutorseekers/frontend@workspace:apps/frontend":
+  version: 0.0.0-use.local
+  resolution: "@tutorseekers/frontend@workspace:apps/frontend"
+  dependencies:
+    "@types/node": "npm:^20"
+    "@types/react": "npm:^18"
+    "@types/react-dom": "npm:^18"
+    eslint: "npm:^8"
+    eslint-config-next: "npm:14.2.0"
+    next: "npm:14.2.0"
+    postcss: "npm:^8"
+    react: "npm:^18"
+    react-dom: "npm:^18"
+    tailwindcss: "npm:^3.4.1"
+    typescript: "npm:^5"
+  languageName: unknown
+  linkType: soft
+
 "@tutorseekers/initial-setup@workspace:apps/1-initial-setup":
   version: 0.0.0-use.local
   resolution: "@tutorseekers/initial-setup@workspace:apps/1-initial-setup"
@@ -3571,24 +3589,6 @@ __metadata:
   resolution: "frontend-uk@workspace:apps/frontend-test"
   dependencies:
     "@tutorseekers/logger": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
-"frontend@workspace:apps/frontend":
-  version: 0.0.0-use.local
-  resolution: "frontend@workspace:apps/frontend"
-  dependencies:
-    "@types/node": "npm:^20"
-    "@types/react": "npm:^18"
-    "@types/react-dom": "npm:^18"
-    eslint: "npm:^8"
-    eslint-config-next: "npm:14.2.0"
-    next: "npm:14.2.0"
-    postcss: "npm:^8"
-    react: "npm:^18"
-    react-dom: "npm:^18"
-    tailwindcss: "npm:^3.4.1"
-    typescript: "npm:^5"
   languageName: unknown
   linkType: soft
 

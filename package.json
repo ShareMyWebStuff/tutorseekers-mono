@@ -9,6 +9,8 @@
     "packages/*"
   ],
   "scripts": {
+    "frontend:build": "yarn --cwd apps/frontend build",
+    "frontend:start": "yarn --cwd apps/frontend start",
     "build:all": "yarn workspaces foreach build",
     "clean:all": "yarn workspaces foreach clean",
     "start": "yarn --cwd apps/frontend-test start",
