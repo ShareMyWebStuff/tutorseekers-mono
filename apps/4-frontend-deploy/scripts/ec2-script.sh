@@ -249,6 +249,14 @@ create_deploy_website_script() {
     echo "cd <<PROJECT_PREFIX>>_tmp/" >> $deployWebsite
     echo "" >> $deployWebsite
 
+yarn
+
+yarn workspacesfocus @tutorseekers/frontend-deploy
+
+
+
+
+
     # Install the node modules
     echo "logging \"Run npm install\"" >> $deployWebsite
     echo "npm install" >> $deployWebsite
