@@ -1,4 +1,4 @@
-import { Stack, StackProps } from "aws-cdk-lib";
+import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import {
   Peer,
   Port,
@@ -20,7 +20,8 @@ export class VpcStack extends Stack {
     scope: Construct,
     id: string,
     prefix: string,
-    env: string,
+    region: string,
+    stage: string,
     frontend: boolean,
     backend: boolean,
     props?: StackProps,
@@ -40,7 +41,7 @@ export class VpcStack extends Stack {
     // // Should have the same number of NATS as AZ - but can use one to keep the costs down
     // // May need a different cidr per project and environment - 10.1.0.0/16
     // // maxAzs 2
-    this.vpc = createVPC(this, prefix, env);
+    this.vpc = createVPC(this, prefix, region, stage);
 
     // Allow S3 endpoint to the VPC if backend
     if (backend) {
@@ -73,80 +74,84 @@ export class VpcStack extends Stack {
     //   ],
     // });
 
-    console.log("Here 1");
-    const lambdaSG = createSecurityGroup(this, this.vpc, env, prefix, {
-      secGrpName: prefix + `-${env}-lambda-sg`,
-      secGrpDesc: `${env} lambda security group`,
-      ingress: [],
-    });
+    const lambdaSG = createSecurityGroup(
+      this,
+      this.vpc,
+      region,
+      stage,
+      prefix,
+      {
+        secGrpName: prefix + `-${region}-${stage}-lambda-sg`,
+        secGrpDesc: `${region} ${stage} lambda security group`,
+        ingress: [],
+      },
+    );
 
     if (frontend) {
-      console.log("Here 2");
       // const nextSG =
-      createSecurityGroup(this, this.vpc, env, prefix, {
-        secGrpName: prefix + `-${env}-next-sg`,
-        secGrpDesc: `${env} next security group`,
+      createSecurityGroup(this, this.vpc, region, stage, prefix, {
+        secGrpName: `${prefix}-${region}-${stage}-next-sg`,
+        secGrpDesc: `${region} ${stage} next security group`,
         ingress: [
           {
             peer: Peer.anyIpv4(),
             port: Port.tcp(80),
-            description: `${env} next allows http access from anywhere`,
+            description: `${region} ${stage} next allows http access from anywhere`,
           },
           {
             peer: Peer.anyIpv6(),
             port: Port.tcp(80),
-            description: `${env} next allows http access from anywhere`,
+            description: `${region} ${stage} next allows http access from anywhere`,
           },
           {
             peer: Peer.anyIpv4(),
             port: Port.tcp(443),
-            description: `${env} next allows https access from anywhere`,
+            description: `${region} ${stage} next allows https access from anywhere`,
           },
           {
             peer: Peer.anyIpv6(),
             port: Port.tcp(443),
-            description: `${env} next allows https access from anywhere`,
+            description: `${region} ${stage} next allows https access from anywhere`,
           },
           {
             peer: Peer.anyIpv4(),
             port: Port.tcp(3000),
-            description: `${env} next allows nginx access from anywhere`,
+            description: `${region} ${stage} next allows nginx access from anywhere`,
           },
           {
             peer: Peer.anyIpv6(),
             port: Port.tcp(3000),
-            description: `${env} next allows nginx access from anywhere`,
+            description: `${region} ${stage} next allows nginx access from anywhere`,
           },
           {
             peer: Peer.anyIpv4(),
             port: Port.tcp(22),
-            description: `${env} next allows SSH access from anywhere`,
+            description: `${region} ${stage} next allows SSH access from anywhere`,
           },
         ],
       });
     }
 
     if (backend) {
-      console.log("Here 3");
       // const databaseSG =
-      createSecurityGroup(this, this.vpc, env, prefix, {
-        secGrpName: prefix + `-${env}-database-sg`,
-        secGrpDesc: `${env} database security group`,
+      createSecurityGroup(this, this.vpc, region, stage, prefix, {
+        secGrpName: prefix + `-${region}-${stage}-database-sg`,
+        secGrpDesc: `${region} ${stage} database security group`,
         ingress: [
           {
             peer: this.lambdaSG,
             port: Port.tcp(3306),
-            description: `${env} lambda access to the database group`,
+            description: `${region} ${stage} lambda access to the database group`,
           },
           {
             peer: this.nextSG,
             port: Port.tcp(3306),
-            description: `${env} frontend access to the database`,
+            description: `${region} ${stage} frontend access to the database`,
           },
           {
             peer: null,
             port: Port.tcp(3306),
-            description: `${env} loop back for database group`,
+            description: `${region} ${stage} loop back for database group`,
           },
         ],
       });
@@ -161,14 +166,19 @@ export class VpcStack extends Stack {
     //   nextSG: this.nextSG,
     // });
 
-    // // Stack outputs
-    // let exportName: string;
+    // Stack outputs
+    let exportName: string;
 
-    // // VPC
-    // exportName = prefix + '-' + env + '-' + '-vpc-arn'
-    // new CfnOutput(this, exportName, { value: this.vpc.vpcArn, exportName });
-    // exportName = prefix + '-' + env + '-' + '-vpc-id'
-    // new CfnOutput(this, exportName, { value: this.vpc.vpcId, exportName });
+    // VPC
+    exportName = `${prefix}-${region}-${stage}-vpc-arn`;
+    new CfnOutput(this, exportName, { value: this.vpc.vpcArn, exportName });
+    exportName = `${prefix}-${region}-${stage}-vpc-id`;
+    new CfnOutput(this, exportName, { value: this.vpc.vpcId, exportName });
+    exportName = `${prefix}-${region}-${stage}-vpc-ids`;
+    new CfnOutput(this, exportName, {
+      value: this.vpc.availabilityZones[0],
+      exportName,
+    });
 
     // // Security Groups
     // exportName = prefix + '-' + env + '-public-sg-id'

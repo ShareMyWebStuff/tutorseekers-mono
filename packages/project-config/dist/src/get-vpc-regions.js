@@ -14,9 +14,12 @@ const getVpcRegions = () => {
                 !!frontend.domainNameId &&
                 !!frontend.region) {
                 const reg = config_1.REGIONS[frontend.region];
+                const { domainName } = config_1.DOMAINS[frontend.domainNameId];
                 if (!vpsToCreate[frontend.region]) {
                     vpsToCreate[frontend.region] = {
                         ...reg,
+                        frontendDomains: [domainName],
+                        backendDomains: [],
                         frontend: true,
                         backend: false,
                     };
@@ -25,6 +28,11 @@ const getVpcRegions = () => {
                     const awsRegionExists = !!vpsToCreate[frontend.region];
                     if (awsRegionExists) {
                         vpsToCreate[frontend.region].frontend = true;
+                        // Add doamin name
+                        const domainNameExists = vpsToCreate[frontend.region].frontendDomains.find((dn) => dn === domainName);
+                        if (!domainNameExists) {
+                            vpsToCreate[frontend.region].frontendDomains.push(domainName);
+                        }
                     }
                 }
             }
@@ -35,9 +43,12 @@ const getVpcRegions = () => {
                     !!backend.domainNameId &&
                     !!backend.region) {
                     const reg = config_1.REGIONS[backend.region];
+                    const { domainName } = config_1.DOMAINS[backend.domainNameId];
                     if (!vpsToCreate[backend.region]) {
                         vpsToCreate[backend.region] = {
                             ...reg,
+                            frontendDomains: [],
+                            backendDomains: [domainName],
                             frontend: false,
                             backend: true,
                         };
@@ -46,6 +57,11 @@ const getVpcRegions = () => {
                         const awsRegionExists = !!vpsToCreate[backend.region];
                         if (awsRegionExists) {
                             vpsToCreate[backend.region].backend = true;
+                            // Add doamin name
+                            const domainNameExists = vpsToCreate[backend.region].backendDomains.find((dn) => dn === domainName);
+                            if (!domainNameExists) {
+                                vpsToCreate[backend.region].backendDomains.push(domainName);
+                            }
                         }
                     }
                 }

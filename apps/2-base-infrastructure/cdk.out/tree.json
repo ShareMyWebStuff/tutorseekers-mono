@@ -4,17 +4,17 @@
     "id": "App",
     "path": "",
     "children": {
-      "tutorseekers-uk-lcl-vpc": {
-        "id": "tutorseekers-uk-lcl-vpc",
-        "path": "tutorseekers-uk-lcl-vpc",
+      "tutorseekers-uk-dev-vpc": {
+        "id": "tutorseekers-uk-dev-vpc",
+        "path": "tutorseekers-uk-dev-vpc",
         "children": {
-          "uk-tutorseekers-vpc": {
-            "id": "uk-tutorseekers-vpc",
-            "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc",
+          "tutorseekers-uk-dev-vpc": {
+            "id": "tutorseekers-uk-dev-vpc",
+            "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/Resource",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
                   "aws:cdk:cloudformation:props": {
@@ -25,7 +25,19 @@
                     "tags": [
                       {
                         "key": "Name",
-                        "value": "uk-tutorseekers-vpc"
+                        "value": "tutorseekers-uk-dev-vpc"
+                      },
+                      {
+                        "key": "Region",
+                        "value": "uk"
+                      },
+                      {
+                        "key": "Site",
+                        "value": "tutorseekers"
+                      },
+                      {
+                        "key": "Stage",
+                        "value": "dev"
                       }
                     ]
                   }
@@ -35,13 +47,13 @@
                   "version": "2.135.0"
                 }
               },
-              "uk-tutorseekers-publicSubnet1": {
-                "id": "uk-tutorseekers-publicSubnet1",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1",
+              "tutorseekers-uk-dev-publicSubnet1": {
+                "id": "tutorseekers-uk-dev-publicSubnet1",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/Subnet",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
@@ -51,7 +63,7 @@
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "uk-tutorseekers-public"
+                            "value": "tutorseekers-uk-dev-public"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
@@ -59,11 +71,23 @@
                           },
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -74,7 +98,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/Acl",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.135.0"
@@ -82,18 +106,30 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/RouteTable",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -104,15 +140,15 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/RouteTableAssociation",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTable6500A727"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet1RouteTable4021B15A"
                         },
                         "subnetId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet1Subnet8AD8B112"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet1Subnet89D42B19"
                         }
                       }
                     },
@@ -123,21 +159,93 @@
                   },
                   "DefaultRoute": {
                     "id": "DefaultRoute",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet1/DefaultRoute",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1/DefaultRoute",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Route",
                       "aws:cdk:cloudformation:props": {
                         "destinationCidrBlock": "0.0.0.0/0",
                         "gatewayId": {
-                          "Ref": "uktutorseekersvpcIGW63DB31DC"
+                          "Ref": "tutorseekersukdevvpcIGWD8993ED5"
                         },
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet1RouteTable6500A727"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet1RouteTable4021B15A"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                      "version": "2.135.0"
+                    }
+                  },
+                  "EIP": {
+                    "id": "EIP",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1/EIP",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "vpc",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                      "version": "2.135.0"
+                    }
+                  },
+                  "NATGateway": {
+                    "id": "NATGateway",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1/NATGateway",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "allocationId": {
+                          "Fn::GetAtt": [
+                            "tutorseekersukdevvpctutorseekersukdevpublicSubnet1EIP6D8E74F7",
+                            "AllocationId"
+                          ]
+                        },
+                        "subnetId": {
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet1Subnet89D42B19"
+                        },
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
                       "version": "2.135.0"
                     }
                   }
@@ -147,13 +255,13 @@
                   "version": "2.135.0"
                 }
               },
-              "uk-tutorseekers-publicSubnet2": {
-                "id": "uk-tutorseekers-publicSubnet2",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2",
+              "tutorseekers-uk-dev-publicSubnet2": {
+                "id": "tutorseekers-uk-dev-publicSubnet2",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/Subnet",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
@@ -163,7 +271,7 @@
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "uk-tutorseekers-public"
+                            "value": "tutorseekers-uk-dev-public"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
@@ -171,11 +279,23 @@
                           },
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -186,7 +306,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/Acl",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.135.0"
@@ -194,18 +314,30 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/RouteTable",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -216,15 +348,15 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/RouteTableAssociation",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableB7686843"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet2RouteTable6E12F193"
                         },
                         "subnetId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet2SubnetC42E0333"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet2Subnet1274D69C"
                         }
                       }
                     },
@@ -235,16 +367,16 @@
                   },
                   "DefaultRoute": {
                     "id": "DefaultRoute",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-publicSubnet2/DefaultRoute",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-publicSubnet2/DefaultRoute",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Route",
                       "aws:cdk:cloudformation:props": {
                         "destinationCidrBlock": "0.0.0.0/0",
                         "gatewayId": {
-                          "Ref": "uktutorseekersvpcIGW63DB31DC"
+                          "Ref": "tutorseekersukdevvpcIGWD8993ED5"
                         },
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerspublicSubnet2RouteTableB7686843"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet2RouteTable6E12F193"
                         }
                       }
                     },
@@ -259,13 +391,13 @@
                   "version": "2.135.0"
                 }
               },
-              "uk-tutorseekers-lambdaSubnet1": {
-                "id": "uk-tutorseekers-lambdaSubnet1",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1",
+              "tutorseekers-uk-dev-lambdaSubnet1": {
+                "id": "tutorseekers-uk-dev-lambdaSubnet1",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/Subnet",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
@@ -275,7 +407,7 @@
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "uk-tutorseekers-lambda"
+                            "value": "tutorseekers-uk-dev-lambda"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
@@ -283,11 +415,23 @@
                           },
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -298,7 +442,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/Acl",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.135.0"
@@ -306,18 +450,30 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/RouteTable",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -328,20 +484,40 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet1/RouteTableAssociation",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet1RouteTable41106C23"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet1RouteTableF9C92AAD"
                         },
                         "subnetId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet1Subnet8478FE6B"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet1SubnetDBE7A493"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.135.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet1/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet1NATGateway2E835C3C"
+                        },
+                        "routeTableId": {
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet1RouteTableF9C92AAD"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
                       "version": "2.135.0"
                     }
                   }
@@ -351,13 +527,13 @@
                   "version": "2.135.0"
                 }
               },
-              "uk-tutorseekers-lambdaSubnet2": {
-                "id": "uk-tutorseekers-lambdaSubnet2",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2",
+              "tutorseekers-uk-dev-lambdaSubnet2": {
+                "id": "tutorseekers-uk-dev-lambdaSubnet2",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/Subnet",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
@@ -367,7 +543,7 @@
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "uk-tutorseekers-lambda"
+                            "value": "tutorseekers-uk-dev-lambda"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
@@ -375,11 +551,23 @@
                           },
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -390,7 +578,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/Acl",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.135.0"
@@ -398,18 +586,30 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/RouteTable",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -420,20 +620,40 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-lambdaSubnet2/RouteTableAssociation",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet2RouteTable54EF7944"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet2RouteTableB11E7B2D"
                         },
                         "subnetId": {
-                          "Ref": "uktutorseekersvpcuktutorseekerslambdaSubnet2SubnetE3273F2F"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet2Subnet83E9FED8"
                         }
                       }
                     },
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                      "version": "2.135.0"
+                    }
+                  },
+                  "DefaultRoute": {
+                    "id": "DefaultRoute",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambdaSubnet2/DefaultRoute",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                      "aws:cdk:cloudformation:props": {
+                        "destinationCidrBlock": "0.0.0.0/0",
+                        "natGatewayId": {
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevpublicSubnet1NATGateway2E835C3C"
+                        },
+                        "routeTableId": {
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet2RouteTableB11E7B2D"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
                       "version": "2.135.0"
                     }
                   }
@@ -443,13 +663,13 @@
                   "version": "2.135.0"
                 }
               },
-              "uk-tutorseekers-databaseSubnet1": {
-                "id": "uk-tutorseekers-databaseSubnet1",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1",
+              "tutorseekers-uk-dev-databaseSubnet1": {
+                "id": "tutorseekers-uk-dev-databaseSubnet1",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet1",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/Subnet",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet1/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
@@ -459,7 +679,7 @@
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "uk-tutorseekers-database"
+                            "value": "tutorseekers-uk-dev-database"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
@@ -467,11 +687,23 @@
                           },
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -482,7 +714,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/Acl",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet1/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.135.0"
@@ -490,18 +722,30 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/RouteTable",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet1/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet1"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -512,15 +756,15 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet1/RouteTableAssociation",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet1/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet1RouteTable9869FDF5"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet1RouteTable7CDCED52"
                         },
                         "subnetId": {
-                          "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet1SubnetA4452D1E"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet1Subnet3DA68D8A"
                         }
                       }
                     },
@@ -535,13 +779,13 @@
                   "version": "2.135.0"
                 }
               },
-              "uk-tutorseekers-databaseSubnet2": {
-                "id": "uk-tutorseekers-databaseSubnet2",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2",
+              "tutorseekers-uk-dev-databaseSubnet2": {
+                "id": "tutorseekers-uk-dev-databaseSubnet2",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet2",
                 "children": {
                   "Subnet": {
                     "id": "Subnet",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/Subnet",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet2/Subnet",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
                       "aws:cdk:cloudformation:props": {
@@ -551,7 +795,7 @@
                         "tags": [
                           {
                             "key": "aws-cdk:subnet-name",
-                            "value": "uk-tutorseekers-database"
+                            "value": "tutorseekers-uk-dev-database"
                           },
                           {
                             "key": "aws-cdk:subnet-type",
@@ -559,11 +803,23 @@
                           },
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet2"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -574,7 +830,7 @@
                   },
                   "Acl": {
                     "id": "Acl",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/Acl",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet2/Acl",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.Resource",
                       "version": "2.135.0"
@@ -582,18 +838,30 @@
                   },
                   "RouteTable": {
                     "id": "RouteTable",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/RouteTable",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet2/RouteTable",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
                       "aws:cdk:cloudformation:props": {
                         "tags": [
                           {
                             "key": "Name",
-                            "value": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2"
+                            "value": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet2"
+                          },
+                          {
+                            "key": "Region",
+                            "value": "uk"
+                          },
+                          {
+                            "key": "Site",
+                            "value": "tutorseekers"
+                          },
+                          {
+                            "key": "Stage",
+                            "value": "dev"
                           }
                         ],
                         "vpcId": {
-                          "Ref": "uktutorseekersvpcD0714111"
+                          "Ref": "tutorseekersukdevvpcC6B5AE9F"
                         }
                       }
                     },
@@ -604,15 +872,15 @@
                   },
                   "RouteTableAssociation": {
                     "id": "RouteTableAssociation",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/uk-tutorseekers-databaseSubnet2/RouteTableAssociation",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-databaseSubnet2/RouteTableAssociation",
                     "attributes": {
                       "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
                       "aws:cdk:cloudformation:props": {
                         "routeTableId": {
-                          "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet2RouteTableA653DFA5"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet2RouteTable1ECFDAE3"
                         },
                         "subnetId": {
-                          "Ref": "uktutorseekersvpcuktutorseekersdatabaseSubnet2SubnetAC605535"
+                          "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet2Subnet70B55D8B"
                         }
                       }
                     },
@@ -629,14 +897,26 @@
               },
               "IGW": {
                 "id": "IGW",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/IGW",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/IGW",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
                   "aws:cdk:cloudformation:props": {
                     "tags": [
                       {
                         "key": "Name",
-                        "value": "uk-tutorseekers-vpc"
+                        "value": "tutorseekers-uk-dev-vpc"
+                      },
+                      {
+                        "key": "Region",
+                        "value": "uk"
+                      },
+                      {
+                        "key": "Site",
+                        "value": "tutorseekers"
+                      },
+                      {
+                        "key": "Stage",
+                        "value": "dev"
                       }
                     ]
                   }
@@ -648,15 +928,15 @@
               },
               "VPCGW": {
                 "id": "VPCGW",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/VPCGW",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/VPCGW",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
                   "aws:cdk:cloudformation:props": {
                     "internetGatewayId": {
-                      "Ref": "uktutorseekersvpcIGW63DB31DC"
+                      "Ref": "tutorseekersukdevvpcIGWD8993ED5"
                     },
                     "vpcId": {
-                      "Ref": "uktutorseekersvpcD0714111"
+                      "Ref": "tutorseekersukdevvpcC6B5AE9F"
                     }
                   }
                 },
@@ -667,11 +947,11 @@
               },
               "RestrictDefaultSecurityGroupCustomResource": {
                 "id": "RestrictDefaultSecurityGroupCustomResource",
-                "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/RestrictDefaultSecurityGroupCustomResource",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/RestrictDefaultSecurityGroupCustomResource",
                 "children": {
                   "Default": {
                     "id": "Default",
-                    "path": "tutorseekers-uk-lcl-vpc/uk-tutorseekers-vpc/RestrictDefaultSecurityGroupCustomResource/Default",
+                    "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/RestrictDefaultSecurityGroupCustomResource/Default",
                     "constructInfo": {
                       "fqn": "aws-cdk-lib.CfnResource",
                       "version": "2.135.0"
@@ -691,11 +971,11 @@
           },
           "Custom::VpcRestrictDefaultSGCustomResourceProvider": {
             "id": "Custom::VpcRestrictDefaultSGCustomResourceProvider",
-            "path": "tutorseekers-uk-lcl-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider",
+            "path": "tutorseekers-uk-dev-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider",
             "children": {
               "Staging": {
                 "id": "Staging",
-                "path": "tutorseekers-uk-lcl-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Staging",
+                "path": "tutorseekers-uk-dev-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Staging",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.AssetStaging",
                   "version": "2.135.0"
@@ -703,7 +983,7 @@
               },
               "Role": {
                 "id": "Role",
-                "path": "tutorseekers-uk-lcl-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role",
+                "path": "tutorseekers-uk-dev-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.135.0"
@@ -711,7 +991,7 @@
               },
               "Handler": {
                 "id": "Handler",
-                "path": "tutorseekers-uk-lcl-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+                "path": "tutorseekers-uk-dev-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.135.0"
@@ -723,18 +1003,18 @@
               "version": "2.135.0"
             }
           },
-          "tutorseekers-uk-lambda-sg": {
-            "id": "tutorseekers-uk-lambda-sg",
-            "path": "tutorseekers-uk-lcl-vpc/tutorseekers-uk-lambda-sg",
+          "tutorseekers-uk-dev-lambda-sg": {
+            "id": "tutorseekers-uk-dev-lambda-sg",
+            "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambda-sg",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "tutorseekers-uk-lcl-vpc/tutorseekers-uk-lambda-sg/Resource",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-lambda-sg/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
                   "aws:cdk:cloudformation:props": {
-                    "groupDescription": "uk lambda security group",
-                    "groupName": "tutorseekers-uk-lambda-sg",
+                    "groupDescription": "uk dev lambda security group",
+                    "groupName": "tutorseekers-uk-dev-lambda-sg",
                     "securityGroupEgress": [
                       {
                         "cidrIp": "0.0.0.0/0",
@@ -744,20 +1024,24 @@
                     ],
                     "tags": [
                       {
-                        "key": "Environment",
-                        "value": "uk"
+                        "key": "Name",
+                        "value": "tutorseekers-uk-dev-lambda-sg"
                       },
                       {
-                        "key": "Name",
-                        "value": "tutorseekers-uk-lambda-sg"
+                        "key": "Region",
+                        "value": "uk"
                       },
                       {
                         "key": "Site",
                         "value": "tutorseekers"
+                      },
+                      {
+                        "key": "Stage",
+                        "value": "dev"
                       }
                     ],
                     "vpcId": {
-                      "Ref": "uktutorseekersvpcD0714111"
+                      "Ref": "tutorseekersukdevvpcC6B5AE9F"
                     }
                   }
                 },
@@ -772,18 +1056,18 @@
               "version": "2.135.0"
             }
           },
-          "tutorseekers-uk-next-sg": {
-            "id": "tutorseekers-uk-next-sg",
-            "path": "tutorseekers-uk-lcl-vpc/tutorseekers-uk-next-sg",
+          "tutorseekers-uk-dev-next-sg": {
+            "id": "tutorseekers-uk-dev-next-sg",
+            "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-next-sg",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "tutorseekers-uk-lcl-vpc/tutorseekers-uk-next-sg/Resource",
+                "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-next-sg/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
                   "aws:cdk:cloudformation:props": {
-                    "groupDescription": "uk next security group",
-                    "groupName": "tutorseekers-uk-next-sg",
+                    "groupDescription": "uk dev next security group",
+                    "groupName": "tutorseekers-uk-dev-next-sg",
                     "securityGroupEgress": [
                       {
                         "cidrIp": "0.0.0.0/0",
@@ -797,67 +1081,71 @@
                         "ipProtocol": "tcp",
                         "fromPort": 80,
                         "toPort": 80,
-                        "description": "uk next allows http access from anywhere"
+                        "description": "uk dev next allows http access from anywhere"
                       },
                       {
                         "cidrIpv6": "::/0",
                         "ipProtocol": "tcp",
                         "fromPort": 80,
                         "toPort": 80,
-                        "description": "uk next allows http access from anywhere"
+                        "description": "uk dev next allows http access from anywhere"
                       },
                       {
                         "cidrIp": "0.0.0.0/0",
                         "ipProtocol": "tcp",
                         "fromPort": 443,
                         "toPort": 443,
-                        "description": "uk next allows https access from anywhere"
+                        "description": "uk dev next allows https access from anywhere"
                       },
                       {
                         "cidrIpv6": "::/0",
                         "ipProtocol": "tcp",
                         "fromPort": 443,
                         "toPort": 443,
-                        "description": "uk next allows https access from anywhere"
+                        "description": "uk dev next allows https access from anywhere"
                       },
                       {
                         "cidrIp": "0.0.0.0/0",
                         "ipProtocol": "tcp",
                         "fromPort": 3000,
                         "toPort": 3000,
-                        "description": "uk next allows nginx access from anywhere"
+                        "description": "uk dev next allows nginx access from anywhere"
                       },
                       {
                         "cidrIpv6": "::/0",
                         "ipProtocol": "tcp",
                         "fromPort": 3000,
                         "toPort": 3000,
-                        "description": "uk next allows nginx access from anywhere"
+                        "description": "uk dev next allows nginx access from anywhere"
                       },
                       {
                         "cidrIp": "0.0.0.0/0",
                         "ipProtocol": "tcp",
                         "fromPort": 22,
                         "toPort": 22,
-                        "description": "uk next allows SSH access from anywhere"
+                        "description": "uk dev next allows SSH access from anywhere"
                       }
                     ],
                     "tags": [
                       {
-                        "key": "Environment",
-                        "value": "uk"
+                        "key": "Name",
+                        "value": "tutorseekers-uk-dev-next-sg"
                       },
                       {
-                        "key": "Name",
-                        "value": "tutorseekers-uk-next-sg"
+                        "key": "Region",
+                        "value": "uk"
                       },
                       {
                         "key": "Site",
                         "value": "tutorseekers"
+                      },
+                      {
+                        "key": "Stage",
+                        "value": "dev"
                       }
                     ],
                     "vpcId": {
-                      "Ref": "uktutorseekersvpcD0714111"
+                      "Ref": "tutorseekersukdevvpcC6B5AE9F"
                     }
                   }
                 },
@@ -872,13 +1160,37 @@
               "version": "2.135.0"
             }
           },
+          "tutorseekers-uk-dev-vpc-arn": {
+            "id": "tutorseekers-uk-dev-vpc-arn",
+            "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc-arn",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.135.0"
+            }
+          },
+          "tutorseekers-uk-dev-vpc-id": {
+            "id": "tutorseekers-uk-dev-vpc-id",
+            "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc-id",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.135.0"
+            }
+          },
+          "tutorseekers-uk-dev-vpc-ids": {
+            "id": "tutorseekers-uk-dev-vpc-ids",
+            "path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc-ids",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.135.0"
+            }
+          },
           "CDKMetadata": {
             "id": "CDKMetadata",
-            "path": "tutorseekers-uk-lcl-vpc/CDKMetadata",
+            "path": "tutorseekers-uk-dev-vpc/CDKMetadata",
             "children": {
               "Default": {
                 "id": "Default",
-                "path": "tutorseekers-uk-lcl-vpc/CDKMetadata/Default",
+                "path": "tutorseekers-uk-dev-vpc/CDKMetadata/Default",
                 "constructInfo": {
                   "fqn": "aws-cdk-lib.CfnResource",
                   "version": "2.135.0"
@@ -892,7 +1204,7 @@
           },
           "BootstrapVersion": {
             "id": "BootstrapVersion",
-            "path": "tutorseekers-uk-lcl-vpc/BootstrapVersion",
+            "path": "tutorseekers-uk-dev-vpc/BootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnParameter",
               "version": "2.135.0"
@@ -900,7 +1212,7 @@
           },
           "CheckBootstrapVersion": {
             "id": "CheckBootstrapVersion",
-            "path": "tutorseekers-uk-lcl-vpc/CheckBootstrapVersion",
+            "path": "tutorseekers-uk-dev-vpc/CheckBootstrapVersion",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnRule",
               "version": "2.135.0"

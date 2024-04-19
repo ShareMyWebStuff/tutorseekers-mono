@@ -15,15 +15,15 @@
         }
       }
     },
-    "fac0462758dcbe5ab12ff2dc1729e8331e1f4e883a180e2f9de8a6d2cca9018b": {
+    "d13602d637a39c876d6246b61ceeb493d87e007360d57b8da029145a90e71ba6": {
       "source": {
-        "path": "tutorseekers-dev-uk-vpc.template.json",
+        "path": "tutorseekers-uk-dev-vpc.template.json",
         "packaging": "file"
       },
       "destinations": {
         "216211142709-eu-west-2": {
           "bucketName": "cdk-hnb659fds-assets-216211142709-eu-west-2",
-          "objectKey": "fac0462758dcbe5ab12ff2dc1729e8331e1f4e883a180e2f9de8a6d2cca9018b.json",
+          "objectKey": "d13602d637a39c876d6246b61ceeb493d87e007360d57b8da029145a90e71ba6.json",
           "region": "eu-west-2",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-file-publishing-role-216211142709-eu-west-2"
         }

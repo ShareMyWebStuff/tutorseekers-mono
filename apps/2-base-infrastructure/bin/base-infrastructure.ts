@@ -46,6 +46,7 @@ const main = async () => {
         stackName,
         PROJECT_PREFIX,
         region,
+        params.stage,
         frontend,
         backend,
         stackProps,

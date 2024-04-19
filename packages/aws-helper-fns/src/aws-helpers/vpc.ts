@@ -27,24 +27,37 @@ export const SUBNETS = [
   { suffix: "-database", subnetType: SubnetType.PRIVATE_ISOLATED },
 ];
 
-export const createVPC = (scope: Stack, env: string, prefix: string) => {
+export const createVPC = (
+  scope: Stack,
+  prefix: string,
+  region: string,
+  stage: string,
+) => {
   const subnets: SubnetConfiguration[] = SUBNETS.map((eachSubnet) => {
     return {
-      name: prefix + "-" + env + eachSubnet.suffix,
+      name: prefix + "-" + region + "-" + stage + eachSubnet.suffix,
       cidrMask: 24,
       subnetType: eachSubnet.subnetType,
     };
   });
 
-  const vpcName = prefix + "-" + env + "-vpc";
-  return new Vpc(scope, vpcName, {
+  const vpcName = prefix + "-" + region + "-" + stage + "-vpc";
+
+  const vpc = new Vpc(scope, vpcName, {
     vpcName,
     ipAddresses: IpAddresses.cidr("10.1.0.0/16"),
     defaultInstanceTenancy: DefaultInstanceTenancy.DEFAULT,
-    maxAzs: 2,
-    natGateways: 0, // May need to put this to 1 later
+    maxAzs: 2, // May need to change this to 3 at some point
+    natGateways: 1, // May need to put this to 1 later
     subnetConfiguration: subnets,
   });
+
+  Tags.of(vpc).add("Name", vpcName);
+  Tags.of(vpc).add("Site", prefix);
+  Tags.of(vpc).add("Region", region);
+  Tags.of(vpc).add("Stage", stage);
+
+  return vpc;
 };
 
 export type TIngress = {
@@ -78,7 +91,8 @@ export type TSecGrpProps = {
 export const createSecurityGroup = (
   scope: Stack,
   vpc: Vpc,
-  env: string,
+  region: string,
+  stage: string,
   website: string,
   secGrpProps: TSecGrpProps,
 ) => {
@@ -93,7 +107,8 @@ export const createSecurityGroup = (
   // Add tags for security group
   Tags.of(secGrp).add("Name", secGrpProps.secGrpName);
   Tags.of(secGrp).add("Site", website);
-  Tags.of(secGrp).add("Environment", env);
+  Tags.of(secGrp).add("Region", region);
+  Tags.of(secGrp).add("Stage", stage);
 
   // Create security group route table
   secGrpProps.ingress.map((eachIng) => {
