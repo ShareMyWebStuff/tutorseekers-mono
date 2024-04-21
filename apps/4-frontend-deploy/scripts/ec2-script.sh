@@ -34,15 +34,15 @@ create_script_to_upgrade_server() {
     echo "}" >> $upgradeScript
     echo "" >> $upgradeScript
     echo "logging \"Starting update\"" >> $upgradeScript
-    echo "apt-get update -y" >>  $upgradeScript
+    echo "sudo apt-get update -y" >>  $upgradeScript
     echo "logging \"Starting upgrade\"" >> $upgradeScript
-    echo "apt-get upgrade -y" >> $upgradeScript
+    echo "sudo apt-get upgrade -y" >> $upgradeScript
     echo "logging \"Installing nginx\"" >> $upgradeScript
-    echo "apt install nginx -y" >> $upgradeScript
+    echo "sudo apt install nginx -y" >> $upgradeScript
     echo "logging \"Starting nginx\"" >> $upgradeScript
-    echo "systemctl start nginx" >> $upgradeScript
+    echo "sudo systemctl start nginx" >> $upgradeScript
     echo "logging \"Enable nginx\"" >> $upgradeScript
-    echo "systemctl enable nginx" >> $upgradeScript
+    echo "sudo systemctl enable nginx" >> $upgradeScript
     echo "logging \"Upgrade complete\"" >> $upgradeScript
 
     chown ubuntu:ubuntu $upgradeScript
