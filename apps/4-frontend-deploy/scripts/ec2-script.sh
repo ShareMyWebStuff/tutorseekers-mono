@@ -210,8 +210,8 @@ create_install_node_script() {
     echo "apt install certbot python3-certbot-nginx -y" >>  $nodeScript
     echo "" >> $nodeScript
 
-    echo "<<CERTBOT_CONF>>" >> $nodeScript
-    echo "" >> $nodeScript
+    # echo "<<CERTBOT_CONF>>" >> $nodeScript
+    # echo "" >> $nodeScript
     echo "logging \"Restart nginx server\"" >> $nodeScript
     echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>\&1" >> $nodeScript
 
@@ -295,10 +295,11 @@ create_deploy_website_script() {
     echo "" >> $deployWebsite
 
     # Restart pm2
-    echo "pm2 delete all" >> $deployWebsite
-    echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
+    echo "logging \"whoami\"" >> $deployWebsite
+    echo "sudo pm2 delete all" >> $deployWebsite
+    echo "sudo pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
     # pm2 start yarn --name tutorseekers-uk -- frontend:start
-    echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $deployWebsite
+    echo "sudo pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $deployWebsite
     # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $deployWebsite
     echo "pm2 save" >> $deployWebsite
 
