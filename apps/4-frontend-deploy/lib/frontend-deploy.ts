@@ -198,7 +198,7 @@ export class FrontendDeployStack extends Stack {
     );
     const usrData3 = usrData2.replace(
       /<<APP_NAME>>/g,
-      `${projectPrefix}-${stage}`,
+      `${projectPrefix}-${region}-${stage}`,
     );
     const usrData4 = usrData3.replace(/<<PROJECT_PREFIX>>/g, projectPrefix);
 
