@@ -350,11 +350,11 @@ setup_pm2_script() {
     echo "" >> $setupPM2
     # echo "yarn frontend:build" >> $setupPM2
 
-    echo "logging \"whoami\"" >> $setupPM2
+    echo "whoami >> /home/ubuntu/logs/setup_pm2.txt" >> $setupPM2
     echo "logging \"PM2 - Deleting\"" >> $setupPM2
     echo "pm2 delete all" >> $setupPM2
     echo "logging \"PM2 - Startup\"" >> $setupPM2
-    echo "pm2 startup >> /home/ubuntu/logs/setup_pm2.txt" >> $setupPM2
+    echo "pm2 startup -u root >> /home/ubuntu/logs/setup_pm2.txt" >> $setupPM2
     # echo "pm2 startup systemd >> /home/ubuntu/logs/deploy_website.txt" >> $setupPM2
     
     # pm2 start yarn --name tutorseekers-uk -- frontend:start
