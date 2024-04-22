@@ -336,7 +336,7 @@ setup_pm2_script() {
     logging "Create script to install node 1"
     echo "" >> $setupPM2
     echo "logging() {" >> $setupPM2
-    echo "    echo \`date \"+%F %T\"\` - \$1 >> /home/ubuntu/logs/install_node.txt" >> $setupPM2
+    echo "    echo \`date \"+%F %T\"\` - \$1 >> /home/ubuntu/logs/setup_pm2.txt" >> $setupPM2
     echo "}" >> $setupPM2
     echo "" >> $setupPM2
 
@@ -348,17 +348,22 @@ setup_pm2_script() {
     # Change in to the directory
     echo "cd <<PROJECT_PREFIX>>/" >> $setupPM2
     echo "" >> $setupPM2
+    # echo "yarn frontend:build" >> $setupPM2
 
     echo "logging \"whoami\"" >> $setupPM2
-    echo "logging \"Setting up PM2\"" >> $setupPM2
+    echo "logging \"PM2 - Deleting\"" >> $setupPM2
     echo "pm2 delete all" >> $setupPM2
-    echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $setupPM2
+    echo "logging \"PM2 - Startup\"" >> $setupPM2
+    echo "pm2 startup >> /home/ubuntu/logs/setup_pm2.txt" >> $setupPM2
     # echo "pm2 startup systemd >> /home/ubuntu/logs/deploy_website.txt" >> $setupPM2
     
     # pm2 start yarn --name tutorseekers-uk -- frontend:start
+    echo "logging \"PM2 - Start\"" >> $setupPM2
     echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $setupPM2
     # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $setupPM2
+    echo "logging \"PM2 - List\"" >> $setupPM2
     echo "pm2 ls" >> $setupPM2
+    echo "logging \"PM2 - Save\"" >> $setupPM2
     echo "pm2 save" >> $setupPM2
 
     # Sleep 10 seconds to give the processes time to start
@@ -392,4 +397,4 @@ setup_pm2_script
 
 . /home/ubuntu/scripts/deploy_website.sh
 
-. /home/ubuntu/scripts/desetup_pm2.sh
+. /home/ubuntu/scripts/setup_pm2.sh
