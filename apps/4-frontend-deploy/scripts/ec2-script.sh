@@ -34,15 +34,16 @@ create_script_to_upgrade_server() {
     echo "}" >> $upgradeScript
     echo "" >> $upgradeScript
     echo "logging \"Starting update\"" >> $upgradeScript
-    echo "sudo apt-get update -y" >>  $upgradeScript
+    echo "whoami > /home/ubuntu/logs/whoami.txt" >> $upgradeScript
+    echo "apt-get update -y" >>  $upgradeScript
     echo "logging \"Starting upgrade\"" >> $upgradeScript
-    echo "sudo apt-get upgrade -y" >> $upgradeScript
+    echo "apt-get upgrade -y" >> $upgradeScript
     echo "logging \"Installing nginx\"" >> $upgradeScript
-    echo "sudo apt install nginx -y" >> $upgradeScript
+    echo "apt install nginx -y" >> $upgradeScript
     echo "logging \"Starting nginx\"" >> $upgradeScript
-    echo "sudo systemctl start nginx" >> $upgradeScript
+    echo "systemctl start nginx" >> $upgradeScript
     echo "logging \"Enable nginx\"" >> $upgradeScript
-    echo "sudo systemctl enable nginx" >> $upgradeScript
+    echo "systemctl enable nginx" >> $upgradeScript
     echo "logging \"Upgrade complete\"" >> $upgradeScript
 
     chown ubuntu:ubuntu $upgradeScript
@@ -204,14 +205,15 @@ create_install_node_script() {
 
     echo "logging \"Install PM2\"" >> $nodeScript
     echo "npm i pm2 -g" >> $nodeScript
+    echo "pm2 update" >> $nodeScript
     echo "" >> $nodeScript
 
     echo "logging \"Install certbot\"" >> $nodeScript
     echo "apt install certbot python3-certbot-nginx -y" >>  $nodeScript
     echo "" >> $nodeScript
 
-    # echo "<<CERTBOT_CONF>>" >> $nodeScript
-    # echo "" >> $nodeScript
+    echo "<<CERTBOT_CONF>>" >> $nodeScript
+    echo "" >> $nodeScript
     echo "logging \"Restart nginx server\"" >> $nodeScript
     echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>\&1" >> $nodeScript
 
@@ -237,6 +239,11 @@ create_deploy_website_script() {
     echo "" >> $deployWebsite
     echo "cd /home/ubuntu" >> $deployWebsite
     echo "" >> $deployWebsite
+
+    echo "logging \"Install PM2\"" >> $nodeScript
+    echo "npm i pm2 -g" >> $nodeScript
+    echo "pm2 update" >> $nodeScript
+    echo "" >> $nodeScript
 
     # Clone the repository
     echo "logging \"Clone <<PROJECT_PREFIX>>\"" >> $deployWebsite
@@ -296,11 +303,12 @@ create_deploy_website_script() {
 
     # Restart pm2
     echo "logging \"whoami\"" >> $deployWebsite
-    echo "sudo pm2 delete all" >> $deployWebsite
-    echo "sudo pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
+    echo "pm2 delete all" >> $deployWebsite
+    echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
     # pm2 start yarn --name tutorseekers-uk -- frontend:start
-    echo "sudo pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $deployWebsite
+    echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $deployWebsite
     # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $deployWebsite
+    echo "pm2 ls" >> $deployWebsite
     echo "pm2 save" >> $deployWebsite
 
 
@@ -350,5 +358,7 @@ create_deploy_website_script
 . /home/ubuntu/scripts/create_nginx_conf.sh
 
 . /home/ubuntu/scripts/install_node.sh
+
+. /home/ubuntu/scripts/deploy_website.sh
 
 . /home/ubuntu/scripts/deploy_website.sh
