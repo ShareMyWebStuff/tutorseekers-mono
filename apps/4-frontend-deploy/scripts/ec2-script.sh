@@ -120,9 +120,11 @@ create_nginx_conf_file() {
     echo "#" >> $nginxConfScript
     echo "# Create the following nginx config files" >> $nginxConfScript
     echo "#" >> $nginxConfScript
+    echo "logging \"Running nginx config\"" >> $nodeScript
     echo "<<NGINX_CONF_FILES>>" >> $nginxConfScript
     echo "" >> $nginxConfScript
 
+    echo "logging \"Complete\"" >> $nodeScript
     logging "Creating nginx conf file 4"
 
     chown ubuntu:ubuntu $nginxConfScript
@@ -203,10 +205,10 @@ create_install_node_script() {
     echo "" >> $nodeScript
 
 
-    echo "logging \"Install PM2\"" >> $nodeScript
-    echo "npm i pm2 -g" >> $nodeScript
-    echo "pm2 update" >> $nodeScript
-    echo "" >> $nodeScript
+    # echo "logging \"Install PM2\"" >> $nodeScript
+    # echo "npm i pm2 -g" >> $nodeScript
+    # echo "pm2 update" >> $nodeScript
+    # echo "" >> $nodeScript
 
     echo "logging \"Install certbot\"" >> $nodeScript
     echo "apt install certbot python3-certbot-nginx -y" >>  $nodeScript
@@ -240,11 +242,6 @@ create_deploy_website_script() {
     echo "cd /home/ubuntu" >> $deployWebsite
     echo "" >> $deployWebsite
 
-    echo "logging \"Install PM2\"" >> $nodeScript
-    echo "npm i pm2 -g" >> $nodeScript
-    echo "pm2 update" >> $nodeScript
-    echo "" >> $nodeScript
-
     # Clone the repository
     echo "logging \"Clone <<PROJECT_PREFIX>>\"" >> $deployWebsite
     # echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers.co.uk.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
@@ -268,10 +265,6 @@ create_deploy_website_script() {
     echo "logging \"Building\"" >> $deployWebsite
     echo "yarn frontend:build" >> $deployWebsite
     echo "" >> $deployWebsite
-
-
-
-
 
     # Install the node modules
     # echo "logging \"Run npm install\"" >> $deployWebsite
@@ -297,24 +290,12 @@ create_deploy_website_script() {
     echo "mv <<PROJECT_PREFIX>>_tmp <<PROJECT_PREFIX>>" >> $deployWebsite
     echo "" >> $deployWebsite
 
-    # Change in to the directory
-    echo "cd <<PROJECT_PREFIX>>/" >> $deployWebsite
-    echo "" >> $deployWebsite
+    # # Change in to the directory
+    # echo "cd <<PROJECT_PREFIX>>/" >> $deployWebsite
+    # echo "" >> $deployWebsite
 
     # Restart pm2
-    echo "logging \"whoami\"" >> $deployWebsite
-    echo "pm2 delete all" >> $deployWebsite
-    # echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
-    echo "pm2 startup systemd >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
-    
-    # pm2 start yarn --name tutorseekers-uk -- frontend:start
-    echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $deployWebsite
-    # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $deployWebsite
-    echo "pm2 ls" >> $deployWebsite
-    echo "pm2 save" >> $deployWebsite
 
-    # Sleep 10 seconds to give the processes time to start
-    echo "sleep 10" >> $deployWebsite
 
 
     # echo "logging \"Remove <<PROJECT_PREFIX>>\"" >> $deployWebsite
@@ -346,6 +327,49 @@ create_deploy_website_script() {
     chmod 755 $deployWebsite
 }
 
+setup_pm2_script() {
+
+    logging "Setup PM2"
+    setupPM2="/home/ubuntu/scripts/setup_pm2.sh"
+
+    echo "#!/bin/bash" > $setupPM2
+    logging "Create script to install node 1"
+    echo "" >> $setupPM2
+    echo "logging() {" >> $setupPM2
+    echo "    echo \`date \"+%F %T\"\` - \$1 >> /home/ubuntu/logs/install_node.txt" >> $setupPM2
+    echo "}" >> $setupPM2
+    echo "" >> $setupPM2
+
+    echo "logging \"Install PM2\"" >> $setupPM2
+    echo "npm i pm2 -g" >> $setupPM2
+    echo "pm2 update" >> $setupPM2
+    echo "" >> $setupPM2
+
+    # Change in to the directory
+    echo "cd <<PROJECT_PREFIX>>/" >> $setupPM2
+    echo "" >> $setupPM2
+
+    echo "logging \"whoami\"" >> $setupPM2
+    echo "logging \"Setting up PM2\"" >> $setupPM2
+    echo "pm2 delete all" >> $setupPM2
+    echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $setupPM2
+    # echo "pm2 startup systemd >> /home/ubuntu/logs/deploy_website.txt" >> $setupPM2
+    
+    # pm2 start yarn --name tutorseekers-uk -- frontend:start
+    echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $setupPM2
+    # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $setupPM2
+    echo "pm2 ls" >> $setupPM2
+    echo "pm2 save" >> $setupPM2
+
+    # Sleep 10 seconds to give the processes time to start
+    echo "sleep 10" >> $setupPM2
+
+    echo "logging \"PM2 Completed\"" >> $setupPM2
+
+    chown root:root $setupPM2
+    chmod 755 $setupPM2
+}
+
 create_scripts_directory
 
 create_script_to_upgrade_server
@@ -358,6 +382,8 @@ create_install_node_script
 
 create_deploy_website_script
 
+setup_pm2_script
+
 . /home/ubuntu/scripts/upgrade_server.sh
 
 . /home/ubuntu/scripts/create_nginx_conf.sh
@@ -366,4 +392,4 @@ create_deploy_website_script
 
 . /home/ubuntu/scripts/deploy_website.sh
 
-# . /home/ubuntu/scripts/deploy_website.sh
+. /home/ubuntu/scripts/desetup_pm2.sh
