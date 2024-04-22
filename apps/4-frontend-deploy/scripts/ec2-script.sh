@@ -304,12 +304,17 @@ create_deploy_website_script() {
     # Restart pm2
     echo "logging \"whoami\"" >> $deployWebsite
     echo "pm2 delete all" >> $deployWebsite
-    echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
+    # echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
+    echo "pm2 startup systemd >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
+    
     # pm2 start yarn --name tutorseekers-uk -- frontend:start
     echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $deployWebsite
     # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $deployWebsite
     echo "pm2 ls" >> $deployWebsite
     echo "pm2 save" >> $deployWebsite
+
+    # Sleep 10 seconds to give the processes time to start
+    echo "sleep 10" >> $deployWebsite
 
 
     # echo "logging \"Remove <<PROJECT_PREFIX>>\"" >> $deployWebsite
@@ -361,4 +366,4 @@ create_deploy_website_script
 
 . /home/ubuntu/scripts/deploy_website.sh
 
-. /home/ubuntu/scripts/deploy_website.sh
+# . /home/ubuntu/scripts/deploy_website.sh
