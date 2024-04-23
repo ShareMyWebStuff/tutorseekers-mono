@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.json",
+    "include": [
+      "stack/**/*.ts",
+      "src/**/*.ts",
+      "__tests__/**/*.ts",
+      "sst.config.ts"
+    ]
+  }
