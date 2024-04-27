@@ -39,6 +39,9 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-west-2
 
+      - name: Verify AWS CLI availability
+        run: aws --version
+
       - name: Install corepack
         run: npm install -g corepack
 
@@ -51,9 +54,13 @@ jobs:
           node-version: ${{ inputs.node-version }}
           cache: "yarn"
           cache-dependency-path: "yarn.lock"
+
       #
       - name: Install
         run: yarn workspaces focus @tutorseekers/initial-setup
+
+      - name: Install everything
+        run: yarn
 
       - name: Synth Stack
         run: ls && cd apps/1-initial-setup && ls && yarn cdk synth
