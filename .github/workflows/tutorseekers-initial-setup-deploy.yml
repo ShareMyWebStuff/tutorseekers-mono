@@ -1,4 +1,4 @@
-name: "Initial Setup :: Deploy :: All"
+name: "Initial Setup :: Deploy :: Region"
 
 on:
   workflow_dispatch:
@@ -38,6 +38,12 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-west-2
+
+      - name: Install corepack
+        run: npm install -g corepack
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Setup Node & Cache
         uses: actions/setup-node@v3
