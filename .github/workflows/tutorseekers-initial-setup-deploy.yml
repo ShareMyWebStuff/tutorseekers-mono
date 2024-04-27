@@ -56,7 +56,7 @@ jobs:
         run: yarn workspaces focus @tutorseekers/initial-setup
 
       - name: Synth Stack
-        run: ls && cd packages/cdk && ls && yarn cdk synth
+        run: ls && cd apps/1-initial-setup && ls && yarn cdk synth
 
       - name: Deploy Stack
         run: cd apps/1-initial-setup && yarn cdk deploy --all --require-approval never
