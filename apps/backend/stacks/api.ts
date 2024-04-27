@@ -22,6 +22,7 @@ import { ApiGatewayv2DomainProperties } from "aws-cdk-lib/aws-route53-targets";
 import { Fn } from "aws-cdk-lib";
 
 export async function ApiStack({ stack }: StackContext) {
+  console.log(stack);
   const domainName = "cameronguy.biz";
   const domainNameDash = domainName.replace(".", "-");
 

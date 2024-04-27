@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "sst dev",
-    "build": "sst build",
+    "build": "sst build --stage dev --region eu-west-1",
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",

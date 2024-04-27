@@ -61,7 +61,6 @@ export class FrontendDeployStack extends Stack {
     console.log(certbotEmail);
 
     // const prefix = projectPrefix + "-" + region;
-    console.log("Here 1");
 
     // Retrieve the vpc
     const vpc = ec2.Vpc.fromLookup(
@@ -78,8 +77,6 @@ export class FrontendDeployStack extends Stack {
       },
     );
 
-    console.log("Here 2");
-
     // Retrieve the security group
     const nextSG = ec2.SecurityGroup.fromLookupByName(
       this,
@@ -87,8 +84,6 @@ export class FrontendDeployStack extends Stack {
       `${projectPrefix}-${region}-${stage}-next-sg`,
       vpc,
     );
-
-    console.log("Here 3");
 
     if (!vpc) {
       throw new Error("No VPC found");

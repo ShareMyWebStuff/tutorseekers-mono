@@ -1,0 +1,56 @@
+name: "Initial Setup :: Deploy :: All"
+
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        type: choice
+        description: Select the region to run in
+        options:
+          - uk
+
+      node-version:
+        description: The node version we are running
+        default: "20.10"
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  deploy-certificates:
+    name: Deploy Initial Project Setup
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3.6.0
+
+      # Configure Github to connect to AWS via AWS role
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Setup Node & Cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "yarn"
+          cache-dependency-path: "yarn.lock"
+      #
+      - name: Install
+        run: yarn workspaces focus @tutorseekers/initial-setup
+
+      - name: Synth Stack
+        run: ls && cd packages/cdk && ls && yarn cdk synth
+
+      - name: Deploy Stack
+        run: cd apps/1-initial-setup && yarn cdk deploy --all --require-approval never

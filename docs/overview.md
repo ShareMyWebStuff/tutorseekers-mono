@@ -21,7 +21,7 @@ The project will be broken down into the following parts
 | Base Infrastructure |                                                                                       |
 |                     | Create VPC for the specified region and stage                                         |
 |                     | Create Database for the specified region and stage                                    |
-|                     | Create certificates for the domain names                                              |
+|                     | Create certificates for the domain names (NO SURE ABOUT THIS)                         |
 | Backend             |                                                                                       |
 |                     | Contains all the code to create the backend, infrastructure and code.                 |
 |                     | Create api routes per region / stage e.g. api-dev.domainname.                         |
@@ -42,6 +42,8 @@ The project will be broken down into the following parts
 |                     | Deploys all database items that havent already been deployed.                         |
 
 ### Local Running
+
+Deploy the following
 
 ### Dev / Stg Running
 
