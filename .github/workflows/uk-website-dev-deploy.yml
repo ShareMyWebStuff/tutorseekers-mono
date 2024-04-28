@@ -78,9 +78,19 @@ jobs:
       - name: Checkout repository
         run: echo "STILL TO DO"
 
+  deploy-backend:
+    name: Deploy Backend
+    needs: deploy-database
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout repository
+        run: echo "STILL TO DO"
+
   deploy-frontend:
     name: Deploy Frontend
-    needs: deploy-database
+    needs: deploy-backend
     runs-on: ubuntu-latest
 
     steps:
