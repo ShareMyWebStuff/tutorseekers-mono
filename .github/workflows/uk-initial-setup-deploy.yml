@@ -20,10 +20,10 @@ jobs:
   deploy-certificates:
     name: Deploy Initial Project Setup
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: read
-      id-token: write
+    # permissions:
+    #   actions: write
+    #   contents: read
+    #   id-token: write
 
     steps:
       # Check out the code from the repository
