@@ -1,4 +1,4 @@
-name: "Initial Setup :: Deploy :: Region"
+name: "UK :: Teardown :: Local"
 
 on:
   workflow_dispatch:

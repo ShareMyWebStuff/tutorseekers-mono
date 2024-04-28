@@ -3,18 +3,13 @@ name: "UK :: 1 - Initial Setup :: Deploy"
 on:
   workflow_dispatch:
     inputs:
-      region:
-        type: choice
-        description: Select the region to run in
-        options:
-          - uk
-
       node-version:
         description: The node version we are running
         default: "20.10"
 
 env:
-  REGION: uk--eu-west-2
+  REGION: uk
+  AWS_REGION: eu-west-2
 
 permissions:
   id-token: write
