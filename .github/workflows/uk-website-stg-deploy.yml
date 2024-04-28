@@ -1,4 +1,4 @@
-name: "Initial Setup :: Deploy :: Region"
+name: "UK :: Deploy :: Stg"
 
 on:
   workflow_dispatch:
@@ -9,12 +9,15 @@ on:
         options:
           - uk
 
+      stage:
+        type: choice
+        description: Select the stage to run in lcl / dev / stg / prd
+        options:
+          - lcl
+
       node-version:
         description: The node version we are running
         default: "20.10"
-
-env:
-  REGION: uk--eu-west-2
 
 permissions:
   id-token: write
@@ -22,7 +25,7 @@ permissions:
   packages: read
 
 jobs:
-  deploy-certificates:
+  deploy:
     name: Deploy Initial Project Setup
     runs-on: ubuntu-latest
     permissions:
@@ -75,4 +78,4 @@ jobs:
         run: ls && cd apps/1-initial-setup && ls && yarn cdk synth
 
       - name: Deploy Stack
-        run: cd apps/1-initial-setup && yarn cdk deploy -c region=$REGION --all --require-approval never
+        run: cd apps/1-initial-setup && yarn cdk deploy --all --require-approval never

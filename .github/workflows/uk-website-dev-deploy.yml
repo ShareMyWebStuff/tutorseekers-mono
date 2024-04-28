@@ -1,4 +1,4 @@
-name: "Initial Setup :: Deploy :: Region"
+name: "UK :: Deploy :: Dev"
 
 on:
   workflow_dispatch:
@@ -25,6 +25,9 @@ permissions:
   packages: read
 
 jobs:
+  create-infrastructure:
+    name: Create VPC
+
   deploy:
     name: Deploy Initial Project Setup
     runs-on: ubuntu-latest
