@@ -13,6 +13,9 @@ on:
         description: The node version we are running
         default: "20.10"
 
+env:
+  REGION: uk--eu-west-2
+
 permissions:
   id-token: write
   contents: read
@@ -72,4 +75,4 @@ jobs:
         run: ls && cd apps/1-initial-setup && ls && yarn cdk synth
 
       - name: Deploy Stack
-        run: cd apps/1-initial-setup && yarn cdk deploy --all --require-approval never
+        run: cd apps/1-initial-setup && yarn cdk deploy -c region=$REGION --all --require-approval never

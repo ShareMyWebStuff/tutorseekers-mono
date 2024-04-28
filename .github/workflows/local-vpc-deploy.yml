@@ -1,0 +1,41 @@
+name: "Initial Setup :: Deploy :: Region"
+
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        type: choice
+        description: Select the region to run in
+        options:
+          - uk
+
+      nat-gatway:
+        type: choice
+        description: Select the region to run in
+        options:
+          - uk
+
+      node-version:
+        description: The node version we are running
+        default: "20.10"
+
+env:
+  STAGE: lcl
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    name: Deploy VPC, Database and AWS Infrastructure
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Dummy
+        run: echo "The backend and frontend are all run locally, the backend is in the "

@@ -1,0 +1,81 @@
+name: "Initial Setup :: Deploy :: Region"
+
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        type: choice
+        description: Select the region to run in
+        options:
+          - uk
+
+      stage:
+        type: choice
+        description: Select the stage to run in lcl / dev / stg / prd
+        options:
+          - lcl
+
+      node-version:
+        description: The node version we are running
+        default: "20.10"
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    name: Deploy Initial Project Setup
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
+      id-token: write
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3.6.0
+
+      # Configure Github to connect to AWS via AWS role
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Install corepack
+        run: npm install -g corepack
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Verify AWS CLI availability
+        run: aws --version
+
+      - name: Setup Node & Cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "yarn"
+          cache-dependency-path: "yarn.lock"
+
+      - name: Install Python dependencies and CDK
+        run: |
+          python -m pip install --upgrade pip
+          # install your Python dependencies here
+          npm install -g aws-cdk
+
+      #
+      - name: Install
+        run: yarn workspaces focus @tutorseekers/initial-setup
+
+      - name: Install everything
+        run: yarn
+
+      - name: Synth Stack
+        run: ls && cd apps/1-initial-setup && ls && yarn cdk synth
+
+      - name: Deploy Stack
+        run: cd apps/1-initial-setup && yarn cdk deploy --all --require-approval never
