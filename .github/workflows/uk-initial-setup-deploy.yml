@@ -72,7 +72,7 @@ jobs:
         run: yarn
 
       - name: Synth Stack
-        run: ls && cd apps/1-initial-setup && ls && yarn cdk synth
+        run: ls && cd apps/1-initial-setup && ls && yarn cdk synth -c region=$REGION
 
       - name: Deploy Stack
         run: cd apps/1-initial-setup && yarn cdk deploy -c region=$REGION --all --require-approval never
