@@ -128,4 +128,4 @@ jobs:
         run: ls && cd apps/4-frontend-deploy && ls && yarn cdk synth -c region=$REGION  -c stage=dev --all
 
       - name: Deploy Stack
-        run: cd apps/4-base-frontend-deploy && yarn cdk deploy -c region=$REGION -c stage=dev --all --require-approval never
+        run: cd apps/4-frontend-deploy && yarn cdk deploy -c region=$REGION -c stage=dev --all --require-approval never
