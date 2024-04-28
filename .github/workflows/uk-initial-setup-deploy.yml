@@ -1,4 +1,4 @@
-name: "UK :: Initial Setup :: Deploy"
+name: "UK :: 1 - Initial Setup :: Deploy"
 
 on:
   workflow_dispatch:
