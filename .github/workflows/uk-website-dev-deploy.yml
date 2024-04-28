@@ -63,10 +63,10 @@ jobs:
         run: yarn
 
       - name: Synth Stack
-        run: ls && cd apps/base-infrastructure && ls && yarn cdk synth -c region=$REGION  -c stage=dev --all
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=$REGION  -c stage=dev --all
 
       - name: Deploy Stack
-        run: cd apps/base-infrastructure && yarn cdk deploy -c region=$REGION -c stage=dev --all --require-approval never
+        run: cd apps/2-base-infrastructure && yarn cdk deploy -c region=$REGION -c stage=dev --all --require-approval never
 
   deploy-database:
     name: Deploy Databasr Upgrades
