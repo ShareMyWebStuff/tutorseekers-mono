@@ -3,18 +3,6 @@ name: "UK :: Deploy :: Dev"
 on:
   workflow_dispatch:
     inputs:
-      region:
-        type: choice
-        description: Select the region to run in
-        options:
-          - uk
-
-      stage:
-        type: choice
-        description: Select the stage to run in lcl / dev / stg / prd
-        options:
-          - lcl
-
       node-version:
         description: The node version we are running
         default: "20.10"
