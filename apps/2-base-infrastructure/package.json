@@ -21,10 +21,13 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
+    "@aws-cdk/aws-rds": "^1.204.0",
+    "@aws-sdk/client-secrets-manager": "^3.564.0",
     "@shared/aws-helper-fns": "workspace:^",
     "@tutorseekers/project-config": "workspace:^",
     "aws-cdk-lib": "^2.135.0",
     "constructs": "^10.3.0",
+    "mysql2": "^3.9.7",
     "source-map-support": "^0.5.21"
   }
 }

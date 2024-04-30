@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-deploy-role-216211142709-eu-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-cfn-exec-role-216211142709-eu-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-216211142709-eu-west-2/d13602d637a39c876d6246b61ceeb493d87e007360d57b8da029145a90e71ba6.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-216211142709-eu-west-2/9b4399ca1ee9f276ec75cf4e56245dc784475f60d1d9397b9aeec40a3bb02c7c.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -202,6 +202,12 @@
             "data": "tutorseekersukdevvpcRestrictDefaultSecurityGroupCustomResourceF593B856"
           }
         ],
+        "/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-S3-Gateway/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevvpctutorseekersS3Gateway7DE67B98"
+          }
+        ],
         "/tutorseekers-uk-dev-vpc/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
           {
             "type": "aws:cdk:logicalId",
@@ -224,6 +230,30 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "tutorseekersukdevnextsg754522AC"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdatabasesg6EBEB387"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/from tutorseekersukdevvpctutorseekersukdevlambdasgA2BCAF80:3306": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdatabasesgfromtutorseekersukdevvpctutorseekersukdevlambdasgA2BCAF80330637D7BFF5"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/from tutorseekersukdevvpctutorseekersukdevnextsg9D8B40A5:3306": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdatabasesgfromtutorseekersukdevvpctutorseekersukdevnextsg9D8B40A533064659C3C1"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/from tutorseekersukdevvpctutorseekersukdevdatabasesg585B2038:3306": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdatabasesgfromtutorseekersukdevvpctutorseekersukdevdatabasesg585B20383306B3CE9AF2"
           }
         ],
         "/tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc-arn": [
@@ -250,6 +280,42 @@
             "data": "CDKMetadata"
           }
         ],
+        "/tutorseekers-uk-dev-vpc/Exports/Output{\"Ref\":\"tutorseekersukdevvpctutorseekersukdevdatabaseSubnet1Subnet3DA68D8A\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet1Subnet3DA68D8A5DAA253B"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/Exports/Output{\"Ref\":\"tutorseekersukdevvpctutorseekersukdevdatabaseSubnet2Subnet70B55D8B\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet2Subnet70B55D8BC2C8926B"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/Exports/Output{\"Fn::GetAtt\":[\"tutorseekersukdevdatabasesg6EBEB387\",\"GroupId\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAtttutorseekersukdevdatabasesg6EBEB387GroupIdE2204630"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/Exports/Output{\"Ref\":\"tutorseekersukdevvpctutorseekersukdevlambdaSubnet1SubnetDBE7A493\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet1SubnetDBE7A4933DDBCBBB"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/Exports/Output{\"Ref\":\"tutorseekersukdevvpctutorseekersukdevlambdaSubnet2Subnet83E9FED8\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet2Subnet83E9FED8409CE4A1"
+          }
+        ],
+        "/tutorseekers-uk-dev-vpc/Exports/Output{\"Fn::GetAtt\":[\"tutorseekersukdevlambdasg755FDE01\",\"GroupId\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAtttutorseekersukdevlambdasg755FDE01GroupId3159A224"
+          }
+        ],
         "/tutorseekers-uk-dev-vpc/BootstrapVersion": [
           {
             "type": "aws:cdk:logicalId",
@@ -264,6 +330,169 @@
         ]
       },
       "displayName": "tutorseekers-uk-dev-vpc"
+    },
+    "tutorseekers-uk-dev-create-database.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "tutorseekers-uk-dev-create-database.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "tutorseekers-uk-dev-create-database": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://216211142709/eu-west-2",
+      "properties": {
+        "templateFile": "tutorseekers-uk-dev-create-database.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-deploy-role-216211142709-eu-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-cfn-exec-role-216211142709-eu-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-216211142709-eu-west-2/1305e942e08fe6f098f0072245d617ad4bde6f9114e73d7f7b410b11ee8da812.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "tutorseekers-uk-dev-create-database.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::216211142709:role/cdk-hnb659fds-lookup-role-216211142709-eu-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "tutorseekers-uk-dev-vpc",
+        "tutorseekers-uk-dev-create-database.assets"
+      ],
+      "metadata": {
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdeploybucketC8B79C3D"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdeploybucketPolicyFD392060"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdeploybucketAutoDeleteObjectsCustomResourceDEC92980"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket-role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdeploybucketroleDE21EE17"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-db-credentials/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdbcredentials7997D994"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-db-credentials/Attachment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevdbcredentialsAttachment1D49E83F"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-aurora-mysql-8.0.mysql_aurora.3.04.0/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevauroramysql80mysqlaurora304085212FFE"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-aurora-rds-subnet-group/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevaurorardssubnetgroup"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/S3ImportRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevclusterauroramysqlS3ImportRoleA4022ACF"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/S3ImportRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevclusterauroramysqlS3ImportRoleDefaultPolicy839C4FD9"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/ClusterParameterGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevclusterauroramysqlClusterParameterGroup506D5051"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevclusterauroramysql90321ABA"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/Instance1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevclusterauroramysqlInstance1AF214C90"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-connect-to-aurora-db/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevconnecttoauroradbServiceRoleEC4EAD16"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-connect-to-aurora-db/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevconnecttoauroradbServiceRoleDefaultPolicy0034A4A0"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-connect-to-aurora-db/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tutorseekersukdevconnecttoauroradb343DF0BA"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/tutorseekers-uk-dev-create-database/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "tutorseekers-uk-dev-create-database"
     },
     "Tree": {
       "type": "cdk:tree",

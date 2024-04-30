@@ -1,0 +1,718 @@
+{
+ "Resources": {
+  "tutorseekersukdevdeploybucketC8B79C3D": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "AccessControl": "BucketOwnerFullControl",
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "OwnershipControls": {
+     "Rules": [
+      {
+       "ObjectOwnership": "BucketOwnerEnforced"
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "IgnorePublicAcls": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket/Resource"
+   }
+  },
+  "tutorseekersukdevdeploybucketPolicyFD392060": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "tutorseekersukdevdeploybucketC8B79C3D"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "tutorseekersukdevdeploybucketC8B79C3D",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "tutorseekersukdevdeploybucketC8B79C3D",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket/Policy/Resource"
+   }
+  },
+  "tutorseekersukdevdeploybucketAutoDeleteObjectsCustomResourceDEC92980": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "tutorseekersukdevdeploybucketC8B79C3D"
+    }
+   },
+   "DependsOn": [
+    "tutorseekersukdevdeploybucketPolicyFD392060"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-216211142709-eu-west-2",
+     "S3Key": "6c1e9b465fa4b2d651dbc9ce3e732d8702a7b19137327684a71d89f1d355f1a2.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "tutorseekersukdevdeploybucketC8B79C3D"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
+   },
+   "DependsOn": [
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.6c1e9b465fa4b2d651dbc9ce3e732d8702a7b19137327684a71d89f1d355f1a2",
+    "aws:asset:property": "Code"
+   }
+  },
+  "tutorseekersukdevdeploybucketroleDE21EE17": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "rds.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Policies": [
+     {
+      "PolicyDocument": {
+       "Statement": [
+        {
+         "Action": [
+          "s3:*",
+          "s3:AbortMultipartUpload",
+          "s3:DeleteObject",
+          "s3:GetObject",
+          "s3:GetObjectVersion",
+          "s3:ListBucket",
+          "s3:ListMultipartUploadParts",
+          "s3:PutObject"
+         ],
+         "Effect": "Allow",
+         "Resource": [
+          {
+           "Fn::GetAtt": [
+            "tutorseekersukdevdeploybucketC8B79C3D",
+            "Arn"
+           ]
+          },
+          {
+           "Fn::Join": [
+            "",
+            [
+             {
+              "Fn::GetAtt": [
+               "tutorseekersukdevdeploybucketC8B79C3D",
+               "Arn"
+              ]
+             },
+             "/*"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "Version": "2012-10-17"
+      },
+      "PolicyName": "deployBucketPolicy"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-deploy-bucket-role/Resource"
+   }
+  },
+  "tutorseekersukdevdbcredentials7997D994": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "GenerateSecretString": {
+     "ExcludePunctuation": true,
+     "GenerateStringKey": "password",
+     "IncludeSpace": false,
+     "SecretStringTemplate": "{\"username\":\"admin\"}"
+    },
+    "Name": "tutorseekers-uk-dev-aurora-mysql-credentials"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-db-credentials/Resource"
+   }
+  },
+  "tutorseekersukdevdbcredentialsAttachment1D49E83F": {
+   "Type": "AWS::SecretsManager::SecretTargetAttachment",
+   "Properties": {
+    "SecretId": {
+     "Ref": "tutorseekersukdevdbcredentials7997D994"
+    },
+    "TargetId": {
+     "Ref": "tutorseekersukdevclusterauroramysql90321ABA"
+    },
+    "TargetType": "AWS::RDS::DBCluster"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-db-credentials/Attachment/Resource"
+   }
+  },
+  "tutorseekersukdevauroramysql80mysqlaurora304085212FFE": {
+   "Type": "AWS::RDS::DBParameterGroup",
+   "Properties": {
+    "Description": "Aurora RDS Instance Parameter Group for database tutorseekers-uk-dev-aurora-mysql",
+    "Family": "aurora-mysql8.0",
+    "Parameters": {
+     "log_bin_trust_function_creators": "1",
+     "aws_default_s3_role": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:iam::216211142709:role/",
+        {
+         "Ref": "tutorseekersukdevdeploybucketroleDE21EE17"
+        }
+       ]
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-aurora-mysql-8.0.mysql_aurora.3.04.0/Resource"
+   }
+  },
+  "tutorseekersukdevaurorardssubnetgroup": {
+   "Type": "AWS::RDS::DBSubnetGroup",
+   "Properties": {
+    "DBSubnetGroupDescription": "Aurora RDS Subnet Group for database tutorseekers-uk-dev-aurora-mysql",
+    "DBSubnetGroupName": "tutorseekers-uk-dev-aurora-rds-subnet-group",
+    "SubnetIds": [
+     {
+      "Fn::ImportValue": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet1Subnet3DA68D8A5DAA253B"
+     },
+     {
+      "Fn::ImportValue": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet2Subnet70B55D8BC2C8926B"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-aurora-rds-subnet-group/Default"
+   }
+  },
+  "tutorseekersukdevclusterauroramysqlS3ImportRoleA4022ACF": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "rds.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/S3ImportRole/Resource"
+   }
+  },
+  "tutorseekersukdevclusterauroramysqlS3ImportRoleDefaultPolicy839C4FD9": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "tutorseekersukdevdeploybucketC8B79C3D",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "tutorseekersukdevdeploybucketC8B79C3D",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "tutorseekersukdevclusterauroramysqlS3ImportRoleDefaultPolicy839C4FD9",
+    "Roles": [
+     {
+      "Ref": "tutorseekersukdevclusterauroramysqlS3ImportRoleA4022ACF"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/S3ImportRole/DefaultPolicy/Resource"
+   }
+  },
+  "tutorseekersukdevclusterauroramysqlClusterParameterGroup506D5051": {
+   "Type": "AWS::RDS::DBClusterParameterGroup",
+   "Properties": {
+    "Description": "Cluster parameter group for aurora-mysql8.0",
+    "Family": "aurora-mysql8.0",
+    "Parameters": {
+     "aws_default_s3_role": {
+      "Fn::GetAtt": [
+       "tutorseekersukdevclusterauroramysqlS3ImportRoleA4022ACF",
+       "Arn"
+      ]
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/ClusterParameterGroup/Resource"
+   }
+  },
+  "tutorseekersukdevclusterauroramysql90321ABA": {
+   "Type": "AWS::RDS::DBCluster",
+   "Properties": {
+    "AssociatedRoles": [
+     {
+      "RoleArn": {
+       "Fn::GetAtt": [
+        "tutorseekersukdevclusterauroramysqlS3ImportRoleA4022ACF",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "CopyTagsToSnapshot": true,
+    "DBClusterIdentifier": "tutorseekers-uk-dev-cluster-aurora-mysql",
+    "DBClusterParameterGroupName": {
+     "Ref": "tutorseekersukdevclusterauroramysqlClusterParameterGroup506D5051"
+    },
+    "DBSubnetGroupName": {
+     "Ref": "tutorseekersukdevaurorardssubnetgroup"
+    },
+    "DatabaseName": "tutor",
+    "EnableIAMDatabaseAuthentication": false,
+    "Engine": "aurora-mysql",
+    "EngineVersion": "8.0.mysql_aurora.3.04.0",
+    "MasterUserPassword": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "tutorseekersukdevdbcredentials7997D994"
+       },
+       ":SecretString:password::}}"
+      ]
+     ]
+    },
+    "MasterUsername": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "tutorseekersukdevdbcredentials7997D994"
+       },
+       ":SecretString:username::}}"
+      ]
+     ]
+    },
+    "VpcSecurityGroupIds": [
+     {
+      "Fn::ImportValue": "tutorseekers-uk-dev-vpc:ExportsOutputFnGetAtttutorseekersukdevdatabasesg6EBEB387GroupIdE2204630"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Snapshot",
+   "DeletionPolicy": "Snapshot",
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/Resource"
+   }
+  },
+  "tutorseekersukdevclusterauroramysqlInstance1AF214C90": {
+   "Type": "AWS::RDS::DBInstance",
+   "Properties": {
+    "DBClusterIdentifier": {
+     "Ref": "tutorseekersukdevclusterauroramysql90321ABA"
+    },
+    "DBInstanceClass": "db.t4g.medium",
+    "DBInstanceIdentifier": "tutorseekers-uk-dev-cluster-aurora-mysqlinstance1",
+    "DBParameterGroupName": {
+     "Ref": "tutorseekersukdevauroramysql80mysqlaurora304085212FFE"
+    },
+    "DBSubnetGroupName": {
+     "Ref": "tutorseekersukdevaurorardssubnetgroup"
+    },
+    "Engine": "aurora-mysql",
+    "PubliclyAccessible": false
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-cluster-aurora-mysql/Instance1"
+   }
+  },
+  "tutorseekersukdevconnecttoauroradbServiceRoleEC4EAD16": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-connect-to-aurora-db/ServiceRole/Resource"
+   }
+  },
+  "tutorseekersukdevconnecttoauroradbServiceRoleDefaultPolicy0034A4A0": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "secretsmanager:GetSecretValue",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "tutorseekersukdevdbcredentials7997D994"
+       }
+      },
+      {
+       "Action": "s3:*",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "tutorseekersukdevdeploybucketC8B79C3D",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "tutorseekersukdevdeploybucketC8B79C3D",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "tutorseekersukdevconnecttoauroradbServiceRoleDefaultPolicy0034A4A0",
+    "Roles": [
+     {
+      "Ref": "tutorseekersukdevconnecttoauroradbServiceRoleEC4EAD16"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-connect-to-aurora-db/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "tutorseekersukdevconnecttoauroradb343DF0BA": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-216211142709-eu-west-2",
+     "S3Key": "df12baf317f61ee42e7640ec8a786646b953acacb5225f27c57e06fd9381d954.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "CLUSTER_ENDPOINT": {
+       "Fn::GetAtt": [
+        "tutorseekersukdevclusterauroramysql90321ABA",
+        "Endpoint.Address"
+       ]
+      },
+      "CLUSTER_SOCKET": {
+       "Fn::Join": [
+        "",
+        [
+         {
+          "Fn::GetAtt": [
+           "tutorseekersukdevclusterauroramysql90321ABA",
+           "Endpoint.Address"
+          ]
+         },
+         ":",
+         {
+          "Fn::GetAtt": [
+           "tutorseekersukdevclusterauroramysql90321ABA",
+           "Endpoint.Port"
+          ]
+         }
+        ]
+       ]
+      },
+      "CLUSTER_SECRET_ARN": {
+       "Ref": "tutorseekersukdevdbcredentials7997D994"
+      },
+      "DB_NAME": "tutor",
+      "BUCKET_NAME": {
+       "Ref": "tutorseekersukdevdeploybucketC8B79C3D"
+      },
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "FunctionName": "tutorseekers-uk-dev-connect-to-aurora-db",
+    "Handler": "index.main",
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "tutorseekersukdevconnecttoauroradbServiceRoleEC4EAD16",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 300,
+    "VpcConfig": {
+     "SecurityGroupIds": [
+      {
+       "Fn::ImportValue": "tutorseekers-uk-dev-vpc:ExportsOutputFnGetAtttutorseekersukdevlambdasg755FDE01GroupId3159A224"
+      }
+     ],
+     "SubnetIds": [
+      {
+       "Fn::ImportValue": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet1SubnetDBE7A4933DDBCBBB"
+      },
+      {
+       "Fn::ImportValue": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet2Subnet83E9FED8409CE4A1"
+      }
+     ]
+    }
+   },
+   "DependsOn": [
+    "tutorseekersukdevconnecttoauroradbServiceRoleDefaultPolicy0034A4A0",
+    "tutorseekersukdevconnecttoauroradbServiceRoleEC4EAD16"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/tutorseekers-uk-dev-connect-to-aurora-db/Resource",
+    "aws:asset:path": "asset.df12baf317f61ee42e7640ec8a786646b953acacb5225f27c57e06fd9381d954",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22Q227CMAyGn4X74BXQHgCKhnYzIbp75KamCzTJFDugqeq7T23KOGhX/8FfrMhzmC1eIZvghae6Ok0bU0JbCOqTwgvvW15Au4r6RKLygxtdkq1vjP651WNOYYVMnTJood35hnpq0Nuj5DrFpAMJW3RYU4C2GHJPjC7JJ4aaZCmC+suSuwOeJ50KFUO7xYCWhMIm+Pjd4+vVU1fE0pHcze+LNQqWyJQ3kYVCAsbw3+4H7t2xoNPUqQZtWeHe+YqODB+DvEWnxXineLFHZhKGZS8jDPnBXZFO5ZHF2x2xj0GnQ/75h9E2+LOpKPSnV8O+QrA2rlZXolP9N+DIL+d5BrMMssmRjZmG6MRYgl3SXzekdPAUAgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-create-database/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,53 @@
+name: "UK :: Deploy :: Dev"
+
+on:
+  workflow_dispatch:
+    inputs:
+      node-version:
+        description: The node version we are running
+        default: "20.10"
+
+# https://github.com/marketplace/actions/aws-ssm-send-command
+
+env:
+  REGION: uk
+  AWS_REGION: eu-west-2
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  run-ec2-script:
+    name: Run Script
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3.6.0
+
+      # Configure Github to connect to AWS via AWS role
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: AWS SSM Send-Command
+        uses: peterkimzz/aws-ssm-send-command@master
+        id: ssm
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          instance-ids: ${{ secrets.INSTANCE_ID }}
+
+          working-directory: /home/ubuntu/application
+          command: ls -al
+          comment: Hello world!
+
+      # Catch SSM outputs
+      - name: Get the outputs
+        run: echo "The Command id is ${{ steps.ssm.outputs.command-id }}"

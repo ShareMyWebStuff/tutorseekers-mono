@@ -98,12 +98,12 @@ export const WEBSITE_SETUP: T_WEBSITE = {
         domainNameId: CAMERONGUY_BIZ,
         region: REGION_UK,
         backend: [
-          // {
-          //   name: "UK Backend API",
-          //   subDomain: "api",
-          //   domainNameId: CAMERONGUY_BIZ,
-          //   region: REGION_UK,
-          // },
+          {
+            name: "UK Backend API",
+            subDomain: "api",
+            domainNameId: CAMERONGUY_BIZ,
+            region: REGION_UK,
+          },
         ],
       },
     ],

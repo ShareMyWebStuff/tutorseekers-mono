@@ -74,22 +74,14 @@ export class VpcStack extends Stack {
     //   ],
     // });
 
-    const lambdaSG = createSecurityGroup(
-      this,
-      this.vpc,
-      region,
-      stage,
-      prefix,
-      {
-        secGrpName: prefix + `-${region}-${stage}-lambda-sg`,
-        secGrpDesc: `${region} ${stage} lambda security group`,
-        ingress: [],
-      },
-    );
+    this.lambdaSG = createSecurityGroup(this, this.vpc, region, stage, prefix, {
+      secGrpName: prefix + `-${region}-${stage}-lambda-sg`,
+      secGrpDesc: `${region} ${stage} lambda security group`,
+      ingress: [],
+    });
 
     if (frontend) {
-      // const nextSG =
-      createSecurityGroup(this, this.vpc, region, stage, prefix, {
+      this.nextSG = createSecurityGroup(this, this.vpc, region, stage, prefix, {
         secGrpName: `${prefix}-${region}-${stage}-next-sg`,
         secGrpDesc: `${region} ${stage} next security group`,
         ingress: [
@@ -133,28 +125,34 @@ export class VpcStack extends Stack {
     }
 
     if (backend) {
-      // const databaseSG =
-      createSecurityGroup(this, this.vpc, region, stage, prefix, {
-        secGrpName: prefix + `-${region}-${stage}-database-sg`,
-        secGrpDesc: `${region} ${stage} database security group`,
-        ingress: [
-          {
-            peer: this.lambdaSG,
-            port: Port.tcp(3306),
-            description: `${region} ${stage} lambda access to the database group`,
-          },
-          {
-            peer: this.nextSG,
-            port: Port.tcp(3306),
-            description: `${region} ${stage} frontend access to the database`,
-          },
-          {
-            peer: null,
-            port: Port.tcp(3306),
-            description: `${region} ${stage} loop back for database group`,
-          },
-        ],
-      });
+      this.databaseSG = createSecurityGroup(
+        this,
+        this.vpc,
+        region,
+        stage,
+        prefix,
+        {
+          secGrpName: prefix + `-${region}-${stage}-database-sg`,
+          secGrpDesc: `${region} ${stage} database security group`,
+          ingress: [
+            {
+              peer: this.lambdaSG,
+              port: Port.tcp(3306),
+              description: `${region} ${stage} lambda access to the database group`,
+            },
+            {
+              peer: this.nextSG,
+              port: Port.tcp(3306),
+              description: `${region} ${stage} frontend access to the database`,
+            },
+            {
+              peer: null,
+              port: Port.tcp(3306),
+              description: `${region} ${stage} loop back for database group`,
+            },
+          ],
+        },
+      );
     }
 
     // buildConfig.createdVPCs.push({

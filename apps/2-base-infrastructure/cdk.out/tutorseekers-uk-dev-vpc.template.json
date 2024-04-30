@@ -723,6 +723,38 @@
     "aws:cdk:path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/RestrictDefaultSecurityGroupCustomResource/Default"
    }
   },
+  "tutorseekersukdevvpctutorseekersS3Gateway7DE67B98": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "RouteTableIds": [
+     {
+      "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet1RouteTable7CDCED52"
+     },
+     {
+      "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet2RouteTable1ECFDAE3"
+     }
+    ],
+    "ServiceName": {
+     "Fn::Join": [
+      "",
+      [
+       "com.amazonaws.",
+       {
+        "Ref": "AWS::Region"
+       },
+       ".s3"
+      ]
+     ]
+    },
+    "VpcEndpointType": "Gateway",
+    "VpcId": {
+     "Ref": "tutorseekersukdevvpcC6B5AE9F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-vpc/tutorseekers-S3-Gateway/Resource"
+   }
+  },
   "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -938,10 +970,120 @@
     "aws:cdk:path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-next-sg/Resource"
    }
   },
+  "tutorseekersukdevdatabasesg6EBEB387": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "uk dev database security group",
+    "GroupName": "tutorseekers-uk-dev-database-sg",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "tutorseekers-uk-dev-database-sg"
+     },
+     {
+      "Key": "Region",
+      "Value": "uk"
+     },
+     {
+      "Key": "Site",
+      "Value": "tutorseekers"
+     },
+     {
+      "Key": "Stage",
+      "Value": "dev"
+     }
+    ],
+    "VpcId": {
+     "Ref": "tutorseekersukdevvpcC6B5AE9F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/Resource"
+   }
+  },
+  "tutorseekersukdevdatabasesgfromtutorseekersukdevvpctutorseekersukdevlambdasgA2BCAF80330637D7BFF5": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "uk dev lambda access to the database group",
+    "FromPort": 3306,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdevdatabasesg6EBEB387",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdevlambdasg755FDE01",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3306
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/from tutorseekersukdevvpctutorseekersukdevlambdasgA2BCAF80:3306"
+   }
+  },
+  "tutorseekersukdevdatabasesgfromtutorseekersukdevvpctutorseekersukdevnextsg9D8B40A533064659C3C1": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "uk dev frontend access to the database",
+    "FromPort": 3306,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdevdatabasesg6EBEB387",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdevnextsg754522AC",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3306
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/from tutorseekersukdevvpctutorseekersukdevnextsg9D8B40A5:3306"
+   }
+  },
+  "tutorseekersukdevdatabasesgfromtutorseekersukdevvpctutorseekersukdevdatabasesg585B20383306B3CE9AF2": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "uk dev loop back for database group",
+    "FromPort": 3306,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdevdatabasesg6EBEB387",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "tutorseekersukdevdatabasesg6EBEB387",
+      "GroupId"
+     ]
+    },
+    "ToPort": 3306
+   },
+   "Metadata": {
+    "aws:cdk:path": "tutorseekers-uk-dev-vpc/tutorseekers-uk-dev-database-sg/from tutorseekersukdevvpctutorseekersukdevdatabasesg585B2038:3306"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WOQW/CMAyFfwv3NCud9gO6akJctqiduE5uasDQJlXstEKI/z51TGSXnfze52frFXr9/KLzFcyc2e6c9dTqayNgzwpm/kJb6OtutKrau52plIltT7aJrUNZWFK1j4Kf0PaYeGIls7cEQt49wot425plvINsQHCGizKBJhBMj7dOMDh8BO5Nfl0pAvY4oBPVoI2B5LIJPo4/Hf6Cm6qRfQwWVRVZ/JDs3v2zMsFP1GF4BUZVMqM0Agdyh+XmI8oY5aac71Cf+Gkqcr3Odb46MVEWohMaUNf3+Q2+kGcXZgEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/32OwW6DQAxEvyX3ZUuo+gEURVEuLYKKa7UsDnECXrT2gqIo/17RRHBqT555HluT6O3rm443ZuLINpeow1rfSjH2oszE32ATfasGq7IjVXmm8lB3aMtQE8jMVlW4IPBl6g5WvrKU2Vk0go6W8Cx2h3weH0b2RmAyV5V7HI3A+vhAAp5gCTyaPF0qYuypBxL1JNVgd9QMDkme0cWWYINHue69C8Nvy3/BgVoPzHdVALvgLagssLh+tUf6Y5V7N2ID/t0wqJQZpBTTIrXzzWeQIchdkWtAn/llTGK9jXW8OTNi5AMJ9qCLx/wBQp1X+aABAAA="
    },
    "Metadata": {
     "aws:cdk:path": "tutorseekers-uk-dev-vpc/CDKMetadata/Default"
@@ -977,6 +1119,60 @@
    "Value": "eu-west-2a",
    "Export": {
     "Name": "tutorseekers-uk-dev-vpc-ids"
+   }
+  },
+  "ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet1Subnet3DA68D8A5DAA253B": {
+   "Value": {
+    "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet1Subnet3DA68D8A"
+   },
+   "Export": {
+    "Name": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet1Subnet3DA68D8A5DAA253B"
+   }
+  },
+  "ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet2Subnet70B55D8BC2C8926B": {
+   "Value": {
+    "Ref": "tutorseekersukdevvpctutorseekersukdevdatabaseSubnet2Subnet70B55D8B"
+   },
+   "Export": {
+    "Name": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevdatabaseSubnet2Subnet70B55D8BC2C8926B"
+   }
+  },
+  "ExportsOutputFnGetAtttutorseekersukdevdatabasesg6EBEB387GroupIdE2204630": {
+   "Value": {
+    "Fn::GetAtt": [
+     "tutorseekersukdevdatabasesg6EBEB387",
+     "GroupId"
+    ]
+   },
+   "Export": {
+    "Name": "tutorseekers-uk-dev-vpc:ExportsOutputFnGetAtttutorseekersukdevdatabasesg6EBEB387GroupIdE2204630"
+   }
+  },
+  "ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet1SubnetDBE7A4933DDBCBBB": {
+   "Value": {
+    "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet1SubnetDBE7A493"
+   },
+   "Export": {
+    "Name": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet1SubnetDBE7A4933DDBCBBB"
+   }
+  },
+  "ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet2Subnet83E9FED8409CE4A1": {
+   "Value": {
+    "Ref": "tutorseekersukdevvpctutorseekersukdevlambdaSubnet2Subnet83E9FED8"
+   },
+   "Export": {
+    "Name": "tutorseekers-uk-dev-vpc:ExportsOutputReftutorseekersukdevvpctutorseekersukdevlambdaSubnet2Subnet83E9FED8409CE4A1"
+   }
+  },
+  "ExportsOutputFnGetAtttutorseekersukdevlambdasg755FDE01GroupId3159A224": {
+   "Value": {
+    "Fn::GetAtt": [
+     "tutorseekersukdevlambdasg755FDE01",
+     "GroupId"
+    ]
+   },
+   "Export": {
+    "Name": "tutorseekers-uk-dev-vpc:ExportsOutputFnGetAtttutorseekersukdevlambdasg755FDE01GroupId3159A224"
    }
   }
  },
