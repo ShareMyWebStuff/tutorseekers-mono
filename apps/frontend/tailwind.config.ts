@@ -19,6 +19,10 @@ const config = {
     },
 
     extend: {
+      backgroundImage: {
+        "landing-tutor-selector":
+          "linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/images/landing/banner-4.jpg')",
+      },
       colors: {
         blue: {
           // light: "#d2e6f3",

@@ -27,8 +27,8 @@ const Header = () => {
         absolute ? "absolute bg-opacity-60" : ""
       }
     >
-      <div className="m-auto max-w-7xl w-11/12">
-        <div className="flex items-center justify-between md:border-b-1 border-white-800 border-solid py-6">
+      <div className="m-auto max-w-7xl w-11/12 ">
+        <div className="flex items-center justify-between md:border-b-1 border-white-800 border-solid">
           <Link href="/">
             <Image
               className="sm:w-[300px] w-[200px]"
@@ -43,7 +43,7 @@ const Header = () => {
           <div className="flex items-center justify-between">
             <Button
               asChild
-              className="rounded-full shadow-xl text-lg mr-3 md:flex hidden"
+              className="text-lg mr-3 md:flex hidden"
               variant={"outline"}
               size="sm"
             >
@@ -55,13 +55,13 @@ const Header = () => {
 
             <Button
               asChild
-              className="rounded-full shadow-xl text-lg md:flex hidden"
-              // variant={"auth"}
+              className="text-lg md:flex hidden"
+              variant={"outline"}
               size="sm"
             >
               <Link href="/auth/register">
                 <FaRegistered className="mr-1" />
-                <span className="md:block hidden">Register</span>
+                <span className="md:block hidden">Register1</span>
               </Link>
             </Button>
 
