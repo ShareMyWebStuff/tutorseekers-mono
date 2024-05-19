@@ -25,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} text-base`}>{children}</body>
+      <body className={`${poppins.variable} text-base select-none`}>
+        {children}
+      </body>
     </html>
   );
 }

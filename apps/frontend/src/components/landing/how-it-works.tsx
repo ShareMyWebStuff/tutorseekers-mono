@@ -10,14 +10,15 @@ import Image from "next/image";
 export function HowItWorks() {
   return (
     <div className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% text-white-800 pt-8">
-      <div className="max-w-7xl w-11/12 m-auto pb-12">
+      <div className="max-w-7xl w-11/12 m-auto pb-12 px-8">
         <main className="" data-cy="landingOtherServicesSection">
           <header>
             <h2 className="text-2xl text-center mb-12">How It Works</h2>
           </header>
 
           <section>
-            <div className="mx-2 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* <div className="mx-2 grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-6"> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-y-12 md:gap-x-6 xl:gap-12 grid-rows-3 md:grid-rows-2 xl:grid-rows-1">
               <Card>
                 <CardHeader>
                   <Image

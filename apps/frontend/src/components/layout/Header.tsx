@@ -18,17 +18,10 @@ const Header = () => {
   const absolute = false;
   absoultePaths.includes(path);
 
-  // text-white-off bg-grey-700 bg-brown-300
-  // <header className={"w-full bg-page-header-bg text-page-header-fg " + (absolute ? "absolute bg-opacity-60" : "")}>
   return (
-    <header
-      className={
-        // "bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90%  text-white-800 " +
-        absolute ? "absolute bg-opacity-60" : ""
-      }
-    >
+    <header className={absolute ? "absolute bg-opacity-60" : ""}>
       <div className="m-auto max-w-7xl w-11/12 ">
-        <div className="flex items-center justify-between md:border-b-1 border-white-800 border-solid">
+        <div className="flex items-center justify-between md:border-b-1 border-white-800 border-solid pb-4 md:pb-0">
           <Link href="/">
             <Image
               className="sm:w-[300px] w-[200px]"
@@ -61,14 +54,14 @@ const Header = () => {
             >
               <Link href="/auth/register">
                 <FaRegistered className="mr-1" />
-                <span className="md:block hidden">Register1</span>
+                <span className="md:block hidden">Register</span>
               </Link>
             </Button>
 
             <Button
               asChild
               className="rounded-full shadow-xl text-lg mr-3 md:hidden flex"
-              // variant={"auth"}
+              variant={"outline"}
               size="icon"
             >
               <Link href="/auth/login">
@@ -79,7 +72,7 @@ const Header = () => {
             <Button
               asChild
               className="rounded-full shadow-xl text-lg mr-3 md:hidden flex"
-              // variant={"auth"}
+              variant={"outline"}
               size="icon"
             >
               <Link href="/auth/register">

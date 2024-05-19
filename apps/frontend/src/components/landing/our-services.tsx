@@ -86,13 +86,13 @@ export function OurService() {
             <button
               title="Previous Service"
               onClick={handlePrevBtn}
-              className="px-4"
+              className="mr-2"
               data-cy="prevBtn"
             >
               <SquareChevronLeft className="w-8 h-8" />
             </button>
 
-            <div className="mx-2 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-6 lg:gap-x-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-6 lg:gap-x-12">
               <Card>
                 <CardHeader>
                   <Image
@@ -169,7 +169,7 @@ export function OurService() {
             <button
               title="Next Service"
               onClick={handleNextBtn}
-              className="px-4"
+              className="ml-2"
               data-cy="nextBtn"
             >
               <SquareChevronRight className="w-8 h-8" />

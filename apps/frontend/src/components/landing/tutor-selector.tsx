@@ -9,8 +9,10 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/react";
+import { Button } from "../ui/button";
 import { Select } from "@headlessui/react";
 import { Field, Input, Label } from "@headlessui/react";
+import { Search } from "lucide-react";
 import { CircleCheckBig } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -50,11 +52,13 @@ const FormSchema = z.object({
 });
 
 export function TutorSelector() {
-  const [lessonType, setLessonType] = useState(0);
+  const [lessonType, setLessonType] = useState("In Person");
   const [selectedSubject, setSelectedSubject] = useState<SelectedSubject>(
     subjects[0],
   );
   const [query, setQuery] = useState("");
+
+  console.log(lessonType);
 
   const filteredSubjects =
     query === ""
@@ -86,21 +90,22 @@ export function TutorSelector() {
 
   return (
     <div className="bg-landing-tutor-selector bg-no-repeat bg-cover bg-center bg-blue-100 text-black">
-      <h1 className="text-4xl text-center text-white-900 my-16">
+      <h1 className="text-4xl text-center text-white-900 my-20">
         Shaping a world through education.
       </h1>
 
-      <form className="m-auto mb-16 w-[800px] my-10 rounded-xl p-4 bg-white-900 grid grid-cols-3 gap-2">
+      {/* <form className="m-auto mb-16 w-[800px] my-10 rounded-xl p-4 bg-white-900 grid grid-cols-4 gap-2"> */}
+      <form className="m-auto mb-28 w-4/5 max-w-[800px] rounded-xl p-4 bg-white-900 grid grid-cols-12 gap-2 items-end">
         <RadioGroup
           value={lessonType}
           onChange={setLessonType}
           aria-label="Lesson type"
-          className="w-full flex flex-row col-span-3"
+          className="w-full flex flex-row col-span-12"
         >
           <Radio
             key={0}
             value={"In Person"}
-            className="basis-1/2 group relative flex flex-row justify-center content-end cursor-pointer p-3 text-black border-black shadow-xl transition focus:outline-none  data-[focus]:outline-1 data-[focus]:outline-white hover:font-bold data-[checked]:border-b-2"
+            className="basis-1/2 group relative flex flex-row items-center justify-center content-end cursor-pointer p-3 text-black border-black shadow-xl transition focus:outline-none  data-[focus]:outline-1 data-[focus]:outline-white hover:font-bold data-[checked]:border-b-2"
           >
             In Person
             <CircleCheckBig className="ml-2 size-4 fill-white opacity-0 transition group-data-[checked]:opacity-100" />
@@ -108,14 +113,14 @@ export function TutorSelector() {
           <Radio
             key={1}
             value={"Online"}
-            className="basis-1/2 group relative flex flex-row justify-center content-end cursor-pointer p-3 text-black border-black shadow-xl transition focus:outline-none  data-[focus]:outline-1 data-[focus]:outline-white hover:font-bold data-[checked]:border-b-2"
+            className="basis-1/2 group relative flex flex-row items-center justify-center content-end cursor-pointer p-3 text-black border-black shadow-xl transition focus:outline-none  data-[focus]:outline-1 data-[focus]:outline-white hover:font-bold data-[checked]:border-b-2"
           >
             <span>Online</span>
             <CircleCheckBig className="ml-2 size-4 fill-white opacity-0 transition group-data-[checked]:opacity-100" />
           </Radio>
         </RadioGroup>
 
-        <Field>
+        <Field className="col-span-12 md:col-span-7 lg:col-span-4">
           <Label className="text-sm">Subject</Label>
           <Combobox
             value={selectedSubject}
@@ -145,7 +150,7 @@ export function TutorSelector() {
           </Combobox>
         </Field>
 
-        <Field>
+        <Field className="col-span-12 md:col-span-5 lg:col-span-3">
           <Label className="text-sm">Level</Label>
           <Select
             className="w-full p-2 rounded-lg border data-[hover]:shadow data-[focus]:bg-blue-100"
@@ -169,7 +174,12 @@ export function TutorSelector() {
           </Select>
         </Field>
 
-        <Field>
+        <Field
+          className={
+            (lessonType === "Online" ? "hidden " : "") +
+            "col-span-12 md:col-span-7 lg:col-span-4"
+          }
+        >
           <Label className="text-sm">Location</Label>
           <Input
             className="p-2 rounded-lg border w-full"
@@ -177,6 +187,14 @@ export function TutorSelector() {
             placeholder="Your town / postcode"
           />
         </Field>
+        {/* align-end content-end */}
+        <Button
+          className="col-span-12 md:col-start-8 lg:col-start-12 md:col-span-1 justify-self-center"
+          variant="outline"
+          size="icon"
+        >
+          <Search />
+        </Button>
       </form>
     </div>
   );

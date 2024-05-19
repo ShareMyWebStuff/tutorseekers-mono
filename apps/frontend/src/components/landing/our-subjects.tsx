@@ -8,8 +8,8 @@ import { Button } from "../ui/button";
 
 export function OurSubjects() {
   return (
-    <div className="bg-gradient-to-r from-blue-light from-0% via-white-900 via-50% to-blue-light to-90% pt-8 text-black pb-12">
-      <div className="max-w-7xl w-11/12 m-auto ">
+    <div className="bg-gradient-to-r from-blue-light from-0% via-white-900 via-50% to-blue-light to-90% pt-8 text-black pb-6">
+      <div className="max-w-7xl w-11/12 m-auto">
         <h2 className="text-2xl text-center mb-12">Our Subjects</h2>
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
@@ -104,8 +104,8 @@ export function OurSubjects() {
           </div>
         </div>
 
-        <div className="mb-4 flex items-center justify-center">
-          <Button asChild variant={"secondary"} size="sm">
+        <div className="my-4 flex items-center justify-center">
+          <Button asChild variant={"outliner"} size="sm">
             <Link href="/list-subjects">View all Subjects</Link>
           </Button>
         </div>

@@ -70,7 +70,9 @@ export default function BlogPostCard(props: BlogPostCardProps) {
               <p>{props.publishedDate}</p>
             </div>
           </div>
-          <Button className="content-end">View Blog</Button>
+          <Button className="content-end" variant={"outline"}>
+            View Blog
+          </Button>
         </div>
       </div>
     </div>

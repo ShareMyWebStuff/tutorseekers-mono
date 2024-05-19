@@ -50,7 +50,7 @@ export function OurKnowledgeCenterBlogs() {
 
   return (
     <div className="bg-gradient-to-r from-blue-light from-0% via-white-900 via-50% to-blue-light to-90% pt-8 text-black">
-      <div className="max-w-7xl w-11/12 m-auto py-12">
+      <div className="max-w-7xl w-11/12 m-auto py-12 px-8">
         <h2 className="text-2xl text-center mb-12">
           Latest Knowledge Center Blogs
         </h2>
@@ -62,12 +62,12 @@ export function OurKnowledgeCenterBlogs() {
         </p>
 
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-1 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-12"
           data-cy="landingOurSubjectsSectionItems"
         >
           {blogData.map((blog, idx) => {
             let className =
-              idx >= 2 ? "hidden lg:block" : idx >= 1 ? "hidden sm:block" : "";
+              idx >= 2 ? "hidden xl:block" : idx >= 1 ? "hidden sm:block" : "";
             return (
               <BlogPostCard
                 className={className}
