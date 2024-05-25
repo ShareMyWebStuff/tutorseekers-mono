@@ -111,7 +111,7 @@ export function OurService() {
                   <p>{sliderData[firstItem].para}</p>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="secondary" className="mx-auto">
+                  <Button variant="outliner" className="mx-auto">
                     {sliderData[firstItem].btnText}
                   </Button>
                 </CardFooter>
@@ -135,7 +135,7 @@ export function OurService() {
                   <p>{sliderData[secondItem].para}</p>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="secondary" className="mx-auto">
+                  <Button variant="outliner" className="mx-auto">
                     {sliderData[secondItem].btnText}
                   </Button>
                 </CardFooter>
@@ -159,7 +159,7 @@ export function OurService() {
                   <p>{sliderData[thirdItem].para}</p>
                 </CardContent>
                 <CardFooter>
-                  <Button variant="secondary" className="mx-auto">
+                  <Button variant="outliner" className="mx-auto">
                     {sliderData[thirdItem].btnText}
                   </Button>
                 </CardFooter>

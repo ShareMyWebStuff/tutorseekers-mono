@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
 {
@@ -7,6 +8,8 @@ import { Button } from "../ui/button";
 }
 
 export function OurSubjects() {
+  const router = useRouter();
+
   return (
     <div className="bg-gradient-to-r from-blue-light from-0% via-white-900 via-50% to-blue-light to-90% pt-8 text-black pb-6">
       <div className="max-w-7xl w-11/12 m-auto">
@@ -17,12 +20,9 @@ export function OurSubjects() {
         >
           <div
             className="group pb-10"
-            // onClick={() => {
-            //   router.push({
-            //     pathname: "/list-subjects",
-            //     query: { category: "Academic" },
-            //   });
-            // }}
+            onClick={() => {
+              router.push("/subjects/list?category=Academic");
+            }}
           >
             <h5 className="text-center pb-2 group-hover:font-semibold group-hover:tracking-wider">
               Academic
@@ -39,6 +39,9 @@ export function OurSubjects() {
 
           <div
             className="group"
+            onClick={() => {
+              router.push("/subjects/list?category=IT");
+            }}
             // onClick={() => {
             //   router.push({
             //     pathname: "/list-subjects",
@@ -61,6 +64,10 @@ export function OurSubjects() {
 
           <div
             className="group"
+            onClick={() => {
+              router.push("/subjects/list?category=Lifestyle");
+            }}
+
             // onClick={() => {
             //   router.push({
             //     pathname: "/list-subjects",
@@ -83,12 +90,9 @@ export function OurSubjects() {
 
           <div
             className="group"
-            // onClick={() => {
-            //   router.push({
-            //     pathname: "/list-subjects",
-            //     query: { category: "Professional" },
-            //   });
-            // }}
+            onClick={() => {
+              router.push("/subjects/list?category=Professional");
+            }}
           >
             <h5 className="text-center pb-2 group-hover:font-semibold group-hover:tracking-wider">
               Professional
@@ -106,7 +110,7 @@ export function OurSubjects() {
 
         <div className="my-4 flex items-center justify-center">
           <Button asChild variant={"outliner"} size="sm">
-            <Link href="/list-subjects">View all Subjects</Link>
+            <Link href="/subjects/list">View all Subjects</Link>
           </Button>
         </div>
 

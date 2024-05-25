@@ -10,10 +10,7 @@ export const ScrollToTop = ({}: ScrollToTopProps) => {
   };
 
   return (
-    <Button
-      // variant="auth"
-      onClick={handleScrollToTop}
-    >
+    <Button variant="outliner" onClick={handleScrollToTop}>
       Top of page
     </Button>
   );

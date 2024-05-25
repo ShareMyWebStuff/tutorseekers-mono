@@ -14,12 +14,13 @@ const Header = () => {
   console.log("Path +++++", path);
 
   // Check if the header needs to be absolute
-  const absoultePaths = ["/auth/login", "/auth/register"];
+  const absolutePaths = ["/auth/login", "/auth/register"];
   const absolute = false;
-  absoultePaths.includes(path);
+  absolutePaths.includes(path);
 
+  // className={absolute ? "absolute bg-opacity-60" : ""}
   return (
-    <header className={absolute ? "absolute bg-opacity-60" : ""}>
+    <header className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% pt-8 text-white-800">
       <div className="m-auto max-w-7xl w-11/12 ">
         <div className="flex items-center justify-between md:border-b-1 border-white-800 border-solid pb-4 md:pb-0">
           <Link href="/">

@@ -17,6 +17,12 @@ const config = {
         "2xl": "1400px",
       },
     },
+    borderWidth: {
+      DEFAULT: "1px",
+      "0": "0",
+      "2": "2",
+      "3": "3",
+    },
 
     extend: {
       backgroundImage: {
@@ -49,6 +55,9 @@ const config = {
         facebook: "#1877F2",
         email: "",
         twitter: "#1DA1F2",
+        "input-border": "#E4E4E7",
+        warning: "#ff6961",
+        "disabled-bg": "#CDCDCD",
 
         "orange-logo": {
           500: "#ef4136",

@@ -1,92 +1,180 @@
 "use client";
 
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
 import { Radio, RadioGroup } from "@headlessui/react";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-} from "@headlessui/react";
+import InputDropDown, {
+  DropdownItem,
+  DropdownState,
+  DropdownStateType,
+} from "@/components/general/input-dropdown";
+import SelectInput, {
+  OptionsType,
+  OptionsValue,
+  SelectInputStateType,
+} from "../general/select-input";
 import { Button } from "../ui/button";
-import { Select } from "@headlessui/react";
 import { Field, Input, Label } from "@headlessui/react";
 import { Search } from "lucide-react";
 import { CircleCheckBig } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-interface SelectedSubject {
-  id: number;
-  subject: string;
-}
-
-const subjects = [
-  { id: 1, subject: "Design and Communication" },
-  { id: 2, subject: "French" },
-  { id: 3, subject: "German" },
-  { id: 4, subject: "Spanish" },
-  { id: 5, subject: "Portuguese" },
-  { id: 6, subject: "Russian" },
-  { id: 7, subject: "Japanese" },
-  { id: 8, subject: "Korean" },
-];
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
-
-const FormSchema = z.object({
-  language: z.string({
-    required_error: "Please select a language.",
-  }),
-});
+import { tuitionSubjects, tuitionLevels } from "@/constants/subjects";
 
 export function TutorSelector() {
-  const [lessonType, setLessonType] = useState("In Person");
-  const [selectedSubject, setSelectedSubject] = useState<SelectedSubject>(
-    subjects[0],
-  );
-  const [query, setQuery] = useState("");
+  const EmptyData: OptionsValue = {
+    type: "value",
+    key: 0,
+    value: "No subject selected",
+  };
 
-  console.log(lessonType);
+  const [tuitionLocation, setTuitionLocation] = useState("In Person");
 
-  const filteredSubjects =
-    query === ""
-      ? subjects
-      : subjects.filter((subject) => {
-          return subject.subject.toLowerCase().includes(query.toLowerCase());
-        });
+  const [subjectLookup, setSubjectLookup] = useState<DropdownStateType>({
+    subject: {
+      dropdownItems: [],
+      value: "",
+      matched: false,
+    },
+  });
+  let disabled = false;
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const [level, setLevel] = useState<SelectInputStateType>({
+    level: {
+      selectedValue: EmptyData.value,
+      options: [EmptyData],
+    },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("Hello");
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
-  }
+  const [location, setLocation] = useState("");
 
-  // <div className="bg-landing-tutor-selector bg-no-repeat bg-cover bg-center bg-blue-100">
+  const [formErrors, setFormErrors] = useState({
+    errors: false,
+    errorMsgs: {},
+  });
 
-  // className="basis-1/2 group relative flex flex-row justify-between cursor-pointer rounded-l-lg p-3 text-black border-b-2 border-black shadow-xl transition focus:outline-none  data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-red-500"
-  // className="basis-1/2 group relative flex flex-row justify-between cursor-pointer rounded-r-lg p-3 text-black bg-white-500 shadow-xl transition focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-red-500"
+  console.log("Level");
+  console.log(level);
+
+  //
+  // On initial load create subject list for the dropdown
+  //
+  useEffect(() => {
+    const subs: DropdownItem[] = tuitionSubjects.map((subject) => {
+      return { lookupId: subject.subjectId, lookup: subject.subject };
+    });
+
+    setSubjectLookup((prev: DropdownStateType): DropdownStateType => {
+      return { ...prev, subject: { ...prev.subject, dropdownItems: subs } }; // , disabled: false },
+    });
+  }, []);
+
+  //
+  // When the choosen subject changes, create the subject level list.
+  // If the user selects Maths -> set the level dopdown to show the academic levels
+  //
+  useEffect(() => {
+    const AllLevels: OptionsValue = {
+      type: "value",
+      key: 0,
+      value: "All levels",
+    };
+
+    if (subjectLookup.subject.matched) {
+      const levelOptions: OptionsType[] = [];
+      let levelOption: OptionsType = {
+        type: "group",
+        key: 1,
+        groupName: "",
+        groupDesc: [],
+      };
+
+      // Get the subject
+      const foundSubjects = tuitionSubjects.find(
+        (sub) => sub.subject === subjectLookup.subject.value,
+      );
+
+      if (!foundSubjects) {
+        setLevel((prev: SelectInputStateType): SelectInputStateType => {
+          return { ...prev, level: { selectedValue: "", options: [] } };
+        });
+      } else {
+        // Get the categories the subject is held in
+        foundSubjects.categories.forEach((cat, idx) => {
+          // Look up the subjects levels
+          const foundLevel = tuitionLevels[cat.level];
+
+          if (foundLevel && foundLevel.type === "value") {
+            levelOptions.push({
+              type: foundLevel.type,
+              key: foundLevel.key,
+              value: foundLevel.name,
+            });
+          } else if (foundLevel && foundLevel.type === "group") {
+            levelOption = {
+              type: foundLevel.type,
+              key: foundLevel.key,
+              groupName: foundLevel.name,
+              groupDesc: [],
+            };
+
+            for (let item of foundLevel.items) {
+              levelOption.groupDesc.push({
+                key: item.subjectLevelItemId + 10000,
+                value: item.levelItem,
+              });
+            }
+            levelOptions.push(levelOption);
+          } else {
+            setLevel((prev: SelectInputStateType): SelectInputStateType => {
+              return { ...prev, level: { selectedValue: "", options: [] } };
+            });
+            return;
+          }
+        });
+
+        if (levelOptions.length > 1) {
+          levelOptions.unshift(AllLevels);
+        }
+        setLevel((prev: SelectInputStateType): SelectInputStateType => {
+          return {
+            ...prev,
+            level: { selectedValue: "", options: levelOptions },
+          };
+        });
+      }
+    } else {
+      setLevel((prev: SelectInputStateType): SelectInputStateType => {
+        return { ...prev, level: { selectedValue: "", options: [] } };
+      });
+    }
+  }, [subjectLookup.subject, subjectLookup.subject.matched]);
+
+  const onSearch = () => {
+    console.log("Here");
+    const errorMsgs: { [key: string]: string } = {};
+
+    if (!subjectLookup.subject.matched) {
+      errorMsgs["subject"] = "Please enter a valid subject.";
+    }
+    if (subjectLookup.subject.value === "No subject selected") {
+      errorMsgs["level"] = "Please enter a valid level.";
+    }
+    if (tuitionLocation === "In Person" && location.length < 2) {
+      errorMsgs["location"] = "Please enter a valid postcode.";
+    }
+
+    if (Object.keys(errorMsgs).length > 0) {
+      setFormErrors({ errors: true, errorMsgs });
+      // } else {
+      //     history.push(  { pathname: '/tutor-search', search: '', state:{ tuitionLocation, subject, level, location } })
+    }
+  };
+
+  const lvlDisabled = !subjectLookup.subject.matched;
+  const btnDisabled = !(
+    (tuitionLocation === "In Person" &&
+      subjectLookup.subject.matched &&
+      location.length >= 2) ||
+    (tuitionLocation === "Online" && subjectLookup.subject.matched)
+  );
 
   return (
     <div className="bg-landing-tutor-selector bg-no-repeat bg-cover bg-center bg-blue-100 text-black">
@@ -95,10 +183,10 @@ export function TutorSelector() {
       </h1>
 
       {/* <form className="m-auto mb-16 w-[800px] my-10 rounded-xl p-4 bg-white-900 grid grid-cols-4 gap-2"> */}
-      <form className="m-auto mb-28 w-4/5 max-w-[800px] rounded-xl p-4 bg-white-900 grid grid-cols-12 gap-2 items-end">
+      <form className="m-auto mb-28 w-4/5 max-w-[900px] rounded-xl p-4 bg-white-900 grid grid-cols-12 gap-2 items-end">
         <RadioGroup
-          value={lessonType}
-          onChange={setLessonType}
+          value={tuitionLocation}
+          onChange={setTuitionLocation}
           aria-label="Lesson type"
           className="w-full flex flex-row col-span-12"
         >
@@ -120,78 +208,66 @@ export function TutorSelector() {
           </Radio>
         </RadioGroup>
 
-        <Field className="col-span-12 md:col-span-7 lg:col-span-4">
-          <Label className="text-sm">Subject</Label>
-          <Combobox
-            value={selectedSubject}
-            onChange={setSelectedSubject}
-            onClose={() => setQuery("")}
-          >
-            <ComboboxInput
-              aria-label="Assignee"
-              displayValue={(subject: SelectedSubject) => subject?.subject}
-              onChange={(event) => setQuery(event.target.value)}
-              className="p-2 rounded-lg w-full border"
-            />
-            <ComboboxOptions
-              anchor="bottom start"
-              className="empty:hidden mt-2 w-[320px] rounded-lg p-2  bg-white"
-            >
-              {filteredSubjects.map((subject) => (
-                <ComboboxOption
-                  key={subject.id}
-                  value={subject}
-                  className="data-[focus]:bg-blue-100 data-[focus]:rounded-lg p-2"
-                >
-                  {subject.subject}
-                </ComboboxOption>
-              ))}
-            </ComboboxOptions>
-          </Combobox>
+        <Field className="col-span-12 md:col-span-6 lg:col-span-4">
+          <InputDropDown
+            name="subject"
+            placeholder="Enter a Subject"
+            dropdownMinLength={1}
+            InputDropDownClass="mt-2"
+            label="Subject"
+            state={subjectLookup.subject}
+            updateState={setSubjectLookup}
+            disabled={disabled}
+            loading={false}
+            // setMatchedValue={setMatchedValue}
+
+            // listItems={subjectLookup.subjectItems}
+            // value={subjectLookup.subject}
+            // valueMatched={subjectLookup.subjectMatched}
+            // onChangeHandler={onDropdownHandler}
+          />
         </Field>
 
-        <Field className="col-span-12 md:col-span-5 lg:col-span-3">
-          <Label className="text-sm">Level</Label>
-          <Select
-            className="w-full p-2 rounded-lg border data-[hover]:shadow data-[focus]:bg-blue-100"
-            name="status"
-            aria-label="Project status"
-          >
-            <option value="all">All Levels</option>
-            <optgroup key={1} label={"Academic"} className="mt-2 rounded-t-lg">
-              <option value="primary">Primary (Key stage 1-2)</option>
-              <option value="secondary">Secondary (Key stage 3)</option>
-              <option value="gcse">GCSE / Nats 3.5</option>
-              <option value="a-level">A-Level / Higher</option>
-              <option value="ib">IB</option>
-              <option value="degree">Degree+</option>
-            </optgroup>
-            <optgroup key={2} label={"Level"} className="mt-2 rounded-t-lg">
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </optgroup>
-          </Select>
+        <Field className="col-span-12 md:col-span-6 lg:col-span-3">
+          <SelectInput
+            label="Tuition Level"
+            name="level"
+            title="Select subject level"
+            selectInputClass="mt-2"
+            state={level.level}
+            updateState={setLevel}
+            emptyDataValue="No subject selected"
+            disabled={lvlDisabled}
+            loading={disabled}
+          />
         </Field>
 
         <Field
           className={
-            (lessonType === "Online" ? "hidden " : "") +
+            (tuitionLocation === "Online" ? "hidden " : "") +
             "col-span-12 md:col-span-7 lg:col-span-4"
           }
         >
           <Label className="text-sm">Location</Label>
           <Input
-            className="p-2 rounded-lg border w-full"
-            name="full_name"
-            placeholder="Your town / postcode"
+            className="p-2 w-full border border-1 border-input-border rounded-lg cursor-pointer focus:border-blue-dark focus:outline-none focus:ring-0"
+            name="location"
+            placeholder="Location e.g. GU22 / HA316AA"
+            autoComplete="off"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setLocation(e.target.value);
+            }}
+            value={location}
           />
         </Field>
+
         {/* align-end content-end */}
         <Button
           className="col-span-12 md:col-start-8 lg:col-start-12 md:col-span-1 justify-self-center"
           variant="outline"
           size="icon"
+          onClick={onSearch}
+          disabled={btnDisabled}
         >
           <Search />
         </Button>
