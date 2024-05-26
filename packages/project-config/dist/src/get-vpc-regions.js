@@ -37,8 +37,11 @@ const getVpcRegions = () => {
                 }
             }
             // Loop through backends
+            console.log("HERE 00000000000000000000000000000000000000000000");
+            console.log(frontend);
             frontend.backend.forEach((backend) => {
                 // Add backend
+                console.log(backend);
                 if (backend.subDomain !== undefined &&
                     !!backend.domainNameId &&
                     !!backend.region) {
@@ -68,6 +71,8 @@ const getVpcRegions = () => {
             });
         });
     });
+    console.log("vpsToCreate");
+    console.log(vpsToCreate);
     return vpsToCreate;
 };
 exports.getVpcRegions = getVpcRegions;
