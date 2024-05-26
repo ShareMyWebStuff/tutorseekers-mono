@@ -1,28 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Select } from "@headlessui/react";
 import { Field, Input, Label } from "@headlessui/react";
-import { Check } from "lucide-react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-// import {
-//   Form,
-//   FormControl,
-//   FormField,
-//   FormItem,
-//   FormLabel,
-//   FormMessage,
-// } from "@/components/ui/form";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
 import {
   Card,
   CardContent,
@@ -30,8 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// import { Input } from "@/components/ui/input";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { tuitionCategories, tuitionSubjects } from "@/constants/subjects";
 import { GoTriangleRight } from "react-icons/go";
 
@@ -62,7 +44,7 @@ const FormSchema = z.object({
   subjectSearch: z.string().max(50),
 });
 
-export function ListSubjectsForm() {
+function SuspenseListSubjectsForm() {
   /**
    * Sets the default category from the url path
    * @param cat
@@ -80,9 +62,9 @@ export function ListSubjectsForm() {
   };
 
   // Retrieve the pathname and search parameters
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const searchParams = useSearchParams();
-  const catParam = searchParams.get("cat");
+  // const catParam = searchParams.get("cat");
 
   const [subjectCategory, setSubjectCategory] = useState(() =>
     setCategoryFromPath(searchParams.get("category")),
@@ -295,5 +277,14 @@ export function ListSubjectsForm() {
         <CardFooter className="bg-blue-light rounded-b-xl py-4"></CardFooter>
       </Card>
     </div>
+  );
+}
+
+export function ListSubjectsForm() {
+  return (
+    // You could have a loading skeleton as the `fallback` too
+    <Suspense>
+      <SuspenseListSubjectsForm />
+    </Suspense>
   );
 }

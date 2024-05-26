@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
   Card,
@@ -10,7 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollToTop } from "@/components/utils/scroll-to-top";
 
-export function LegalForm() {
+function SuspenseLegalForm() {
   const legals = ["terms", "privacy", "cookies", "safeguarding"];
 
   const checkLegalValue = (legal: string | null) => {
@@ -1449,5 +1450,14 @@ export function LegalForm() {
         </Card>
       </TabsContent>
     </Tabs>
+  );
+}
+
+export function LegalForm() {
+  return (
+    // You could have a loading skeleton as the `fallback` too
+    <Suspense>
+      <SuspenseLegalForm />
+    </Suspense>
   );
 }
