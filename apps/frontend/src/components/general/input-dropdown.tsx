@@ -250,7 +250,6 @@ export const InputDropDown: React.FC<InputDropDownProps> = ({
     placeholder,
     type: "text",
     className: `w-full p-2 border border-1 border-input-border rounded-lg cursor-pointer focus:border-blue-dark focus:outline-none focus:ring-0`,
-    // onChange: onChangeHandler,
     onChange: (event: React.ChangeEvent<HTMLInputElement>): void => {
       updateState((prev: DropdownStateType): DropdownStateType => {
         return {
