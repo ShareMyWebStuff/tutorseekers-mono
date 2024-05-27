@@ -217,7 +217,7 @@ create_install_node_script() {
     echo "<<CERTBOT_CONF>>" >> $nodeScript
     echo "" >> $nodeScript
     echo "logging \"Restart nginx server\"" >> $nodeScript
-    echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>\&1" >> $nodeScript
+    echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $nodeScript
 
     chown ubuntu:ubuntu $nodeScript
     chmod 755 $nodeScript
