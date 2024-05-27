@@ -214,8 +214,9 @@ create_install_node_script() {
     echo "apt install certbot python3-certbot-nginx -y" >>  $nodeScript
     echo "" >> $nodeScript
 
-    echo "<<CERTBOT_CONF>>" >> $nodeScript
-    echo "" >> $nodeScript
+# DPF
+#    echo "<<CERTBOT_CONF>>" >> $nodeScript
+#    echo "" >> $nodeScript
     echo "logging \"Restart nginx server\"" >> $nodeScript
     echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $nodeScript
 
@@ -359,7 +360,12 @@ setup_pm2_script() {
     
     # pm2 start yarn --name tutorseekers-uk -- frontend:start
     echo "logging \"PM2 - Start\"" >> $setupPM2
-    echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $setupPM2
+    # echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $setupPM2
+
+    cd apps/frontend
+    echo "pm2 start yarn --name <<APP_NAME>> -- start &>/dev/null" >> $setupPM2
+
+
     # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $setupPM2
     echo "logging \"PM2 - List\"" >> $setupPM2
     echo "pm2 ls" >> $setupPM2
