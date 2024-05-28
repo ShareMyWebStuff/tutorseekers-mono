@@ -362,7 +362,7 @@ setup_pm2_script() {
     echo "logging \"PM2 - Start\"" >> $setupPM2
     # echo "pm2 start yarn --name <<APP_NAME>> -- frontend:start &>/dev/null" >> $setupPM2
 
-    cd apps/frontend
+    echo "cd apps/frontend" >> $setupPM2
     echo "pm2 start yarn --name <<APP_NAME>> -- start &>/dev/null" >> $setupPM2
 
 

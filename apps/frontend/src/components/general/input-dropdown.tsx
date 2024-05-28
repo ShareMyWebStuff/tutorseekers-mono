@@ -305,12 +305,12 @@ export const InputDropDown: React.FC<InputDropDownProps> = ({
   let dropdown: JSX.Element | null = (
     <div
       id="subjectDropdownID"
-      className="absolute rounded-lg  bg-white-900 border border-1 border-input-border py-2 w-full overflow-y-auto max-h-64"
+      className="absolute rounded-lg  bg-white-500 border border-1 border-input-border py-2 w-full overflow-y-auto max-h-64 z-2000"
       data-cy={`InputDropDown${"-" + name + "-items"}`}
     >
       {dropdownList.map((item, idx) => {
         const className =
-          (idx === selectedItem ? "bg-input-border " : "") +
+          (idx === selectedItem ? "bg-input-border  z-2000 +" : "") +
           "px-2" +
           (item.disabled ? ` line-through` : "");
         const prefixPos = item.lookup
