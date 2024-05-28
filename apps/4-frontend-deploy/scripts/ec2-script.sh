@@ -1,10 +1,10 @@
-echo "Starting " > /home/ubuntu/hello.txt
+echo "Starting " > /home/ubuntu/initial-setup.txt
 
 #
 # Writes logging messages to the log file
 #
 logging() {
-    echo `date "+%F %T"` - $1 >> /home/ubuntu/logs/hello.txt
+    echo `date "+%F %T"` - $1 >> /home/ubuntu/logs/initial-setup.txt
 }
 
 #
@@ -25,7 +25,7 @@ create_script_to_upgrade_server() {
 
     upgradeScript="/home/ubuntu/scripts/upgrade_server.sh"
 
-    logging "Create script to upgrade server"
+    logging "Starting - create_script_to_upgrade_server"
 
     echo "#!/bin/bash" > $upgradeScript
     echo "" >> $upgradeScript
@@ -49,7 +49,8 @@ create_script_to_upgrade_server() {
     chown ubuntu:ubuntu $upgradeScript
     chmod 755 $upgradeScript
 
-    logging "Completed creating script"
+    logging "Finishing - create_script_to_upgrade_server"
+    logging ""
 }
 
 # 
@@ -57,7 +58,7 @@ create_script_to_upgrade_server() {
 # will change the file to add the encryption details.
 #
 create_nginx_conf_file() {
-    logging "Creating nginx conf file"
+    logging "Starting - create_nginx_conf_file"
 
     logging "Create script to upgrade server"
 
@@ -130,6 +131,9 @@ create_nginx_conf_file() {
     chown ubuntu:ubuntu $nginxConfScript
     chmod 755 $nginxConfScript
 
+    logging "Finishing - create_nginx_conf_file"
+    logging ""
+
 }
 
 # 
@@ -137,7 +141,7 @@ create_nginx_conf_file() {
 #
 update_bashrc_files() {
 
-    logging "Setting root bashrc"
+    logging "Starting - update_bashrc_files"
 
     touch ~/.bash_profile
 
@@ -154,7 +158,8 @@ update_bashrc_files() {
     echo "export NVM_DIR=$NVM_DIR" >> /home/ubuntu/.bashrc
     echo ". $NVM_DIR/nvm.sh" >> /home/ubuntu/.bashrc
 
-    logging "Completed updating root bashrc"
+    logging "Finishing - update_bashrc_files"
+    logging ""
 }
 
 # 
@@ -163,7 +168,7 @@ update_bashrc_files() {
 create_install_node_script() {
 
     nodeScript="/home/ubuntu/scripts/install_node.sh"
-    logging "Create script to install node"
+    logging "Starting - create_install_node_script"
 
     echo "#!/bin/bash" > $nodeScript
     logging "Create script to install node 1"
@@ -223,13 +228,14 @@ create_install_node_script() {
     chmod 755 $nodeScript
 
 
-    logging "Completed node installation"
+    logging "Finishing - create_install_node_script"
+    logging ""
 }
 
 #
 create_deploy_website_script() {
 
-    logging "Completed node installation"
+    logging "Starting - create_deploy_website_script"
     deployWebsite="/home/ubuntu/scripts/deploy_website.sh"
 
     logging "Clone <<PROJECT_PREFIX>>"
@@ -325,11 +331,13 @@ create_deploy_website_script() {
 
     chown ubuntu:ubuntu $deployWebsite
     chmod 755 $deployWebsite
+    logging "Finishing - create_deploy_website_script"
+    logging ""
 }
 
 setup_pm2_script() {
 
-    logging "Setup PM2"
+    logging "Starting - Setup PM2"
     setupPM2="/home/ubuntu/scripts/setup_pm2.sh"
 
     echo "#!/bin/bash" > $setupPM2
@@ -378,6 +386,7 @@ setup_pm2_script() {
 
     chown root:root $setupPM2
     chmod 755 $setupPM2
+    logging "Finishing - Setup PM2"
 }
 
 create_scripts_directory

@@ -26,6 +26,7 @@ const REGION_IRELAND = "ie";
  */
 const CAMERONGUY_BIZ = 1;
 const CAMERONGUY_IE = 2;
+const CAMERONGUY_INFO = 3;
 
 /**
  * Define the regions this project is deployed too.
@@ -69,6 +70,11 @@ export const DOMAINS: T_DOMAINS = {
     domainName: "cameronguy.ie",
     description: "Test domain name",
   },
+  [CAMERONGUY_INFO]: {
+    id: CAMERONGUY_INFO,
+    domainName: "cameronguy.info",
+    description: "Test domain name",
+  },
 };
 
 // Define the website infrastructure from a region perspective
@@ -95,7 +101,7 @@ export const WEBSITE_SETUP: T_WEBSITE = {
       {
         name: "UK Frontend",
         subDomain: null,
-        domainNameId: CAMERONGUY_BIZ,
+        domainNameId: CAMERONGUY_INFO,
         region: REGION_UK,
         backend: [
           // {
