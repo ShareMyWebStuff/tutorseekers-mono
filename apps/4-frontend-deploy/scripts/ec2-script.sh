@@ -214,9 +214,8 @@ create_install_node_script() {
     echo "apt install certbot python3-certbot-nginx -y" >>  $nodeScript
     echo "" >> $nodeScript
 
-# DPF
-#    echo "<<CERTBOT_CONF>>" >> $nodeScript
-#    echo "" >> $nodeScript
+   echo "<<CERTBOT_CONF>>" >> $nodeScript
+   echo "" >> $nodeScript
     echo "logging \"Restart nginx server\"" >> $nodeScript
     echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $nodeScript
 
@@ -404,3 +403,8 @@ setup_pm2_script
 . /home/ubuntu/scripts/deploy_website.sh
 
 . /home/ubuntu/scripts/setup_pm2.sh
+
+cat <<EOF >> /home/ubuntu/.bashrc
+export NVM_DIR="/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+EOF
