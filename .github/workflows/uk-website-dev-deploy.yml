@@ -96,7 +96,7 @@ jobs:
     steps:
       # Check out the code from the repository
       - name: Checkout repository
-        uses: actions/checkout@v3.6.0
+        uses: actions/checkout@v4
 
       # Configure Github to connect to AWS via AWS role
       - name: Configure AWS credentials
