@@ -1,10 +1,10 @@
-echo "Starting " > /home/ubuntu/initial-setup.txt
+echo "Starting " > /home/ubuntu/initial_setup.txt
 
 #
 # Writes logging messages to the log file
 #
 logging() {
-    echo `date "+%F %T"` - $1 >> /home/ubuntu/logs/initial-setup.txt
+    echo `date "+%F %T"` - $1 >> /home/ubuntu/logs/initial_setup.txt
 }
 
 #
@@ -33,6 +33,7 @@ create_script_to_upgrade_server() {
     echo "    echo \`date \"+%F %T\"\` - \$1 >> /home/ubuntu/logs/upgrade_server.txt" >> $upgradeScript
     echo "}" >> $upgradeScript
     echo "" >> $upgradeScript
+    echo "logging \"Starting ...\"" >> $upgradeScript
     echo "logging \"Starting update\"" >> $upgradeScript
     echo "whoami > /home/ubuntu/logs/whoami.txt" >> $upgradeScript
     echo "apt-get update -y" >>  $upgradeScript
@@ -45,6 +46,7 @@ create_script_to_upgrade_server() {
     echo "logging \"Enable nginx\"" >> $upgradeScript
     echo "systemctl enable nginx" >> $upgradeScript
     echo "logging \"Upgrade complete\"" >> $upgradeScript
+    echo "logging \"Finished ...\"" >> $upgradeScript
 
     chown ubuntu:ubuntu $upgradeScript
     chmod 755 $upgradeScript
@@ -167,15 +169,19 @@ update_bashrc_files() {
 #
 run_certbot_files() {
 
-    logging "Starting - update_bashrc_files"
+    logging "Starting - run_certbot_files"
     nodeScript="/home/ubuntu/scripts/certbot_setup.sh"
 
+    echo "#!/bin/bash" > $nginxConfScript
+    logging "Creating certbot records"
+
+    echo "" >> $nginxConfScript
     echo "<<CERTBOT_CONF>>" >> $nodeScript
     echo "" >> $nodeScript
     echo "logging \"Restart nginx server\"" >> $nodeScript
-    echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $nodeScript
+    echo "systemctl restart nginx >> /home/ubuntu/logs/restart_nginx.log 2>&1" >> $nodeScript
 
-    logging "Finishing - update_bashrc_files"
+    logging "Finishing - run_certbot_files"
     logging ""
 }
 
@@ -410,6 +416,30 @@ setup_pm2_script() {
     logging "Finishing - Setup PM2"
 }
 
+restart_nginx_script() {
+
+    logging "Starting - Restart nginx"
+    setupPM2="/home/ubuntu/scripts/restart_nginx_script.sh"
+
+    echo "#!/bin/bash" > $setupPM2
+    echo "" >> $setupPM2
+    echo "logging() {" >> $setupPM2
+    echo "    echo \`date \"+%F %T\"\` - \$1 >> /home/ubuntu/logs/restart_nginx_script.txt" >> $setupPM2
+    echo "}" >> $setupPM2
+    echo "" >> $setupPM2
+
+    echo "logging \"Restart nginx server\"" >> $setupPM2
+    echo "systemctl restart nginx >> /home/ubuntu/logs/restart_nginx_script.txt 2>&1" >> $setupPM2
+
+
+    echo "logging \"Restart nginx Completed\"" >> $setupPM2
+
+    chown root:root $setupPM2
+    chmod 755 $setupPM2
+    logging "Finishing - Restart nginx"
+}
+
+
 create_scripts_directory
 
 create_script_to_upgrade_server
@@ -426,6 +456,8 @@ create_deploy_website_script
 
 setup_pm2_script
 
+restart_nginx_script
+
 . /home/ubuntu/scripts/upgrade_server.sh
 
 . /home/ubuntu/scripts/create_nginx_conf.sh
@@ -435,6 +467,17 @@ setup_pm2_script
 . /home/ubuntu/scripts/deploy_website.sh
 
 . /home/ubuntu/scripts/setup_pm2.sh
+
+. /home/ubuntu/scripts/restart_nginx_script.sh
+
+
+# Restart NGINX
+# Restart NGINX
+# Restart NGINX
+# Restart NGINX
+# Restart NGINX
+# Restart NGINX
+
 
 cat <<EOF >> /home/ubuntu/.bashrc
 export NVM_DIR="/.nvm"
