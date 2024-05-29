@@ -165,6 +165,24 @@ update_bashrc_files() {
 # 
 # 
 #
+run_certbot_files() {
+
+    logging "Starting - update_bashrc_files"
+    nodeScript="/home/ubuntu/scripts/certbot_setup.sh"
+
+    echo "<<CERTBOT_CONF>>" >> $nodeScript
+    echo "" >> $nodeScript
+    echo "logging \"Restart nginx server\"" >> $nodeScript
+    echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $nodeScript
+
+    logging "Finishing - update_bashrc_files"
+    logging ""
+}
+
+
+# 
+# 
+#
 create_install_node_script() {
 
     nodeScript="/home/ubuntu/scripts/install_node.sh"
@@ -219,10 +237,10 @@ create_install_node_script() {
     echo "apt install certbot python3-certbot-nginx -y" >>  $nodeScript
     echo "" >> $nodeScript
 
-   echo "<<CERTBOT_CONF>>" >> $nodeScript
-   echo "" >> $nodeScript
-    echo "logging \"Restart nginx server\"" >> $nodeScript
-    echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $nodeScript
+#    echo "<<CERTBOT_CONF>>" >> $nodeScript
+#    echo "" >> $nodeScript
+#     echo "logging \"Restart nginx server\"" >> $nodeScript
+#     echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $nodeScript
 
     chown ubuntu:ubuntu $nodeScript
     chmod 755 $nodeScript
@@ -398,6 +416,9 @@ create_nginx_conf_file
 update_bashrc_files
 
 create_install_node_script
+
+# NEEDS TO BE UNCOMMENTED
+# run_certbot_files
 
 create_deploy_website_script
 

@@ -74,6 +74,9 @@ jobs:
       - name: Install everything
         run: yarn
 
+      - name: Build All Packages
+        run: yarn workspaces foreach -Rpt --from '{@tutorseekers/project-config,@tutorseekers/logger,@shared/aws-helper-fns}' run build
+
       - name: Synth Stack
         run: ls && cd apps/1-initial-setup && ls && yarn cdk synth
 
