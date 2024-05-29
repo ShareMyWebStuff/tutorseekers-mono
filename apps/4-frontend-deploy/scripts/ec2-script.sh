@@ -359,7 +359,6 @@ setup_pm2_script() {
     setupPM2="/home/ubuntu/scripts/setup_pm2.sh"
 
     echo "#!/bin/bash" > $setupPM2
-    logging "Create script to install node 1"
     echo "" >> $setupPM2
     echo "logging() {" >> $setupPM2
     echo "    echo \`date \"+%F %T\"\` - \$1 >> /home/ubuntu/logs/setup_pm2.txt" >> $setupPM2
@@ -400,6 +399,10 @@ setup_pm2_script() {
     # Sleep 10 seconds to give the processes time to start
     echo "sleep 10" >> $setupPM2
 
+    echo "logging \"Restart nginx server\"" >> $setupPM2
+    echo "systemctl restart nginx >> /home/ubuntu/hello.txt 2>&1" >> $setupPM2
+
+
     echo "logging \"PM2 Completed\"" >> $setupPM2
 
     chown root:root $setupPM2
@@ -417,8 +420,7 @@ update_bashrc_files
 
 create_install_node_script
 
-# NEEDS TO BE UNCOMMENTED
-# run_certbot_files
+run_certbot_files
 
 create_deploy_website_script
 
