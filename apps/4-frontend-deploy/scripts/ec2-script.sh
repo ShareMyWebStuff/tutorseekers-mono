@@ -35,7 +35,6 @@ create_script_to_upgrade_server() {
     echo "" >> $upgradeScript
     echo "logging \"Starting ...\"" >> $upgradeScript
     echo "logging \"Starting update\"" >> $upgradeScript
-    echo "whoami > /home/ubuntu/logs/whoami.txt" >> $upgradeScript
     echo "apt-get update -y" >>  $upgradeScript
     echo "logging \"Starting upgrade\"" >> $upgradeScript
     echo "apt-get upgrade -y" >> $upgradeScript
@@ -172,10 +171,10 @@ run_certbot_files() {
     logging "Starting - run_certbot_files"
     nodeScript="/home/ubuntu/scripts/certbot_setup.sh"
 
-    echo "#!/bin/bash" > $nginxConfScript
+    echo "#!/bin/bash" > $nodeScript
     logging "Creating certbot records"
 
-    echo "" >> $nginxConfScript
+    echo "" >> $nodeScript
     echo "<<CERTBOT_CONF>>" >> $nodeScript
     echo "" >> $nodeScript
     echo "logging \"Restart nginx server\"" >> $nodeScript
@@ -183,6 +182,9 @@ run_certbot_files() {
 
     logging "Finishing - run_certbot_files"
     logging ""
+
+    chown ubuntu:ubuntu $nodeScript
+    chmod 755 $nodeScript
 }
 
 
@@ -232,12 +234,6 @@ create_install_node_script() {
     echo "corepack enable" >> $nodeScript
     echo "corepack prepare yarn@stable --activate" >> $nodeScript
     echo "" >> $nodeScript
-
-
-    # echo "logging \"Install PM2\"" >> $nodeScript
-    # echo "npm i pm2 -g" >> $nodeScript
-    # echo "pm2 update" >> $nodeScript
-    # echo "" >> $nodeScript
 
     echo "logging \"Install certbot\"" >> $nodeScript
     echo "apt install certbot python3-certbot-nginx -y" >>  $nodeScript
@@ -324,16 +320,15 @@ setup_pm2_script() {
     echo "" >> $setupPM2
 
     echo "logging \"Install PM2\"" >> $setupPM2
-    echo "npm i pm2 -g" >> $setupPM2
+    echo "npm install pm2@latest -g" >> $setupPM2
     echo "pm2 update" >> $setupPM2
     echo "" >> $setupPM2
 
     # Change in to the directory
-    echo "cd <<PROJECT_PREFIX>>/" >> $setupPM2
+    echo "cd /home/ubuntu/<<PROJECT_PREFIX>>/" >> $setupPM2
     echo "" >> $setupPM2
     # echo "yarn frontend:build" >> $setupPM2
 
-    echo "whoami >> /home/ubuntu/logs/setup_pm2.txt" >> $setupPM2
     echo "logging \"PM2 - Deleting\"" >> $setupPM2
     echo "pm2 delete all" >> $setupPM2
     echo "logging \"PM2 - Startup\"" >> $setupPM2
