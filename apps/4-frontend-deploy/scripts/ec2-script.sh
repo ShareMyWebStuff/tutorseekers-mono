@@ -276,18 +276,11 @@ create_deploy_website_script() {
     echo "logging \"Clone <<PROJECT_PREFIX>>\"" >> $deployWebsite
     # echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers.co.uk.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
     echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers-mono.git <<PROJECT_PREFIX>>_tmp" >> $deployWebsite
-# https://github.com/ShareMyWebStuff/tutorseekers-mono.git
-# Fine grain token - https://github.com/settings/personal-access-tokens/973258
-# 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
 
     # Change in to the directory
     echo "cd <<PROJECT_PREFIX>>_tmp/" >> $deployWebsite
     echo "" >> $deployWebsite
 
-# yarn
-# yarn workspaces focus @tutorseekers/frontend
-# cd apps/frontend
-# yarn build
     echo "logging \"Install packages\"" >> $deployWebsite
     echo "yarn" >> $deployWebsite
     echo "logging \"Focus frontend\"" >> $deployWebsite
@@ -295,16 +288,6 @@ create_deploy_website_script() {
     echo "logging \"Building\"" >> $deployWebsite
     echo "yarn frontend:build" >> $deployWebsite
     echo "" >> $deployWebsite
-
-    # Install the node modules
-    # echo "logging \"Run npm install\"" >> $deployWebsite
-    # echo "npm install" >> $deployWebsite
-    # echo "" >> $deployWebsite
-
-    # # Build the project
-    # echo "logging \"Run npm build\"" >> $deployWebsite
-    # echo "npm run build" >> $deployWebsite
-    # echo "" >> $deployWebsite
 
     # Change in to the home directory
     echo "cd /home/ubuntu" >> $deployWebsite
@@ -320,37 +303,6 @@ create_deploy_website_script() {
     echo "mv <<PROJECT_PREFIX>>_tmp <<PROJECT_PREFIX>>" >> $deployWebsite
     echo "" >> $deployWebsite
 
-    # # Change in to the directory
-    # echo "cd <<PROJECT_PREFIX>>/" >> $deployWebsite
-    # echo "" >> $deployWebsite
-
-    # Restart pm2
-
-
-
-    # echo "logging \"Remove <<PROJECT_PREFIX>>\"" >> $deployWebsite
-    # echo "rm -rf <<PROJECT_PREFIX>>/" >> $deployWebsite
-    # echo "" >> $deployWebsite
-    # echo "logging \"Clone <<PROJECT_PREFIX>>\"" >> $deployWebsite
-    # echo "git clone https://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@github.com/ShareMyWebStuff/tutorseekers.co.uk.git <<PROJECT_PREFIX>>" >> $deployWebsite
-    # echo "" >> $deployWebsite
-    # echo "cd <<PROJECT_PREFIX>>/" >> $deployWebsite
-    # echo "" >> $deployWebsite
-    # echo "logging \"Run npm install\"" >> $deployWebsite
-    # echo "npm install" >> $deployWebsite
-    # echo "" >> $deployWebsite
-    # echo "logging \"Run npm build\"" >> $deployWebsite
-    # echo "npm run build" >> $deployWebsite
-    # echo "" >> $deployWebsite
-    # echo "logging \"Run PM2 start\"" >> $deployWebsite
-    # echo "pm2 startup >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
-    # echo "pm2 start npm --name <<APP_NAME>> -- start &>/dev/null" >> $deployWebsite
-    # echo "pm2 save" >> $deployWebsite
-    # # # echo "nohup pm2 start npm --name <<APP_NAME>> &>/dev/null &" >> $deployWebsite
-    # # # echo "nohup pm2 start npm --name <<APP_NAME>> -- start &>/dev/null &" >> $deployWebsite
-    # # echo "sleep 1" >> $deployWebsite
-    # # echo "pm2 status >> /home/ubuntu/logs/deploy_website.txt" >> $deployWebsite
-    # echo "" >> $deployWebsite
     echo "logging \"Completed\"" >> $deployWebsite
 
     chown ubuntu:ubuntu $deployWebsite
@@ -470,13 +422,6 @@ restart_nginx_script
 
 . /home/ubuntu/scripts/restart_nginx_script.sh
 
-
-# Restart NGINX
-# Restart NGINX
-# Restart NGINX
-# Restart NGINX
-# Restart NGINX
-# Restart NGINX
 
 
 cat <<EOF >> /home/ubuntu/.bashrc
