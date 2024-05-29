@@ -128,6 +128,9 @@ jobs:
           npm install -g aws-cdk
 
       #
+      - name: Install Rimraf
+        run: npm install rimraf -g
+
       - name: Install
         run: yarn workspaces focus @tutorseekers/frontend-deploy
 
