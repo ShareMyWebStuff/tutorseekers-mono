@@ -76,7 +76,7 @@ jobs:
 
   teardown-backend:
     name: Teardown Backend
-    # needs: deploy-database
+    needs: teardown-frontend
     runs-on: ubuntu-latest
 
     steps:
@@ -86,7 +86,7 @@ jobs:
 
   teardown-database:
     name: Teardown Database Upgrades
-    needs: base-infrasture-deployment
+    needs: teardown-backend
     runs-on: ubuntu-latest
 
     steps:
@@ -96,6 +96,7 @@ jobs:
 
   teardown-base-infrasture:
     name: Teardown Base Infrastructure
+    needs: teardown-database
     runs-on: ubuntu-latest
 
     steps:
