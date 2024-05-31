@@ -11,7 +11,8 @@ export function OurSubjects() {
   const router = useRouter();
 
   return (
-    <div className="bg-gradient-to-r from-blue-light from-0% via-white-900 via-50% to-blue-light to-90% pt-8 text-black pb-6">
+    // <div className="bg-gradient-to-r from-blue-light from-0% via-white-900 via-50% to-blue-light to-90% pt-8 text-black pb-6">
+    <div className="bg-blue-light pt-8 text-black pb-6">
       <div className="max-w-7xl w-11/12 m-auto">
         <h2 className="text-2xl text-center mb-12">Our Subjects</h2>
         <div

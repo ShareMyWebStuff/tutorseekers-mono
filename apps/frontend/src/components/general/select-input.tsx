@@ -130,7 +130,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
 
   const attrs: AttrsType = {
     className:
-      "w-full p-2 border border-1 border-input-border rounded-lg cursor-pointer focus:border-blue-dark focus:outline-none focus:ring-0",
+      "opacity-100 w-full p-2 bg-white-900 top-0 bottom-0 border border-1 border-input-border rounded-lg cursor-pointer focus:border-blue-dark focus:outline-none focus:ring-0",
     id: inputId,
     name,
     title,

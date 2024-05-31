@@ -9,7 +9,8 @@ import Image from "next/image";
 
 export function HowItWorks() {
   return (
-    <div className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% text-white-800 pt-8">
+    // <div className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% text-white-800 pt-8">
+    <div className="bg-blue-dark text-white-800 pt-8">
       <div className="max-w-7xl w-11/12 m-auto pb-12 px-8">
         <main className="" data-cy="landingOtherServicesSection">
           <header>

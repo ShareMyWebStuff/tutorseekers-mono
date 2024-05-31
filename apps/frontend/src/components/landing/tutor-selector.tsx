@@ -182,8 +182,7 @@ export function TutorSelector() {
         Shaping a world through education.
       </h1>
 
-      {/* <form className="m-auto mb-16 w-[800px] my-10 rounded-xl p-4 bg-white-900 grid grid-cols-4 gap-2"> */}
-      <form className="m-auto mb-28 w-4/5 max-w-[900px] rounded-xl p-4 bg-white-900 grid grid-cols-12 gap-2 items-end">
+      <form className="m-auto mb-28 w-4/5 max-w-[950px] rounded-xl p-4 bg-white-900 grid grid-cols-12 gap-2 items-end">
         <RadioGroup
           value={tuitionLocation}
           onChange={setTuitionLocation}
@@ -219,16 +218,10 @@ export function TutorSelector() {
             updateState={setSubjectLookup}
             disabled={disabled}
             loading={false}
-            // setMatchedValue={setMatchedValue}
-
-            // listItems={subjectLookup.subjectItems}
-            // value={subjectLookup.subject}
-            // valueMatched={subjectLookup.subjectMatched}
-            // onChangeHandler={onDropdownHandler}
           />
         </Field>
 
-        <Field className="col-span-12 md:col-span-6 lg:col-span-3">
+        <Field className="col-span-12 md:col-span-6 lg:col-span-4 z-2000">
           <SelectInput
             label="Tuition Level"
             name="level"
@@ -244,15 +237,15 @@ export function TutorSelector() {
 
         <Field
           className={
-            (tuitionLocation === "Online" ? "hidden " : "") +
-            "col-span-12 md:col-span-7 lg:col-span-4"
+            (tuitionLocation === "Online" ? "invisible " : "") +
+            "col-span-12 md:col-span-6 lg:col-span-3"
           }
         >
           <Label className="text-sm">Location</Label>
           <Input
             className="p-2 w-full border border-1 border-input-border rounded-lg cursor-pointer focus:border-blue-dark focus:outline-none focus:ring-0"
             name="location"
-            placeholder="Location e.g. GU22 / HA316AA"
+            placeholder="Location e.g. HA316AA"
             autoComplete="off"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setLocation(e.target.value);
@@ -261,9 +254,8 @@ export function TutorSelector() {
           />
         </Field>
 
-        {/* align-end content-end */}
         <Button
-          className="col-span-12 md:col-start-8 lg:col-start-12 md:col-span-1 justify-self-center"
+          className="col-span-12 md:col-start-7 lg:col-start-12 md:col-span-1 justify-self-center disabled:opacity-100 disabled:text-blue-500"
           variant="outline"
           size="icon"
           onClick={onSearch}
