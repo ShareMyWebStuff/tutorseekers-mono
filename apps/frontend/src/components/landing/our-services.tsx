@@ -20,7 +20,7 @@ export function OurService() {
     {
       img: "/images/landing/course-icon.png",
       alt: "Courses image",
-      header: "Courses",
+      header: "Tutor Lead Courses",
       para: "Looking for courses online or in your local area? Search our listings to see if we have what your looking for. Tutors and companies are encouraged to advertise free of charge, so whether it’s learning to throw pottery or a crash course in algebra over a school holiday, we have it covered.",
       btnText: "View Courses",
     },
@@ -33,10 +33,10 @@ export function OurService() {
     },
     {
       img: "/images/landing/study-buddies.jpg",
-      alt: "Study buddy image",
-      header: "Study Buddies",
-      para: "Learning can be less daunting when you learn together. We can put you in touch with other people learning the same subject at the same level as you. Read our security tips to ensure you use this facility in a safe way.",
-      btnText: "View Study Buddies",
+      alt: "Video Courses image",
+      header: "Video Courses",
+      para: "Students all learn different ways. With this in mind we have a selection of videos available for subscription. These videos are prepared by experts and designed to help students learn the required subject.",
+      btnText: "View Videos",
     },
     {
       img: "/images/landing/question-and-answer.jpg",
@@ -104,7 +104,7 @@ export function OurService() {
                     className="rounded-lg"
                   />
                 </CardHeader>
-                <CardContent>
+                <CardContent className="h-72 xl:h-64">
                   <h4 className="my-4 text-center text-xl font-semibold">
                     {sliderData[firstItem].header}
                   </h4>
@@ -128,7 +128,7 @@ export function OurService() {
                     className="rounded-lg"
                   />
                 </CardHeader>
-                <CardContent>
+                <CardContent className="h-72 xl:h-64">
                   <h4 className="my-4 text-center text-xl font-semibold">
                     {sliderData[secondItem].header}
                   </h4>
@@ -152,7 +152,7 @@ export function OurService() {
                     className="rounded-lg"
                   />
                 </CardHeader>
-                <CardContent>
+                <CardContent className="h-72 xl:h-64">
                   <h4 className="my-4 text-center text-xl font-semibold">
                     {sliderData[thirdItem].header}
                   </h4>

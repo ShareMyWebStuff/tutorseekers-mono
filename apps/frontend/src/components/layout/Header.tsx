@@ -20,9 +20,10 @@ const Header = () => {
 
   // className={absolute ? "absolute bg-opacity-60" : ""}
   return (
-    <header className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% pt-8 text-white-800">
+    // <header className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% pt-8 text-white-800">
+    <header className="bg-blue-normal pt-8 text-white-800">
       <div className="m-auto max-w-7xl w-11/12 ">
-        <div className="flex items-center justify-between md:border-b-1 border-white-800 border-solid pb-4 md:pb-0">
+        <div className="flex items-center justify-between md:border-b-1 border-white-500 border-solid pb-4 md:pb-4">
           <Link href="/">
             <Image
               className="sm:w-[300px] w-[200px]"

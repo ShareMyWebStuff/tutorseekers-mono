@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
 import { Poppins } from "next/font/google";
+import { StoreProvider } from "./StoreProvider";
+import CookieController from "@/components/general/cookie-controller";
 import "./globals.css";
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import InitialStateLoad from "@/components/general/initial-state-load";
 
-// const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -18,16 +21,27 @@ export const metadata: Metadata = {
   },
 };
 
+// className={`${poppins.variable} text-base select-none flex h-screen flex-col bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% pt-8 text-white-800`}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${poppins.variable} text-base select-none`}>
-        {children}
-      </body>
-    </html>
+    <StoreProvider>
+      <html lang="en">
+        <body
+          className={`${poppins.variable} text-base select-none flex h-screen flex-col bg-blue-normal text-white-800`}
+        >
+          <CookieController>
+            <InitialStateLoad />
+            <Header />
+            {children}
+            <Footer />
+          </CookieController>
+        </body>
+      </html>
+    </StoreProvider>
   );
 }

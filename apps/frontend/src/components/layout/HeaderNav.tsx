@@ -19,7 +19,7 @@ const menuItems = [
   {
     title: "Search",
     subMenu: [
-      { title: "Search 1", link: "/search1" },
+      { title: "Woo", link: "/woo" },
       { title: "Search 2", link: "/search2" },
       { title: "Search 3", link: "/search3" },
     ],
@@ -38,10 +38,6 @@ export function HeaderNav({ source, manualExpand }: HeaderNavProps) {
   const [menuChecked, setMenuChecked] = useState<Menus>(
     Object.fromEntries(menuItems.map((item, index) => [index, false])),
   );
-
-  console.log("source", source);
-
-  console.log("menuChecked", menuChecked);
 
   // Disabled - if we are loading or saving data
   const disabled = source === "a";

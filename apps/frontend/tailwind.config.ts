@@ -20,8 +20,8 @@ const config = {
     borderWidth: {
       DEFAULT: "1px",
       "0": "0",
-      "2": "2",
-      "3": "3",
+      "1": "1px",
+      "2": "2px",
     },
 
     extend: {
@@ -30,6 +30,8 @@ const config = {
           "linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/images/landing/banner-4.jpg')",
       },
       colors: {
+        error: "#ff6961",
+        success: "#4CAF50",
         blue: {
           // light: "#d2e6f3",
           // normal: "#1c4966",
@@ -57,6 +59,7 @@ const config = {
         twitter: "#1DA1F2",
         "input-border": "#E4E4E7",
         warning: "#ff6961",
+        black: "#000000",
         "disabled-bg": "#CDCDCD",
 
         "orange-logo": {

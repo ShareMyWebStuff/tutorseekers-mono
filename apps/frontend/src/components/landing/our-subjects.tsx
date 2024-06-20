@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 {
   /* <div className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% pt-8 text-white-800"> */
@@ -102,7 +102,7 @@ export function OurSubjects() {
             <Image
               src="/images/landing/professional.png"
               alt="Professional subjects image"
-              width="267"
+              width="266"
               height="291"
               className="mx-auto transition ease-in-out duration-300 group-hover:scale-105"
             />

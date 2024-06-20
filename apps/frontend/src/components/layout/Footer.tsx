@@ -38,7 +38,8 @@ const Footer = () => {
 
   return (
     <footer
-      className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% pt-8 text-white-800"
+      // className="bg-gradient-to-r from-blue-dark from-0% via-blue-normal via-25% to-blue-dark to-90% pt-8 text-white-800"
+      className="bg-blue-normal pt-8 text-white-800"
       data-cy="footer"
     >
       {/* className={( disabled ? '' : ` ${styles.navbarEnabled}` )} */}
