@@ -3,10 +3,6 @@ name: "UK :: Deploy :: Local"
 on:
   workflow_dispatch:
     inputs:
-      username:
-        description: Your github username
-        default: "sharemywebstuff"
-
       node-version:
         description: The node version we are running
         default: "20.10"
@@ -67,10 +63,11 @@ jobs:
         run: yarn
 
       - name: Synth Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=$REGION  -c stage=${{ github.actor }} --all
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=$REGION  -c stage=lcl --all
+        # run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=$REGION  -c stage=${{ github.actor }} --all
 
       - name: Deploy Stack
-        run: cd apps/2-base-infrastructure && yarn cdk deploy -c region=$REGION -c stage=${{ github.actor }} --all --require-approval never
+        run: cd apps/2-base-infrastructure && yarn cdk deploy -c region=$REGION -c stage=lcl --all --require-approval never
 
   deploy-database:
     name: Deploy Database Upgrades
