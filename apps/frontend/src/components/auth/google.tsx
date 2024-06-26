@@ -70,6 +70,7 @@ const useFetch = (url: string) => {
 
   const handleGoogle = async (response: any) => {
     setLoading(true);
+    // Use axios
     // 1. Set loading
     // 2. Call backend to authenticate google account
     //    2.0 Success route

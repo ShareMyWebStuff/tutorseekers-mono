@@ -1,26 +1,19 @@
-name: "UK :: Deploy :: Local"
+name: "UK :: Deploy :: Dev"
 
 on:
   workflow_dispatch:
     inputs:
-      region:
-        type: choice
-        description: Select the region to run in
-        options:
-          - uk
-
-      nat-gatway:
-        type: choice
-        description: Select the region to run in
-        options:
-          - uk
+      username:
+        description: Your github username
+        default: "sharemywebstuff"
 
       node-version:
         description: The node version we are running
         default: "20.10"
 
 env:
-  STAGE: lcl
+  REGION: uk
+  AWS_REGION: eu-west-2
 
 permissions:
   id-token: write
@@ -28,14 +21,131 @@ permissions:
   packages: read
 
 jobs:
-  deploy:
-    name: Deploy VPC, Database and AWS Infrastructure
+  base-infrasture-deployment:
+    name: Deploy Base Infrastructure
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: read
-      id-token: write
 
     steps:
-      - name: Dummy
-        run: echo "The backend and frontend are all run locally, the backend is in the "
+      # Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3.6.0
+
+      # Configure Github to connect to AWS via AWS role
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Install corepack
+        run: npm install -g corepack
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Verify AWS CLI availability
+        run: aws --version
+
+      - name: Setup Node & Cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "yarn"
+          cache-dependency-path: "yarn.lock"
+
+      - name: Install Python dependencies and CDK
+        run: |
+          python -m pip install --upgrade pip
+          # install your Python dependencies here
+          npm install -g aws-cdk
+
+      #
+      - name: Install
+        run: yarn workspaces focus @tutorseekers/base-infrastructure
+
+      - name: Install everything
+        run: yarn
+
+      - name: Synth Stack
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=$REGION  -c stage=${{ github.actor }} --all
+
+      - name: Deploy Stack
+        run: cd apps/2-base-infrastructure && yarn cdk deploy -c region=$REGION -c stage=${{ github.actor }} --all --require-approval never
+
+  deploy-database:
+    name: Deploy Database Upgrades
+    needs: base-infrasture-deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout repository
+        run: echo "STILL TO DO"
+
+  deploy-backend:
+    name: Deploy Backend
+    needs: deploy-database
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout repository
+        run: echo "STILL TO DO"
+
+  # deploy-frontend:
+  #   name: Deploy Frontend
+  #   needs: deploy-backend
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     # Check out the code from the repository
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     # Configure Github to connect to AWS via AWS role
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+  #         aws-region: eu-west-2
+
+  #     - name: Install corepack
+  #       run: npm install -g corepack
+
+  #     - name: Enable corepack
+  #       run: corepack enable
+
+  #     - name: Verify AWS CLI availability
+  #       run: aws --version
+
+  #     - name: Setup Node & Cache
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ inputs.node-version }}
+  #         cache: "yarn"
+  #         cache-dependency-path: "yarn.lock"
+
+  #     - name: Install Python dependencies and CDK
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         # install your Python dependencies here
+  #         npm install -g aws-cdk
+
+  #     #
+  #     - name: Install Rimraf
+  #       run: npm install rimraf -g
+
+  #     - name: Install
+  #       run: yarn workspaces focus @tutorseekers/frontend-deploy
+
+  #     - name: Install everything
+  #       run: yarn
+
+  #     - name: Build All Packages
+  #       run: yarn workspaces foreach -Rpt --from '{@tutorseekers/project-config,@tutorseekers/logger,@shared/aws-helper-fns}' run build
+
+  #     - name: Synth Stack
+  #       run: ls && cd apps/4-frontend-deploy && ls && yarn cdk synth -c region=$REGION  -c stage=dev --all
+
+  #     - name: Deploy Stack
+  #       run: cd apps/4-frontend-deploy && yarn cdk deploy -c region=$REGION -c stage=dev --all --require-approval never
