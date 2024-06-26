@@ -1,4 +1,4 @@
-name: "UK :: Deploy :: Dev"
+name: "UK :: Deploy :: Local"
 
 on:
   workflow_dispatch:
