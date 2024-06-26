@@ -48,17 +48,22 @@ export function RegisterAccountType() {
     },
   ];
 
+  const regBuffer = useAppSelector(selectAll);
+
+  const router = useRouter();
+  if (!regBuffer.token) {
+    router.push("/auth/register");
+  }
+
   const [accType, setAccType] = useState<SelectInputStateType>({
     accountType: {
-      selectedValue: AccTypeData[0].value,
+      selectedValue: regBuffer.accountType, // AccTypeData[0].value,
       options: AccTypeData,
     },
   });
   const [errors, setErrors] = useState("");
 
-  const router = useRouter();
-
-  const regBuffer = useAppSelector(selectAll);
+  // const regBuffer = useAppSelector(selectAll);
   const dispatch = useAppDispatch();
 
   console.log("regBuffer");
@@ -147,6 +152,18 @@ export function RegisterAccountType() {
               business then select this account type. We perform many checks on
               this account type for safeguarding reasons.
             </p>
+
+            <div className="mt-6 flex justify-end">
+              <Button
+                variant="outliner"
+                className=""
+                onClick={() => {
+                  onSubmit();
+                }}
+              >
+                Next
+              </Button>
+            </div>
           </CardContent>
           <CardFooter className="bg-blue-normal rounded-b-lg flex flex-row justify-end py-6">
             {/* <Button
@@ -167,15 +184,6 @@ export function RegisterAccountType() {
             >
               Back
             </Button> */}
-            <Button
-              variant="outline"
-              className="text-white-900"
-              onClick={() => {
-                onSubmit();
-              }}
-            >
-              Next
-            </Button>
           </CardFooter>
         </Card>
       </div>

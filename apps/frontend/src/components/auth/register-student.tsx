@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -11,191 +9,191 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Checkbox } from "@headlessui/react";
+import { Select } from "@headlessui/react";
 import { Field, Input, Label } from "@headlessui/react";
 import { Button } from "@/components/ui/button";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  setParentDetails,
+  selectAll,
+} from "@/lib/features/register/registerSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-/**
- * If Student / Parent
- *    Preferred Name
- *    Town or Postcode
- *
- * If Tutor
- *    Title
- *    Gender
- *    Preferred Name
- *    Firstname
- *    Lastname
- *    Phone Number
- *    Address 1
- *    Address 2
- *    Town
- *    County
- *    Postcode
- *
- * @returns
- *
- */
+const registerTutorSchema = z.object({
+  preferredName: z
+    .string()
+    .min(2, { message: "Must be at least 2 characters long" })
+    .max(50, { message: "Must be 50 characters or less" }),
+  town: z
+    .string()
+    .min(1, { message: "Enter your town / city" })
+    .max(80, { message: "Must be 80 or less characters" }),
+  postcode: z
+    .string()
+    .min(3, { message: "Enter a valid postcode" })
+    .max(11, { message: "Must be 11 characters or less" }),
+});
+
+type FormFields = z.infer<typeof registerTutorSchema>;
 
 export function RegisterStudent() {
-  const [readSafeguarding, setReadSafeguarding] = useState(false);
-  const [over18, setOver18] = useState(false);
-  const [rightToWork, setRightToWork] = useState(false);
-  const [onlyAccount, setSetOnlyAccount] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  const dispatch = useAppDispatch();
+  const regBuffer = useAppSelector(selectAll);
+
+  const router = useRouter();
+
+  if (!regBuffer.token) {
+    router.push("/auth/register");
+  }
+
+  if (!["Student", "Parent", "Tutor"].includes(regBuffer.accountType)) {
+    router.push("/auth/register-account-type");
+  }
+
+  console.log("RegBuffer");
+  console.log(regBuffer);
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<FormFields>({
+    resolver: zodResolver(registerTutorSchema),
+    defaultValues: {
+      preferredName: regBuffer.preferredName,
+      town: regBuffer.town,
+      postcode: regBuffer.postcode,
+    },
+  });
+
+  console.log("errors");
+  console.log(errors);
+
+  const onBack = () => {
+    router.push("/auth/register-account-type");
+  };
+
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    console.log("HERE - onsubmit**");
+    console.log(data);
+    console.log("errors");
+    console.log(errors);
+    // return;
+    try {
+      // Can check if the email address has been used
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // setError("email", {
+      //   message: "This email is already taken.",
+      // });
+      dispatch(
+        setParentDetails({
+          preferredName: data.preferredName,
+          town: data.town,
+          postcode: data.postcode,
+        }),
+      );
+      router.push("/auth/register-checks");
+    } catch (error) {
+      setError("root", {
+        message: "This email is already taken.",
+      });
+    }
+  };
 
   return (
     <div className="py-12 bg-white-900">
-      <div className="shadow-lg max-w-[48rem] mx-auto">
+      <div className="shadow-lg max-w-7xl w-11/12 m-auto mx-auto">
         <Card className="rounded-lg">
           <CardHeader className="bg-blue-normal rounded-t-lg text-white-900">
             <CardTitle className="text-card-header-fg text-2xl text-center">
-              Safeguarding Checks
+              Student Details
             </CardTitle>
             <CardDescription className="text-base text-center text-brown-600">
-              Here at TutorSeekers we take safeguarding very seriously. In order
-              for safeguarding to work properly it is imperative everyone
-              understands our procedures......
+              Something here ...
             </CardDescription>
           </CardHeader>
           <CardContent className="bg-blue-light py-6">
-            <form>
-              <article className="my-4 bg-white-900 space-x-3 space-y-0 rounded-md border shadow">
-                <Field className="flex items-center gap-2 p-4 ">
-                  <Checkbox
-                    checked={readSafeguarding}
-                    onChange={setReadSafeguarding}
-                    className="group block size-4 rounded border bg-white-900 data-[checked]:bg-blue-normal"
-                  >
-                    <svg
-                      className="stroke-white-900 opacity-0 group-data-[checked]:opacity-100"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                    >
-                      <path
-                        d="M3 8L6 11L11 3.5"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Checkbox>
-                  <Label className="font-semibold">
-                    I have read and understood the safeguarding policy
-                  </Label>
-                </Field>
-              </article>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="text-my-white grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2"
+            >
+              <Field className="w-full">
+                <Label className="text-sm">Preferred Name *</Label>
+                <Input
+                  {...register("preferredName")}
+                  className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
+                  type="text"
+                  placeholder="Enter your preferred name."
+                />
+                {errors.preferredName && (
+                  <div className="text-white-900 bg-blue-dark text-sm my-2 px-2 py-1 rounded-sm">
+                    {errors.preferredName.message}
+                  </div>
+                )}
+              </Field>
 
-              <article className="my-4 bg-white-900 space-x-3 space-y-0 rounded-md border shadow">
-                <Field className="flex items-center gap-2 p-4 ">
-                  <Checkbox
-                    checked={over18}
-                    onChange={setOver18}
-                    className="group block size-4 rounded border bg-white-900 data-[checked]:bg-blue-normal"
-                  >
-                    <svg
-                      className="stroke-white-900 opacity-0 group-data-[checked]:opacity-100"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                    >
-                      <path
-                        d="M3 8L6 11L11 3.5"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Checkbox>
-                  <Label className="font-semibold">
-                    I confirm I am 18 years old or over.
-                  </Label>
-                </Field>
-              </article>
+              <div></div>
 
-              <article className="my-4 bg-white-900 space-x-3 space-y-0 rounded-md border shadow">
-                <Field className="flex items-center gap-2 p-4 ">
-                  <Checkbox
-                    checked={rightToWork}
-                    onChange={setRightToWork}
-                    className="group block size-4 rounded border bg-white-900 data-[checked]:bg-blue-normal"
-                  >
-                    <svg
-                      className="stroke-white-900 opacity-0 group-data-[checked]:opacity-100"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                    >
-                      <path
-                        d="M3 8L6 11L11 3.5"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Checkbox>
-                  <Label className="font-semibold">
-                    I have the right to work in the UK.
-                  </Label>
-                </Field>
-              </article>
+              <Field className="w-full">
+                <Label className="text-sm">Town *</Label>
+                <Input
+                  {...register("town")}
+                  className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
+                  type="text"
+                  placeholder="Enter your town / city"
+                />
+                {errors.town && (
+                  <div className="text-white-900 bg-blue-dark text-sm my-2 px-2 py-1 rounded-sm">
+                    {errors.town.message}
+                  </div>
+                )}
+              </Field>
 
-              <article className="my-4 bg-white-900 space-x-3 space-y-0 rounded-md border shadow">
-                <Field className="flex items-center gap-2 p-4 ">
-                  <Checkbox
-                    checked={onlyAccount}
-                    onChange={setSetOnlyAccount}
-                    className="group block size-4 rounded border bg-white-900 data-[checked]:bg-blue-normal"
-                  >
-                    <svg
-                      className="stroke-white-900 opacity-0 group-data-[checked]:opacity-100"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                    >
-                      <path
-                        d="M3 8L6 11L11 3.5"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Checkbox>
-                  <Label className="font-semibold">
-                    I have no other accounts with TutorSeekers
-                  </Label>
-                </Field>
-              </article>
+              <Field className="w-full">
+                <Label className="text-sm">Postcode *</Label>
+                <Input
+                  {...register("postcode")}
+                  className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
+                  type="text"
+                  placeholder="Enter your postcode"
+                />
+                {errors.postcode && (
+                  <div className="text-white-900 bg-blue-dark text-sm my-2 px-2 py-1 rounded-sm">
+                    {errors.postcode.message}
+                  </div>
+                )}
+              </Field>
 
-              <article className="my-4 bg-white-900 space-x-3 space-y-0 rounded-md border shadow">
-                <Field className="flex items-center gap-2 p-4 ">
-                  <Checkbox
-                    checked={agreeTerms}
-                    onChange={setAgreeTerms}
-                    className="group block size-4 rounded border bg-white-900 data-[checked]:bg-blue-normal"
-                  >
-                    <svg
-                      className="stroke-white-900 opacity-0 group-data-[checked]:opacity-100"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                    >
-                      <path
-                        d="M3 8L6 11L11 3.5"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Checkbox>
-                  <Label className="font-semibold">
-                    I agree to TutorSeekers terms and condictions.
-                  </Label>
-                </Field>
-              </article>
+              <div className="flex justify-between md:col-span-2">
+                <Button
+                  className="mt-6 w-28"
+                  variant="outliner"
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={onBack}
+                >
+                  Back
+                </Button>
+
+                <Button
+                  className="mt-6 w-28"
+                  variant="outliner"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  Add Details
+                </Button>
+              </div>
             </form>
           </CardContent>
 
           <CardFooter className="bg-blue-normal rounded-b-lg flex flex-row justify-end py-6">
-            <Button variant="outline" className="text-white-900">
+            {/* <Button variant="outline" className="text-white-900">
               Register
-            </Button>
+            </Button> */}
           </CardFooter>
         </Card>
       </div>

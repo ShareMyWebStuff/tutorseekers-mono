@@ -1,4 +1,4 @@
-import { RegisterChecks } from "@/components/auth/register-checks-form";
+import { RegisterChecks } from "@/components/auth/register-checks";
 
 const RegisterCompletePage = () => {
   return <RegisterChecks />;

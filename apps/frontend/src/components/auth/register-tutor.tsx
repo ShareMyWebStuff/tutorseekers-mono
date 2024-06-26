@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   Card,
@@ -11,14 +9,12 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { Checkbox } from "@headlessui/react";
 import { Select } from "@headlessui/react";
 import { Field, Input, Label } from "@headlessui/react";
 import { Button } from "@/components/ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   setTutorDetails,
-  resetRegister,
   selectAll,
 } from "@/lib/features/register/registerSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
@@ -77,11 +73,16 @@ const registerTutorSchema = z.object({
     .max(50, { message: "Must be 50 characters or less" }),
 
   // phoneNumber: z.string().regex(/^\d{10}$/)
-  phone: z.string().max(20, { message: "Must be 20 or less characters" }),
+  phone: z
+    .string()
+    .max(20, { message: "Must be 20 or less characters" })
+    .refine((val) => val.length === 0 || val.length >= 6, {
+      message: "Must be 5 - 20 characters",
+    }),
   mobile: z
     .string()
     .max(20, { message: "Must be 20 or less characters" })
-    .refine((val) => val.length > 0 && val.length < 6, {
+    .refine((val) => val.length === 0 || val.length >= 6, {
       message: "Must be 5 - 20 characters",
     }),
   address1: z
@@ -108,7 +109,16 @@ type FormFields = z.infer<typeof registerTutorSchema>;
 export function RegisterTutor() {
   const dispatch = useAppDispatch();
   const regBuffer = useAppSelector(selectAll);
+
   const router = useRouter();
+
+  if (!regBuffer.token) {
+    router.push("/auth/register");
+  }
+
+  if (!["Student", "Parent", "Tutor"].includes(regBuffer.accountType)) {
+    router.push("/auth/register-account-type");
+  }
 
   console.log("RegBuffer");
   console.log(regBuffer);
@@ -139,12 +149,16 @@ export function RegisterTutor() {
   console.log("errors");
   console.log(errors);
 
+  const onBack = () => {
+    router.push("/auth/register-account-type");
+  };
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     console.log("HERE - onsubmit**");
     console.log(data);
     console.log("errors");
     console.log(errors);
-    return;
+    // return;
     try {
       // Can check if the email address has been used
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -167,7 +181,7 @@ export function RegisterTutor() {
           postcode: data.postcode,
         }),
       );
-      router.push("/auth/register-account-type");
+      router.push("/auth/register-checks");
     } catch (error) {
       setError("root", {
         message: "This email is already taken.",
@@ -181,7 +195,7 @@ export function RegisterTutor() {
         <Card className="rounded-lg">
           <CardHeader className="bg-blue-normal rounded-t-lg text-white-900">
             <CardTitle className="text-card-header-fg text-2xl text-center">
-              Registration Personal Tutor Details
+              Tutor Details
             </CardTitle>
             <CardDescription className="text-base text-center text-brown-600">
               Enter your details, we require these in order to run safeguarding
@@ -194,7 +208,7 @@ export function RegisterTutor() {
               className="text-my-white grid grid-flow-row grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2"
             >
               <Field className="w-full">
-                <Label className="text-sm">Title</Label>
+                <Label className="text-sm">Title *</Label>
                 <Select
                   {...register("title")}
                   required
@@ -217,7 +231,7 @@ export function RegisterTutor() {
               </Field>
 
               <Field className="w-full">
-                <Label className="text-sm">Gender</Label>
+                <Label className="text-sm">Gender *</Label>
                 <Select
                   {...register("gender")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -235,7 +249,7 @@ export function RegisterTutor() {
               </Field>
 
               <Field className="w-full">
-                <Label className="text-sm">Preferred Name</Label>
+                <Label className="text-sm">Preferred Name *</Label>
                 <Input
                   {...register("preferredName")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -252,7 +266,7 @@ export function RegisterTutor() {
               <div></div>
 
               <Field className="w-full">
-                <Label className="text-sm">First Name</Label>
+                <Label className="text-sm">First Name *</Label>
                 <Input
                   {...register("firstname")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -267,7 +281,7 @@ export function RegisterTutor() {
               </Field>
 
               <Field className="w-full">
-                <Label className="text-sm">Last Name</Label>
+                <Label className="text-sm">Last Name *</Label>
                 <Input
                   {...register("lastname")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -312,7 +326,7 @@ export function RegisterTutor() {
               </Field>
 
               <Field className="w-full">
-                <Label className="text-sm">Address</Label>
+                <Label className="text-sm">Address *</Label>
                 <Input
                   {...register("address1")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -341,7 +355,7 @@ export function RegisterTutor() {
               </Field>
 
               <Field className="w-full">
-                <Label className="text-sm">Town</Label>
+                <Label className="text-sm">Town *</Label>
                 <Input
                   {...register("town")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -356,7 +370,7 @@ export function RegisterTutor() {
               </Field>
 
               <Field className="w-full">
-                <Label className="text-sm">County</Label>
+                <Label className="text-sm">County *</Label>
                 <Input
                   {...register("county")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -371,7 +385,7 @@ export function RegisterTutor() {
               </Field>
 
               <Field className="w-full">
-                <Label className="text-sm">Postcode</Label>
+                <Label className="text-sm">Postcode *</Label>
                 <Input
                   {...register("postcode")}
                   className="p-2 w-full border-1 border-input-border rounded-lg cursor-pointer text-blue-dark focus:border-blue-dark focus:outline-none focus:ring-0"
@@ -389,8 +403,9 @@ export function RegisterTutor() {
                 <Button
                   className="mt-6 w-28"
                   variant="outliner"
-                  // type="submit"
+                  type="button"
                   disabled={isSubmitting}
+                  onClick={onBack}
                 >
                   Back
                 </Button>

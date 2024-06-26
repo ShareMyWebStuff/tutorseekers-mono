@@ -41,6 +41,15 @@ export interface IRegisterStudent {
   postcode: string;
 }
 
+export interface IRegisterChecks {
+  emailVerify: boolean;
+  readSafeguarding: boolean;
+  over18: boolean;
+  rightToWork: boolean;
+  onlyAccount: boolean;
+  agreeTerms: boolean;
+}
+
 // export interface IRegisterStep3 {
 //     step: number;
 //     address1: string;
@@ -54,7 +63,8 @@ export interface IRegisterStudent {
 export interface IRegisterState
   extends IRegisterEmail,
     IRegisterAccountType,
-    IRegisterTutor {}
+    IRegisterTutor,
+    IRegisterChecks {}
 
 const initialState: IRegisterState = {
   token: null,
@@ -78,6 +88,13 @@ const initialState: IRegisterState = {
   town: "",
   county: "",
   postcode: "",
+
+  emailVerify: false,
+  readSafeguarding: false,
+  over18: false,
+  rightToWork: false,
+  onlyAccount: false,
+  agreeTerms: false,
 };
 
 export const registerSlice = createSlice({
@@ -122,6 +139,15 @@ export const registerSlice = createSlice({
       state.town = action.payload.town;
       state.postcode = action.payload.postcode;
     },
+    setChecks: (state, action: PayloadAction<IRegisterChecks>) => {
+      state.emailVerify = action.payload.emailVerify;
+      state.readSafeguarding = action.payload.readSafeguarding;
+      state.over18 = action.payload.over18;
+      state.rightToWork = action.payload.rightToWork;
+      state.onlyAccount = action.payload.onlyAccount;
+      state.agreeTerms = action.payload.agreeTerms;
+    },
+
     // setStep: ( state , action: PayloadAction<IRegisterStep>) => {
     //     state.step = action.payload.step;
     // },
@@ -176,6 +202,12 @@ export const registerSlice = createSlice({
         (state.town = "");
       state.county = "";
       state.postcode = "";
+      state.emailVerify = false;
+      state.readSafeguarding = false;
+      state.over18 = false;
+      state.rightToWork = false;
+      state.onlyAccount = false;
+      state.agreeTerms = false;
     },
   },
   selectors: {
@@ -190,6 +222,7 @@ export const {
   setTutorDetails,
   setParentDetails,
   setStudentDetails,
+  setChecks,
   resetRegister,
 } = registerSlice.actions;
 

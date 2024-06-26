@@ -1,3 +1,21 @@
+Google Auth
+
+Goto console.cloud.google.com
+
+Create a project
+
+**Need to investigate what an organisation is**
+
+After project is created goto APIs and Services
+
+Click OAUTH content screen and then select the scopes (what services are required)
+
+Add test users (dave@harmonydata.co.uk)
+
+Now goto credentials -:> OAuth Client Id
+
+Name : Web Client (maybe change thais)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
