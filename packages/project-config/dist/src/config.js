@@ -27,6 +27,7 @@ const REGION_IRELAND = "ie";
  */
 const CAMERONGUY_BIZ = 1;
 const CAMERONGUY_IE = 2;
+const CAMERONGUY_INFO = 3;
 exports.REGIONS = {
     [REGION_UK]: {
         region: REGION_UK,
@@ -48,6 +49,11 @@ exports.DOMAINS = {
         domainName: "cameronguy.ie",
         description: "Test domain name",
     },
+    [CAMERONGUY_INFO]: {
+        id: CAMERONGUY_INFO,
+        domainName: "cameronguy.info",
+        description: "Test domain name",
+    },
 };
 exports.WEBSITE_SETUP = {
     [REGION_UK]: {
@@ -55,15 +61,15 @@ exports.WEBSITE_SETUP = {
             {
                 name: "UK Frontend",
                 subDomain: null,
-                domainNameId: CAMERONGUY_BIZ,
+                domainNameId: CAMERONGUY_INFO,
                 region: REGION_UK,
                 backend: [
-                // {
-                //   name: "UK Backend API",
-                //   subDomain: "api",
-                //   domainNameId: CAMERONGUY_BIZ,
-                //   region: REGION_UK,
-                // },
+                    {
+                        name: "UK Backend API",
+                        subDomain: "api",
+                        domainNameId: CAMERONGUY_BIZ,
+                        region: REGION_UK,
+                    },
                 ],
             },
         ],

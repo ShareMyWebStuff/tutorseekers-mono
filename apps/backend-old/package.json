@@ -1,32 +1,28 @@
 {
-  "name": "@project/backend",
+  "name": "@project/backendold",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "sst dev",
-    "build": "sst build",
+    "build": "sst build --stage dev --region eu-west-1",
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@tsconfig/node18": "^18.2.4",
-    "@types/jsonwebtoken": "^9.0.6",
-    "aws-cdk-lib": "2.142.1",
+    "@tsconfig/node18": "^18.2.2",
+    "@types/aws-lambda": "^8.10.137",
+    "aws-cdk-lib": "2.132.1",
     "constructs": "10.3.0",
-    "sst": "^2.43.3",
-    "typescript": "^5.5.2"
+    "sst": "^2.41.2",
+    "typescript": "^5.4.2"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.114.1-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.114.1-alpha.0",
     "@tutorseekers/project-config": "workspace:^",
-    "google-auth-library": "^9.11.0",
-    "jsonwebtoken": "^9.0.2"
+    "aws-lambda": "^1.0.7"
   }
 }
