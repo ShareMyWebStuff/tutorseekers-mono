@@ -74,14 +74,13 @@ jobs:
         run: yarn
 
       - name: Synth Stack
-        working-directory: apps/2-base-infrastructure
-        run: |
-          yarn synth -c region=uk -c stage=lcl '${PROJECT}-uk-lcl-vpc'
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl tutorseekers-uk-lcl-vpc
+        # working-directory: apps/2-base-infrastructure
+        # |
+        #   yarn synth -c region=uk -c stage=lcl '${PROJECT}-uk-lcl-vpc'
 
       - name: Deploy Stack
-        run: |
-          yarn deploy -c region=uk -c stage=lcl '${PROJECT}-uk-lcl-vpc'
-
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl tutorseekers-uk-lcl-vpc
 # jobs:
 #   deploy-locally:
 #     uses: ./.github/workflows/deploy-base-infrastructure.yml
