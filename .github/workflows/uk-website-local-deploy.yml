@@ -1,0 +1,33 @@
+name: "UK :: Deploy :: Local"
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_vpc:
+        description: "Deploy VPC resources"
+        required: false
+        type: boolean
+      deploy_database:
+        description: "Deploy Database resources"
+        required: false
+        type: boolean
+      deploy_database_ddl:
+        description: "Deploy Database DDL"
+        required: false
+        type: boolean
+
+jobs:
+  deploy-locally:
+    uses: ./.github/workflows/deploy-base-infrastructure.yml
+    with:
+      project: tutorseekers
+      github-environment: LocalPreview
+      stage: $(echo ${{ github.actor }} | awk '{print tolower($0)}')
+      github-author: ${{ github.actor }}
+      region: uk
+      aws_region: eu-west-2
+      deploy_vpc: ${{ inputs.deploy_vpc }}
+      deploy_database: ${{ inputs.deploy_database }}
+      deploy_database_ddl: ${{ inputs.deploy_database_ddl }}
+    secrets:
+      aws-role-arn: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}

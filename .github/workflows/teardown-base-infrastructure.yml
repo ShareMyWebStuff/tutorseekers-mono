@@ -1,0 +1,142 @@
+name: "Teardown Base Infrastructure"
+
+on:
+  workflow_call:
+    inputs:
+      github-environment:
+        required: true
+        type: string
+      stage:
+        required: true
+        type: string
+      github-author:
+        required: false
+        type: string
+        default: ci
+    secrets:
+      aws-role-arn:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_AUTHOR: ${{ inputs.github-author }}
+
+jobs:
+  teardown-rds-resources:
+    name: Teardown rds
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+    environment: ${{ inputs.github-environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws-role-arn }}
+          aws-region: eu-west-1
+
+      - name: Install
+        run: yarn workspaces focus rds
+
+      - name: Teardown RDS resources
+        working-directory: backend/development/rds
+        run: STAGE=${{ inputs.stage }} SLS_DEBUG=* yarn remove-deployment
+
+  teardown-sns-resources:
+    name: Teardown @shieldpay/sns-resources
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+    environment: ${{ inputs.github-environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws-role-arn }}
+          aws-region: eu-west-1
+
+      - name: Install
+        run: yarn workspaces focus @shieldpay/sns-resources
+
+      # This is only necessary because the DATA_LAKE_ACCOUNT_ID env var is required as
+      # part of the service's IaC. If we can get rid of this dependency, which we
+      # should, then this can go.
+      - name: Install Chamber
+        shell: bash
+        run: |
+          ARCH=$(uname -m) && \
+          PACKAGECLOUD="https://packagecloud.io/segment/chamber/packages/ubuntu/focal" && \
+          if [ "$ARCH" == "arm64" ] || [ "$ARCH" == "aarch64" ]; then \
+          wget --content-disposition $PACKAGECLOUD/chamber_2.10.2_arm64.deb/download.deb?distro_version_id=210 && \
+          sudo apt-get install ./chamber_2.10.2_arm64.deb; \
+          else \
+          wget --content-disposition $PACKAGECLOUD/chamber_2.10.2_amd64.deb/download.deb?distro_version_id=210 && \
+          sudo apt-get install ./chamber_2.10.2_amd64.deb; \
+          fi
+
+      # This is only necessary because the DATA_LAKE_ACCOUNT_ID env var is required as
+      # part of the service's IaC. If we can get rid of this dependency, which we
+      # should, then this can go.
+      - name: Load env variables from Parameter Store
+        run: (chamber env backend/resources/sns) >> backend/resources/sns/.env
+
+      - name: Teardown SNS resources
+        working-directory: backend/resources/sns
+        run: source .env && STAGE=${{ inputs.stage }} SLS_DEBUG=* yarn remove-deployment
+
+  teardown-sftp-resources:
+    name: Teardown @shieldpay/sftp-resources
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+    environment: ${{ inputs.github-environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws-role-arn }}
+          aws-region: eu-west-1
+
+      - name: Install
+        run: yarn workspaces focus @shieldpay/sftp-resources
+
+      - name: Teardown SFTP resources
+        working-directory: backend/resources/sftp
+        run: STAGE=${{ inputs.stage }} SLS_DEBUG=* yarn remove-deployment
+
+  teardown-s3-resources:
+    name: Teardown @shieldpay/s3-resources
+    needs:
+      - teardown-sns-resources
+      - teardown-rds-resources
+      - teardown-sftp-resources
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+    environment: ${{ inputs.github-environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws-role-arn }}
+          aws-region: eu-west-1
+
+      - name: Install
+        run: yarn workspaces focus @shieldpay/s3-resources
+
+      - name: Teardown S3 resources
+        working-directory: backend/resources/s3
+        run: STAGE=${{ inputs.stage }} SLS_DEBUG=* yarn remove-deployment

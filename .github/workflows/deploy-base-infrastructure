@@ -1,0 +1,150 @@
+name: "Deploy Base Infrastructure"
+
+# github-environment  -
+# stage               - The environment stage dev / stg / prd / github name
+# github-author       - The last person the schedule the workflow
+# region              - Our region uk / ie /usa / etc
+# aws_region          - The aws region this is to be deployed in e.g. eu-west-2
+# deploy_vpc          - True then the VPC will be deployed
+# deploy_database     - True then the database will be deployed
+# deploy_database_ddl - True then the ddl will be deployed to the database
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        required: true
+        type: string
+      github-environment:
+        required: true
+        type: string
+      stage:
+        required: true
+        type: string
+      github-author:
+        required: false
+        type: string
+        default: ci
+      region:
+        required: false
+        type: string
+        default: uk
+      aws_region:
+        required: false
+        type: string
+        default: eu-west-2
+      deploy_vpc:
+        required: false
+        type: boolean
+        default: true
+      deploy_database:
+        required: false
+        type: boolean
+        default: true
+      deploy_database_ddl:
+        required: false
+        type: boolean
+        default: true
+    secrets:
+      aws-role-arn:
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_AUTHOR: ${{ inputs.github-author }}
+
+jobs:
+  deploy-vpc-resources:
+    if: ${{ inputs.deploy_vpc }}
+    name: Deploy vpc-resources
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+    environment: ${{ inputs.github-environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.aws-role-arn }}
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Install corepack
+        run: npm install -g corepack
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Verify AWS CLI availability
+        run: aws --version
+
+      - name: Setup Node & Cache
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "yarn"
+          cache-dependency-path: "yarn.lock"
+
+      - name: Install Python dependencies and CDK
+        run: |
+          python -m pip install --upgrade pip
+          # install your Python dependencies here
+          npm install -g aws-cdk
+
+      #
+      - name: Install
+        run: yarn workspaces focus @tutorseekers/base-infrastructure
+
+      - name: Install everything
+        run: yarn
+
+      - name: Synth Stack
+        working-directory: apps/2-base-infrastructure
+        run: |
+          if [ ${{ inputs.github-environment }} == 'LocalPreview' ]; then
+            yarn synth -c region=uk -c stage=lcl '${{inputs.project}}-uk-lcl-vpc'
+          else
+            yarn synth -c region=${{region}} -c stage=${{inputs.stage}} '${{inputs.project}}-uk-lcl-vpc'
+          fi
+
+      - name: Deploy Stack
+        run: |
+          if [ ${{ inputs.github-environment }} == 'LocalPreview' ]; then
+            yarn deploy -c region=uk -c stage=lcl '${{inputs.project}}-uk-lcl-vpc'
+          else
+            yarn deploy -c region=${{region}} -c stage=${{inputs.stage}} '${{inputs.project}}-uk-lcl-vpc'
+          fi
+
+  # deploy-rds-resources:
+  #   if: ${{ inputs.github-environment == 'DevPreview' && inputs.deploy_rds }}
+  #   name: Deploy rds
+  #   needs: deploy-s3-resources
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+  #   environment: ${{ inputs.github-environment }}
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.aws-role-arn }}
+  #         aws-region: eu-west-1
+
+  #     - name: Install
+  #       run: yarn workspaces focus rds
+
+  #     - name: Compile
+  #       working-directory: backend/development/rds
+  #       run: yarn compile
+
+  #     - name: Deploy RDS resources
+  #       working-directory: backend/development/rds
+  #       run: STAGE=${{ inputs.stage }} GITHUB_AUTHOR=${{ inputs.github-author }} SLS_DEBUG=* yarn deploy
