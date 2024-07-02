@@ -72,7 +72,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.aws-role-arn }}
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ inputs.aws_region }}
 
       - name: Install corepack
@@ -120,31 +120,3 @@ jobs:
           else
             yarn deploy -c region=${{inputs.region}} -c stage=${{inputs.stage}} '${{inputs.project}}-${{inputs.region}}-${{inputs.stage}}-vpc'
           fi
-
-  # deploy-rds-resources:
-  #   if: ${{ inputs.github-environment == 'DevPreview' && inputs.deploy_rds }}
-  #   name: Deploy rds
-  #   needs: deploy-s3-resources
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
-  #   environment: ${{ inputs.github-environment }}
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
-
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         role-to-assume: ${{ secrets.aws-role-arn }}
-  #         aws-region: eu-west-1
-
-  #     - name: Install
-  #       run: yarn workspaces focus rds
-
-  #     - name: Compile
-  #       working-directory: backend/development/rds
-  #       run: yarn compile
-
-  #     - name: Deploy RDS resources
-  #       working-directory: backend/development/rds
-  #       run: STAGE=${{ inputs.stage }} GITHUB_AUTHOR=${{ inputs.github-author }} SLS_DEBUG=* yarn deploy
