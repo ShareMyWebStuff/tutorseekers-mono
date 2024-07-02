@@ -110,7 +110,7 @@ jobs:
           if [ ${{ inputs.github-environment }} == 'LocalPreview' ]; then
             yarn synth -c region=uk -c stage=lcl '${{inputs.project}}-uk-lcl-vpc'
           else
-            yarn synth -c region=${{region}} -c stage=${{inputs.stage}} '${{inputs.project}}-uk-lcl-vpc'
+            yarn synth -c region=${{inputs.region}} -c stage=${{inputs.stage}} '${{inputs.project}}-${{inputs.region}}-${{inputs.stage}}-vpc'
           fi
 
       - name: Deploy Stack
@@ -118,7 +118,7 @@ jobs:
           if [ ${{ inputs.github-environment }} == 'LocalPreview' ]; then
             yarn deploy -c region=uk -c stage=lcl '${{inputs.project}}-uk-lcl-vpc'
           else
-            yarn deploy -c region=${{region}} -c stage=${{inputs.stage}} '${{inputs.project}}-uk-lcl-vpc'
+            yarn deploy -c region=${{inputs.region}} -c stage=${{inputs.stage}} '${{inputs.project}}-${{inputs.region}}-${{inputs.stage}}-vpc'
           fi
 
   # deploy-rds-resources:
