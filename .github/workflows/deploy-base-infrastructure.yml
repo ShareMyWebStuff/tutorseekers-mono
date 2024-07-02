@@ -1,14 +1,5 @@
 name: "Deploy Base Infrastructure"
 
-# github-environment  -
-# stage               - The environment stage dev / stg / prd / github name
-# github-author       - The last person the schedule the workflow
-# region              - Our region uk / ie /usa / etc
-# aws_region          - The aws region this is to be deployed in e.g. eu-west-2
-# deploy_vpc          - True then the VPC will be deployed
-# deploy_database     - True then the database will be deployed
-# deploy_database_ddl - True then the ddl will be deployed to the database
-
 on:
   workflow_call:
     inputs:
