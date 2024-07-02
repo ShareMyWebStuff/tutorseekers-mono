@@ -16,6 +16,12 @@ on:
         required: false
         type: boolean
 
+env:
+  REGION: uk
+  PROJECT: tutorseekers
+  AWS_REGION: eu-west-2
+  NODE_VERSION: 20.10
+
 permissions:
   id-token: write
   contents: read
@@ -36,7 +42,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
-          aws-region: ${{ inputs.aws_region }}
+          aws-region: $AWS_REGION
 
       - name: Install corepack
         run: npm install -g corepack
@@ -50,7 +56,7 @@ jobs:
       - name: Setup Node & Cache
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ inputs.node-version }}
+          node-version: $NODE_VERSION
           cache: "yarn"
           cache-dependency-path: "yarn.lock"
 
@@ -70,19 +76,11 @@ jobs:
       - name: Synth Stack
         working-directory: apps/2-base-infrastructure
         run: |
-          if [ ${{ inputs.github-environment }} == 'LocalPreview' ]; then
-            yarn synth -c region=uk -c stage=lcl '${{inputs.project}}-uk-lcl-vpc'
-          else
-            yarn synth -c region=${{inputs.region}} -c stage=${{inputs.stage}} '${{inputs.project}}-${{inputs.region}}-${{inputs.stage}}-vpc'
-          fi
+          yarn synth -c region=uk -c stage=lcl '${PROJECT}-uk-lcl-vpc'
 
       - name: Deploy Stack
         run: |
-          if [ ${{ inputs.github-environment }} == 'LocalPreview' ]; then
-            yarn deploy -c region=uk -c stage=lcl '${{inputs.project}}-uk-lcl-vpc'
-          else
-            yarn deploy -c region=${{inputs.region}} -c stage=${{inputs.stage}} '${{inputs.project}}-${{inputs.region}}-${{inputs.stage}}-vpc'
-          fi
+          yarn deploy -c region=uk -c stage=lcl '${PROJECT}-uk-lcl-vpc'
 
 # jobs:
 #   deploy-locally:
