@@ -80,7 +80,7 @@ jobs:
         #   yarn synth -c region=uk -c stage=lcl '${PROJECT}-uk-lcl-vpc'
 
       - name: Deploy Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl tutorseekers-uk-lcl-vpc --require-approval
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl tutorseekers-uk-lcl-vpc
 # jobs:
 #   deploy-locally:
 #     uses: ./.github/workflows/deploy-base-infrastructure.yml
