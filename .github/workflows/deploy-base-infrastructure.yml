@@ -63,8 +63,8 @@ jobs:
     if: ${{ inputs.deploy_vpc }}
     name: Deploy vpc-resources
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
-    environment: ${{ inputs.github-environment }}
+    # timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+    # environment: ${{ inputs.github-environment }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
