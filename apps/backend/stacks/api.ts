@@ -4,6 +4,7 @@ import {
   Certificate,
   CertificateValidation,
 } from "aws-cdk-lib/aws-certificatemanager";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Fn } from "aws-cdk-lib";
 import { DomainName } from "@aws-cdk/aws-apigatewayv2-alpha";
@@ -27,6 +28,27 @@ export async function ApiStack({ stack }: StackContext) {
 
   const domainName = "cameronguy.biz";
   const domainNameDash = domainName.replace(".", "-");
+
+  // Lookup VPC
+  const vpc = ec2.Vpc.fromLookup(stack, "Poop", {
+    isDefault: false,
+    region: stack.region,
+    tags: {
+      Stage: "lcl",
+      "aws:cloudformation:stack-name": `tutorseekers-uk-lcl-vpc`,
+    },
+  });
+
+  const securityGroups = ec2.SecurityGroup.fromLookupByName(
+    stack,
+    "PoopSecGrps",
+    "tutorseekers-uk-lcl-lambda-sg",
+    vpc,
+  );
+
+  const subnets = vpc.selectSubnets({
+    subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+  }).subnetIds;
 
   // Get the hosted zone
   const hostedZone = HostedZone.fromLookup(
@@ -100,6 +122,8 @@ export async function ApiStack({ stack }: StackContext) {
     handler: "handler",
     functionName: "get-version",
     entry: "src/service/api/version.ts",
+    vpc: vpc,
+    securityGroups: [securityGroups],
   });
 
   const templateLambdaIntegration = new HttpLambdaIntegration(
@@ -120,6 +144,8 @@ export async function ApiStack({ stack }: StackContext) {
     handler: "handler",
     functionName: "auth-signup",
     entry: "src/service/api/signup.ts",
+    vpc: vpc,
+    securityGroups: [securityGroups],
   });
 
   const authSignupIntegration = new HttpLambdaIntegration(

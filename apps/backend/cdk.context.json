@@ -10,5 +10,71 @@
   "hosted-zone:account=216211142709:domainName=cameronguy.biz:region=eu-west-2": {
     "Id": "/hostedzone/Z07773822Z0KFUEH6BEYR",
     "Name": "cameronguy.biz."
+  },
+  "vpc-provider:account=216211142709:filter.isDefault=false:filter.tag:Stage=lcl:filter.tag:aws:cloudformation:stack-name=tutorseekers-uk-lcl-vpc:region=eu-west-2:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-07c27476e582f3765",
+    "vpcCidrBlock": "10.1.0.0/16",
+    "ownerAccountId": "216211142709",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "tutorseekers-uk-lcl-database",
+        "type": "Isolated",
+        "subnets": [
+          {
+            "subnetId": "subnet-0daa645fc806eb431",
+            "cidr": "10.1.4.0/24",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-0a0c591a108bc1673"
+          },
+          {
+            "subnetId": "subnet-07b9431e375685f8a",
+            "cidr": "10.1.5.0/24",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-0f2d939eb6571d94a"
+          }
+        ]
+      },
+      {
+        "name": "tutorseekers-uk-lcl-lambda",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-00bced79a47b77a66",
+            "cidr": "10.1.2.0/24",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-0a723e280faf93248"
+          },
+          {
+            "subnetId": "subnet-008dd53c7f3e95dce",
+            "cidr": "10.1.3.0/24",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-0e8bd81be8f16bf92"
+          }
+        ]
+      },
+      {
+        "name": "tutorseekers-uk-lcl-public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-05fe963220e314afc",
+            "cidr": "10.1.0.0/24",
+            "availabilityZone": "eu-west-2a",
+            "routeTableId": "rtb-0f6e9bb2b9dbbe725"
+          },
+          {
+            "subnetId": "subnet-0f38688cf27a80416",
+            "cidr": "10.1.1.0/24",
+            "availabilityZone": "eu-west-2b",
+            "routeTableId": "rtb-004376f231bbae7ca"
+          }
+        ]
+      }
+    ]
+  },
+  "security-group:account=216211142709:region=eu-west-2:securityGroupName=tutorseekers-uk-lcl-lambda-sg:vpcId=vpc-07c27476e582f3765": {
+    "securityGroupId": "sg-01d68c878e9b3dc51",
+    "allowAllOutbound": false
   }
 }
