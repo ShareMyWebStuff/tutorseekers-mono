@@ -66,7 +66,6 @@ jobs:
           # install your Python dependencies here
           npm install -g aws-cdk
 
-      #
       - name: Install
         run: yarn workspaces focus @tutorseekers/base-infrastructure
 
@@ -75,9 +74,6 @@ jobs:
 
       - name: Synth Stack
         run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl "$PROJECT-uk-lcl-vpc"
-        # working-directory: apps/2-base-infrastructure
-        # |
-        #   yarn synth -c region=uk -c stage=lcl '${PROJECT}-uk-lcl-vpc'
 
       - name: Deploy Stack
         run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl "$PROJECT-uk-lcl-vpc"

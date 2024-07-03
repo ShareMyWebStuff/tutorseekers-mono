@@ -65,19 +65,19 @@ const main = async () => {
   console.log("Create database has been commented out");
   console.log("Create database has been commented out");
 
-  // if (backend) {
-  //   new DatabaseStack(
-  //     app,
-  //     stackName,
-  //     PROJECT_PREFIX,
-  //     params.region,
-  //     params.stage,
-  //     vpc.vpc,
-  //     vpc.databaseSG,
-  //     vpc.lambdaSG,
-  //     stackProps,
-  //   );
-  // }
+  if (backend) {
+    new DatabaseStack(
+      app,
+      stackName,
+      PROJECT_PREFIX,
+      params.region,
+      params.stage,
+      vpc.vpc,
+      vpc.databaseSG,
+      vpc.lambdaSG,
+      stackProps,
+    );
+  }
 
   // // Create the VPC
   // for (const region in vpcs) {
