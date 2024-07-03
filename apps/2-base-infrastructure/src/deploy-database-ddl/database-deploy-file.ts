@@ -22,7 +22,10 @@ export class DatabaseDeployFile {
     new Promise((resolve, reject) => {
       const chunks = [];
       stream.on("data", (chunk) => chunks.push(chunk));
-      stream.on("error", reject);
+      stream.on("error", () => {
+        console.log("Wholey poooo poooooo");
+        reject;
+      });
       stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
     });
   }
@@ -42,7 +45,11 @@ export class DatabaseDeployFile {
     console.log(response);
     const { Body } = response;
 
-    return this.streamToString(Body);
+    console.log(Body);
+    const wee = this.streamToString(Body);
+    console.log("5 readFile");
+    console.log(wee);
+    return wee;
   }
 
   public async checkFile() {
