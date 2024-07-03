@@ -3,7 +3,7 @@
 // import { S3Client, HeadObjectCommand } from "@aws-sdk/client-s3"
 // import { listFilesOnS3Bucket } from "./aws-utils";
 // import { FileStructure } from './types';
-import { DatabaseDeployFile } from "./database-deploy-file_new";
+import { DatabaseDeployFile } from "./database-deploy-file";
 // import { connectToDB, executeSQL } from "./db-utils";
 // import { createDatabaseDeployTable, readDatabaseDeployTable, insertDeployFile } from "./read-database-deploy-table";
 import { DatabaseDeployTable } from "./database-deploy-table";
