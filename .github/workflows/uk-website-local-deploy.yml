@@ -147,7 +147,7 @@ jobs:
           aws-region: eu-west-2
 
       - name: Copy the DDL Files to the S3 Bucket
-        run: cd apps/database && aws s3 sync s3://${{env.PROJECTS}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
+        run: aws s3 sync apps/database s3://${{env.PROJECTS}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
 
       - name: Run the lambda to load the DDL
         run: echo "Run the lambda to load the DDL"
