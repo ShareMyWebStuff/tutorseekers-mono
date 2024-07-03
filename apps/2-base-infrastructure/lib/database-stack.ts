@@ -251,10 +251,10 @@ export class DatabaseStack extends Stack {
     // Create lambda
     const connectToAuroraLambda = new NodejsFunction(
       this,
-      `${projectPrefix}-${region}-${stage}-connect-to-aurora-db`,
+      `${projectPrefix}-${region}-${stage}-deploy-database-ddl`,
       {
-        functionName: `${projectPrefix}-${region}-${stage}-connect-to-aurora-db`,
-        entry: path.join(__dirname, `../src/connect-to-aurora-db/index.ts`),
+        functionName: `${projectPrefix}-${region}-${stage}-deploy-database-ddl`,
+        entry: path.join(__dirname, `../src/deploy-database-ddl/index.ts`),
         runtime: lambda.Runtime.NODEJS_20_X,
         initialPolicy: [
           // Access to the database secret
