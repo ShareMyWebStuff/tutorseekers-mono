@@ -147,7 +147,7 @@ jobs:
           aws-region: eu-west-2
 
       - name: Copy the DDL Files to the S3 Bucket
-        run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
+        run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket --acl public-read
 
       - name: Invoke AWS Lambda by OIDC
         run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl output.txt
