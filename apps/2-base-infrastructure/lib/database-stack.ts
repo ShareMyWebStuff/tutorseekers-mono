@@ -222,6 +222,8 @@ export class DatabaseStack extends Stack {
       },
     );
 
+    deployBucket.grantReadWrite(connectToAuroraLambda);
+
     // // Stack outputs
     // let exportName: string;
 
