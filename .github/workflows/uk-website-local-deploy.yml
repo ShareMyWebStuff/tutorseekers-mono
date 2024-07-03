@@ -149,5 +149,12 @@ jobs:
       - name: Copy the DDL Files to the S3 Bucket
         run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
 
-      - name: Run the lambda to load the DDL
-        run: echo "Run the lambda to load the DDL"
+      - name: Run the database deploy lambda
+        id: database-deploy
+        uses: gagoar/invoke-aws-lambda@master
+        with:
+          FunctionName: ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl
+          LogType: Tail
+          Payload: "{ }"
+      - name: Show the deploy status
+        run: echo "${{ fromJSON(steps.database-deploy.outputs.response).LogResult }}"
