@@ -146,11 +146,8 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-west-2
 
-      - name: Empty the S3 Deployment Bucket
-        run: cd apps/database && ls -ltr
-
       - name: Copy the DDL Files to the S3 Bucket
-        run: cd apps/database && aws s3 sync build s3://${{env.PROJECTS}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
+        run: cd apps/database && aws s3 sync s3://${{env.PROJECTS}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
 
       - name: Run the lambda to load the DDL
         run: echo "Run the lambda to load the DDL"
