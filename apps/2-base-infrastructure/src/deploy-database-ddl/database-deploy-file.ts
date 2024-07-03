@@ -54,6 +54,8 @@ export class DatabaseDeployFile {
     try {
       console.log("1- readDatabaseDeployFile");
       const s3Params = { Bucket: this.bucketName, Key: this.fileName };
+      console.log("s3Params");
+      console.log(s3Params);
       console.log("2- readDatabaseDeployFile");
       const response = await s3.getObject(s3Params).promise();
       console.log("3- readDatabaseDeployFile");
