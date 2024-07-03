@@ -91,22 +91,26 @@ export async function main(): Promise<boolean> {
     // Reads file, validates file and ensures the files contents exist on the S3 bucket
     await deployFile.checkFile();
 
-    // Initialise the reading from the database deploy table
-    const readDB = new DatabaseDeployTable(bucketName, "eu-west-2");
+    // COMMENTED OUT FROM HERE ++++++++
 
-    // Creates the deploy table if it doesnt exist and reads its contents
-    await readDB.checkTableExists();
+    // // Initialise the reading from the database deploy table
+    // const readDB = new DatabaseDeployTable(bucketName, "eu-west-2");
 
-    // Read the database deploy table
-    readDB.createRunList(deployFile.getLoadFiles(), deployFile.getMode()); // , deployFile.isModeSet(), deployFile.getMode());
+    // // Creates the deploy table if it doesnt exist and reads its contents
+    // await readDB.checkTableExists();
 
-    readDB.showRunList();
+    // // Read the database deploy table
+    // readDB.createRunList(deployFile.getLoadFiles(), deployFile.getMode()); // , deployFile.isModeSet(), deployFile.getMode());
 
-    if (deployFile.getMode() === "") {
-      await readDB.loadRunList();
-    } else if (deployFile.getMode() === "R") {
-      await readDB.loadRollbackRunList();
-    }
+    // readDB.showRunList();
+
+    // if (deployFile.getMode() === "") {
+    //   await readDB.loadRunList();
+    // } else if (deployFile.getMode() === "R") {
+    //   await readDB.loadRollbackRunList();
+    // }
+
+    // END HERE +++++++++++++++++++++
 
     // // // Initialise the class to read the deploy.txt file on the S3 bucket
     // // const readFile = new ReadDatabaseDeployFile(bucketName, "database-deploy.txt");
