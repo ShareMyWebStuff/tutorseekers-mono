@@ -1,8 +1,8 @@
-import * as S3 from "@aws-sdk/client-s3";
+import * as AWS from "aws-sdk";
 import { FileStructure } from "./types";
 import { listFilesOnS3Bucket } from "./aws-utils";
 
-const client = new S3.S3Client({});
+const s3 = new AWS.S3();
 
 export class DatabaseDeployFile {
   private bucketName: string;
@@ -18,40 +18,6 @@ export class DatabaseDeployFile {
     this.fileName = fileName;
   }
 
-  public streamToString(stream) {
-    new Promise((resolve, reject) => {
-      const chunks = [];
-      stream.on("data", (chunk) => chunks.push(chunk));
-      stream.on("error", () => {
-        console.log("Wholey poooo poooooo");
-        reject;
-      });
-      stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-    });
-  }
-
-  public async readFile() {
-    console.log("1 readFile");
-    const params = {
-      Bucket: this.bucketName,
-      Key: this.fileName,
-    };
-    console.log("2 readFile");
-
-    const command = new S3.GetObjectCommand(params);
-    console.log("3 readFile");
-    const response = await client.send(command);
-    console.log("4 readFile");
-    console.log(response);
-    const { Body } = response;
-
-    console.log(Body);
-    const wee = this.streamToString(Body);
-    console.log("5 readFile");
-    console.log(wee);
-    return wee;
-  }
-
   public async checkFile() {
     console.log("1- checkFile");
 
@@ -63,11 +29,7 @@ export class DatabaseDeployFile {
 
     // Read file in from database deploy file
     console.log("3- checkFile");
-    const poo = await this.readFile();
-    console.log("4- checkFile");
-    console.log(poo);
-    console.log("5- checkFile");
-    // this.deployRecs = await this.readDatabaseDeployFile<FileStructure>();
+    this.deployRecs = await this.readDatabaseDeployFile<FileStructure>();
     console.log("Files in deploy file ...");
     console.log(this.deployRecs);
 
@@ -88,91 +50,91 @@ export class DatabaseDeployFile {
   /**
    * Read the database deploy file from the S3 bucket and checks each deploy record is of the required format
    */
-  //   private async readDatabaseDeployFile<T>() {
-  //     try {
-  //       console.log("1- readDatabaseDeployFile");
-  //       const s3Params = { Bucket: this.bucketName, Key: this.fileName };
-  //       console.log("s3Params");
-  //       console.log(s3Params);
-  //       console.log("2- readDatabaseDeployFile");
-  //       const response = await s3.getObject(s3Params).promise();
-  //       console.log("3- readDatabaseDeployFile");
-  //       const fileContent = response.Body?.toString("utf-8");
-  //       console.log("4- readDatabaseDeployFile");
-  //       const tmpLines: string[] = !fileContent ? [] : fileContent?.split("\r\n");
+  private async readDatabaseDeployFile<T>() {
+    try {
+      console.log("1- readDatabaseDeployFile");
+      const s3Params = { Bucket: this.bucketName, Key: this.fileName };
+      console.log("s3Params");
+      console.log(s3Params);
+      console.log("2- readDatabaseDeployFile");
+      const response = await s3.getObject(s3Params).promise();
+      console.log("3- readDatabaseDeployFile");
+      const fileContent = response.Body?.toString("utf-8");
+      console.log("4- readDatabaseDeployFile");
+      const tmpLines: string[] = !fileContent ? [] : fileContent?.split("\r\n");
 
-  //       // Remove comments and blank lines
-  //       const lines = tmpLines.filter(
-  //         (line) => !line.startsWith("--") && line.trimEnd().length > 0,
-  //       );
-  //       console.log("5- readDatabaseDeployFile");
+      // Remove comments and blank lines
+      const lines = tmpLines.filter(
+        (line) => !line.startsWith("--") && line.trimEnd().length > 0,
+      );
+      console.log("5- readDatabaseDeployFile");
 
-  //       this.modeSet = false;
-  //       this.mode = "";
-  //       this.fileErrors = 0;
+      this.modeSet = false;
+      this.mode = "";
+      this.fileErrors = 0;
 
-  //       const dataDeploys = lines.map((line, idx) => {
-  //         console.log("6- readDatabaseDeployFile");
-  //         console.log(line);
-  //         const deploy = line.split("|");
-  //         if (deploy.length !== 9) {
-  //           console.log(
-  //             `Error reading line ${idx} from file ${this.fileName} from bucket ${this.bucketName}`,
-  //           );
-  //           this.fileErrors++;
-  //         } else if (deploy[8].trimEnd() !== "") {
-  //           if (this.mode !== "" && this.mode !== deploy[8].trimEnd()) {
-  //             console.log(
-  //               `Different modes in file found. Previous (${this.mode}) current (${deploy[8].trimEnd()})`,
-  //             );
-  //             this.fileErrors++;
-  //           }
-  //           this.mode = deploy[8].trimEnd();
-  //           this.modeSet = true;
-  //         }
-  //         return {
-  //           deployId: parseInt(deploy[0]),
-  //           instDesc: deploy[1].trimEnd(),
-  //           instFilename: deploy[2].trimEnd(),
-  //           instRowCounts:
-  //             deploy[3].trimEnd() === ""
-  //               ? null
-  //               : deploy[3]
-  //                   .trimEnd()
-  //                   .split(",")
-  //                   .map((item) => parseInt(item)),
-  //           rollbackDesc: deploy[4].trimEnd(),
-  //           rollbackFilename: deploy[5].trimEnd(),
-  //           rollbackRowCounts:
-  //             deploy[6].trimEnd() === ""
-  //               ? null
-  //               : deploy[6]
-  //                   .trimEnd()
-  //                   .split(",")
-  //                   .map((item) => parseInt(item)),
-  //           dataFilename: deploy[7].trimEnd(),
-  //           mode: deploy[8].trimEnd(),
-  //         };
-  //       });
+      const dataDeploys = lines.map((line, idx) => {
+        console.log("6- readDatabaseDeployFile");
+        console.log(line);
+        const deploy = line.split("|");
+        if (deploy.length !== 9) {
+          console.log(
+            `Error reading line ${idx} from file ${this.fileName} from bucket ${this.bucketName}`,
+          );
+          this.fileErrors++;
+        } else if (deploy[8].trimEnd() !== "") {
+          if (this.mode !== "" && this.mode !== deploy[8].trimEnd()) {
+            console.log(
+              `Different modes in file found. Previous (${this.mode}) current (${deploy[8].trimEnd()})`,
+            );
+            this.fileErrors++;
+          }
+          this.mode = deploy[8].trimEnd();
+          this.modeSet = true;
+        }
+        return {
+          deployId: parseInt(deploy[0]),
+          instDesc: deploy[1].trimEnd(),
+          instFilename: deploy[2].trimEnd(),
+          instRowCounts:
+            deploy[3].trimEnd() === ""
+              ? null
+              : deploy[3]
+                  .trimEnd()
+                  .split(",")
+                  .map((item) => parseInt(item)),
+          rollbackDesc: deploy[4].trimEnd(),
+          rollbackFilename: deploy[5].trimEnd(),
+          rollbackRowCounts:
+            deploy[6].trimEnd() === ""
+              ? null
+              : deploy[6]
+                  .trimEnd()
+                  .split(",")
+                  .map((item) => parseInt(item)),
+          dataFilename: deploy[7].trimEnd(),
+          mode: deploy[8].trimEnd(),
+        };
+      });
 
-  //       console.log("7- readDatabaseDeployFile");
+      console.log("7- readDatabaseDeployFile");
 
-  //       if (this.fileErrors > 0) {
-  //         throw new Error(
-  //           `Error in file ${this.fileName} on bucket ${this.bucketName}`,
-  //         );
-  //       }
+      if (this.fileErrors > 0) {
+        throw new Error(
+          `Error in file ${this.fileName} on bucket ${this.bucketName}`,
+        );
+      }
 
-  //       console.log("8- readDatabaseDeployFile");
-  //       console.log(dataDeploys);
-  //       return dataDeploys as T[];
-  //     } catch (err) {
-  //       console.log(
-  //         `File may not exist on bucket. File ${this.fileName} from bucket ${this.bucketName}.`,
-  //       );
-  //       throw `Error reading file ${this.fileName} from bucket ${this.bucketName}. Does it exist.`;
-  //     }
-  //   }
+      console.log("8- readDatabaseDeployFile");
+      console.log(dataDeploys);
+      return dataDeploys as T[];
+    } catch (err) {
+      console.log(
+        `File may not exist on bucket. File ${this.fileName} from bucket ${this.bucketName}.`,
+      );
+      throw `Error reading file ${this.fileName} from bucket ${this.bucketName}. Does it exist.`;
+    }
+  }
 
   /**
    * Checks all the deploy records in the file exist on the S3 bucket
