@@ -150,7 +150,7 @@ jobs:
         run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
 
       - name: Invoke AWS Lambda by OIDC
-        run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl --payload '{ }' --log-type Tail --output text --region=${{env.AWS_REGION}}
+        run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl output.txt
       #   uses: y5347M/invoke-aws-lambda-oidc@v1
       #   with:
       #     aws-region: 'us-west-2'
