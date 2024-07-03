@@ -19,24 +19,18 @@ export class DatabaseDeployFile {
   }
 
   public async checkFile() {
-    console.log("1- checkFile");
-
     // Read all files from S3 bucket
-    console.log("2- checkFile");
     this.filesInBucket = await listFilesOnS3Bucket({ Bucket: this.bucketName });
     console.log("Files in bucket ...");
     console.log(this.filesInBucket);
 
     // Read file in from database deploy file
-    console.log("3- checkFile");
     this.deployRecs = await this.readDatabaseDeployFile<FileStructure>();
     console.log("Files in deploy file ...");
     console.log(this.deployRecs);
 
-    console.log("4- checkFile");
     await this.checkAllsFileExists();
 
-    console.log("5- checkFile");
     if (this.deployRecs.length === 0) {
       console.log(
         `No records found in file ${this.fileName} on bucket ${this.bucketName}`,
@@ -52,30 +46,24 @@ export class DatabaseDeployFile {
    */
   private async readDatabaseDeployFile<T>() {
     try {
-      console.log("1- readDatabaseDeployFile");
       const s3Params = { Bucket: this.bucketName, Key: this.fileName };
       console.log("s3Params");
       console.log(s3Params);
-      console.log("2- readDatabaseDeployFile");
+
       const response = await s3.getObject(s3Params).promise();
-      console.log("3- readDatabaseDeployFile");
       const fileContent = response.Body?.toString("utf-8");
-      console.log("4- readDatabaseDeployFile");
       const tmpLines: string[] = !fileContent ? [] : fileContent?.split("\r\n");
 
       // Remove comments and blank lines
       const lines = tmpLines.filter(
         (line) => !line.startsWith("--") && line.trimEnd().length > 0,
       );
-      console.log("5- readDatabaseDeployFile");
 
       this.modeSet = false;
       this.mode = "";
       this.fileErrors = 0;
 
       const dataDeploys = lines.map((line, idx) => {
-        console.log("6- readDatabaseDeployFile");
-        console.log(line);
         const deploy = line.split("|");
         if (deploy.length !== 9) {
           console.log(
@@ -117,16 +105,12 @@ export class DatabaseDeployFile {
         };
       });
 
-      console.log("7- readDatabaseDeployFile");
-
       if (this.fileErrors > 0) {
         throw new Error(
           `Error in file ${this.fileName} on bucket ${this.bucketName}`,
         );
       }
 
-      console.log("8- readDatabaseDeployFile");
-      console.log(dataDeploys);
       return dataDeploys as T[];
     } catch (err) {
       console.log(

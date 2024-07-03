@@ -8,6 +8,11 @@ import { DatabaseDeployFile } from "./database-deploy-file";
 // import { createDatabaseDeployTable, readDatabaseDeployTable, insertDeployFile } from "./read-database-deploy-table";
 import { DatabaseDeployTable } from "./database-deploy-table";
 
+// tutorseekers-uk-lcl-deploy-bucket
+// tutorseekers-uk-lcl-deploy-bucket
+
+// { Bucket: '', Key: 'database-deploy.txt' }
+
 /**
  * Database
  *
@@ -91,26 +96,22 @@ export async function main(): Promise<boolean> {
     // Reads file, validates file and ensures the files contents exist on the S3 bucket
     await deployFile.checkFile();
 
-    // COMMENTED OUT FROM HERE ++++++++
+    // Initialise the reading from the database deploy table
+    const readDB = new DatabaseDeployTable(bucketName, "eu-west-2");
 
-    // // Initialise the reading from the database deploy table
-    // const readDB = new DatabaseDeployTable(bucketName, "eu-west-2");
+    // Creates the deploy table if it doesnt exist and reads its contents
+    await readDB.checkTableExists();
 
-    // // Creates the deploy table if it doesnt exist and reads its contents
-    // await readDB.checkTableExists();
+    // Read the database deploy table
+    readDB.createRunList(deployFile.getLoadFiles(), deployFile.getMode()); // , deployFile.isModeSet(), deployFile.getMode());
 
-    // // Read the database deploy table
-    // readDB.createRunList(deployFile.getLoadFiles(), deployFile.getMode()); // , deployFile.isModeSet(), deployFile.getMode());
+    readDB.showRunList();
 
-    // readDB.showRunList();
-
-    // if (deployFile.getMode() === "") {
-    //   await readDB.loadRunList();
-    // } else if (deployFile.getMode() === "R") {
-    //   await readDB.loadRollbackRunList();
-    // }
-
-    // END HERE +++++++++++++++++++++
+    if (deployFile.getMode() === "") {
+      await readDB.loadRunList();
+    } else if (deployFile.getMode() === "R") {
+      await readDB.loadRollbackRunList();
+    }
 
     // // // Initialise the class to read the deploy.txt file on the S3 bucket
     // // const readFile = new ReadDatabaseDeployFile(bucketName, "database-deploy.txt");

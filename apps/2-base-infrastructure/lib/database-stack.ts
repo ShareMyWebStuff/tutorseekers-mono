@@ -93,95 +93,83 @@ export class DatabaseStack extends Stack {
       },
     );
 
-    /**
-     * DATABASE HAS BEEN COMMENTED OUT TO TEST READING FILES
-     *
-     * FROM HERE +++++
-     */
+    const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
+    const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
 
-    // const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
-    // const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
+    const databaseCredentialsSecret = new Secret(
+      this,
+      `${projectPrefix}-${region}-${stage}-db-credentials`,
+      {
+        secretName: `${instanceName}-credentials`,
+        generateSecretString: {
+          secretStringTemplate: JSON.stringify({
+            username: dbUserName,
+          }),
+          excludePunctuation: true,
+          includeSpace: false,
+          generateStringKey: "password",
+        },
+      },
+    );
 
-    // const databaseCredentialsSecret = new Secret(
-    //   this,
-    //   `${projectPrefix}-${region}-${stage}-db-credentials`,
-    //   {
-    //     secretName: `${instanceName}-credentials`,
-    //     generateSecretString: {
-    //       secretStringTemplate: JSON.stringify({
-    //         username: dbUserName,
-    //       }),
-    //       excludePunctuation: true,
-    //       includeSpace: false,
-    //       generateStringKey: "password",
-    //     },
-    //   },
-    // );
+    const dbEngine = rds.DatabaseClusterEngine.auroraMysql({
+      version: rds.AuroraMysqlEngineVersion.VER_3_04_0,
+    });
 
-    // const dbEngine = rds.DatabaseClusterEngine.auroraMysql({
-    //   version: rds.AuroraMysqlEngineVersion.VER_3_04_0,
-    // });
+    const parameterGroupForInstance = new rds.ParameterGroup(
+      this,
+      `${instanceName}-${dbEngine.engineVersion?.fullVersion}`,
+      {
+        engine: dbEngine,
+        description: `Aurora RDS Instance Parameter Group for database ${instanceName}`,
+        parameters: {
+          log_bin_trust_function_creators: "1",
+          // aurora_load_from_s3_role:
+          //   "arn:aws:iam::" +
+          //   this.account +
+          //   ":role/" +
+          //   deployBucketRole.roleName,
+          aws_default_s3_role:
+            "arn:aws:iam::" +
+            this.account +
+            ":role/" +
+            deployBucketRole.roleName,
+        },
+      },
+    );
 
-    // const parameterGroupForInstance = new rds.ParameterGroup(
-    //   this,
-    //   `${instanceName}-${dbEngine.engineVersion?.fullVersion}`,
-    //   {
-    //     engine: dbEngine,
-    //     description: `Aurora RDS Instance Parameter Group for database ${instanceName}`,
-    //     parameters: {
-    //       log_bin_trust_function_creators: "1",
-    //       // aurora_load_from_s3_role:
-    //       //   "arn:aws:iam::" +
-    //       //   this.account +
-    //       //   ":role/" +
-    //       //   deployBucketRole.roleName,
-    //       aws_default_s3_role:
-    //         "arn:aws:iam::" +
-    //         this.account +
-    //         ":role/" +
-    //         deployBucketRole.roleName,
-    //     },
-    //   },
-    // );
-
-    // // Create the MySQL aurora cluster
-    // const dbCluster = new rds.DatabaseCluster(
-    //   this,
-    //   `${projectPrefix}-${region}-${stage}-db-cluster`,
-    //   {
-    //     engine: dbEngine,
-    //     credentials: rds.Credentials.fromSecret(databaseCredentialsSecret),
-    //     clusterIdentifier: `${projectPrefix}-${region}-${stage}-cluster`,
-    //     defaultDatabaseName: dbName,
-    //     serverlessV2MaxCapacity: 4,
-    //     serverlessV2MinCapacity: 0.5,
-    //     writer: rds.ClusterInstance.serverlessV2(
-    //       `${projectPrefix}-${region}-${stage}-db-writer`,
-    //       {},
-    //     ),
-    //     readers: [
-    //       rds.ClusterInstance.serverlessV2(
-    //         `${projectPrefix}-${region}-${stage}-db-reader`,
-    //         {},
-    //       ),
-    //     ],
-    //     deletionProtection: false,
-    //     removalPolicy: cdk.RemovalPolicy.DESTROY,
-    //     securityGroups: [databaseSG],
-    //     s3ImportBuckets: [deployBucket],
-    //     vpc: vpc,
-    //     vpcSubnets: {
-    //       subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
-    //     },
-    //     parameterGroup: parameterGroupForInstance,
-    //   },
-    // );
-
-    /**
-     * TO HERE +++++++
-     *
-     * BUT ALSO UNCOMMENT THE DATABASE PERMISSIONS AND ENV VARS
-     */
+    // Create the MySQL aurora cluster
+    const dbCluster = new rds.DatabaseCluster(
+      this,
+      `${projectPrefix}-${region}-${stage}-db-cluster`,
+      {
+        engine: dbEngine,
+        credentials: rds.Credentials.fromSecret(databaseCredentialsSecret),
+        clusterIdentifier: `${projectPrefix}-${region}-${stage}-cluster`,
+        defaultDatabaseName: dbName,
+        serverlessV2MaxCapacity: 4,
+        serverlessV2MinCapacity: 0.5,
+        writer: rds.ClusterInstance.serverlessV2(
+          `${projectPrefix}-${region}-${stage}-db-writer`,
+          {},
+        ),
+        readers: [
+          rds.ClusterInstance.serverlessV2(
+            `${projectPrefix}-${region}-${stage}-db-reader`,
+            {},
+          ),
+        ],
+        deletionProtection: false,
+        removalPolicy: cdk.RemovalPolicy.DESTROY,
+        securityGroups: [databaseSG],
+        s3ImportBuckets: [deployBucket],
+        vpc: vpc,
+        vpcSubnets: {
+          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+        },
+        parameterGroup: parameterGroupForInstance,
+      },
+    );
 
     // Create lambda
     const connectToAuroraLambda = new NodejsFunction(
@@ -193,11 +181,11 @@ export class DatabaseStack extends Stack {
         runtime: lambda.Runtime.NODEJS_20_X,
         initialPolicy: [
           // Access to the database secret
-          // new iam.PolicyStatement({
-          //   effect: iam.Effect.ALLOW,
-          //   actions: ["secretsmanager:GetSecretValue"],
-          //   resources: [databaseCredentialsSecret.secretArn],
-          // }),
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ["secretsmanager:GetSecretValue"],
+            resources: [databaseCredentialsSecret.secretArn],
+          }),
           new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             actions: ["s3:*"],
@@ -211,9 +199,9 @@ export class DatabaseStack extends Stack {
         securityGroups: [lambdaSG],
         handler: "main",
         environment: {
-          // CLUSTER_ENDPOINT: dbCluster.clusterEndpoint.hostname,
-          // CLUSTER_SOCKET: dbCluster.clusterEndpoint.socketAddress,
-          // CLUSTER_SECRET_ARN: databaseCredentialsSecret.secretArn,
+          CLUSTER_ENDPOINT: dbCluster.clusterEndpoint.hostname,
+          CLUSTER_SOCKET: dbCluster.clusterEndpoint.socketAddress,
+          CLUSTER_SECRET_ARN: databaseCredentialsSecret.secretArn,
           DB_NAME: dbName,
           BUCKET_NAME: deployBucket.bucketName,
         },
