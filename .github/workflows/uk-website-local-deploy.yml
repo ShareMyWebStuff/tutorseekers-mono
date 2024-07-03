@@ -7,8 +7,8 @@ on:
         description: "Deploy VPC resources"
         required: false
         type: boolean
-      deploy_database:
-        description: "Deploy Database resources"
+      create_database:
+        description: "Create Database"
         required: false
         type: boolean
       deploy_database_ddl:
@@ -78,8 +78,8 @@ jobs:
       - name: Deploy Stack
         run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl "$PROJECT-uk-lcl-vpc"
 
-  deploy-database-resources:
-    if: ${{ inputs.deploy_database }}
+  create-database:
+    if: ${{ inputs.create_database }}
     name: Deploy database
     runs-on: ubuntu-latest
     # timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
@@ -129,18 +129,27 @@ jobs:
       - name: Deploy Stack
         run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl "$PROJECT-uk-lcl-create-database"
 
-        # jobs:
-#   deploy-locally:
-#     uses: ./.github/workflows/deploy-base-infrastructure.yml
-#     with:
-#       project: tutorseekers
-#       github-environment: LocalPreview
-#       stage: $(echo ${{ github.actor }} | awk '{print tolower($0)}')
-#       github-author: ${{ github.actor }}
-#       region: uk
-#       aws_region: eu-west-2
-#       deploy_vpc: ${{ inputs.deploy_vpc }}
-#       deploy_database: ${{ inputs.deploy_database }}
-#       deploy_database_ddl: ${{ inputs.deploy_database_ddl }}
-#     secrets:
-#       aws-role-arn: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+  deploy_database_ddl:
+    if: ${{ inputs.deploy_database_ddl }}
+    name: Deploy database
+    runs-on: ubuntu-latest
+    # timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
+    # environment: ${{ inputs.github-environment }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Empty the S3 Deployment Bucket
+        run: npm install -g corepack
+
+      - name: Copy the DDL Files to the S3 Bucket
+        run: echo "Copy the DDL Files to the S3 Bucket"
+
+      - name: Run the lambda to load the DDL
+        run: echo "Run the lambda to load the DDL"
