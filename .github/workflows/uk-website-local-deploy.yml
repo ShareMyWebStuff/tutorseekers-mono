@@ -18,6 +18,7 @@ on:
 
 env:
   REGION: uk
+  STAGE: lcl
   PROJECT: tutorseekers
   AWS_REGION: eu-west-2
   NODE_VERSION: 20.10
@@ -146,10 +147,10 @@ jobs:
           aws-region: eu-west-2
 
       - name: Empty the S3 Deployment Bucket
-        run: npm install -g corepack
+        run: cd apps/database && ls -ltr
 
       - name: Copy the DDL Files to the S3 Bucket
-        run: echo "Copy the DDL Files to the S3 Bucket"
+        run: cd apps/database && aws s3 sync build s3://${{env.PROJECTS}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
 
       - name: Run the lambda to load the DDL
         run: echo "Run the lambda to load the DDL"
