@@ -149,12 +149,24 @@ jobs:
       - name: Copy the DDL Files to the S3 Bucket
         run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket
 
-      - name: Run the database deploy lambda
-        id: database-deploy
-        uses: gagoar/invoke-aws-lambda@master
-        with:
-          FunctionName: ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl
-          LogType: Tail
-          Payload: "{ }"
-      - name: Show the deploy status
-        run: echo "${{ fromJSON(steps.database-deploy.outputs.response).LogResult }}"
+      - name: Invoke AWS Lambda by OIDC
+        run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl --payload '{ }' --log-type Tail --output text --region=${{env.AWS_REGION}}
+      #   uses: y5347M/invoke-aws-lambda-oidc@v1
+      #   with:
+      #     aws-region: 'us-west-2'
+      #     role-to-assume: 'arn:aws:iam::123456789012:role/MyRole'
+      #     function-name: 'my-lambda-function'
+      #     payload: '{"key1":"value1","key2":"value2"}'
+
+      # - name: Output Lambda Response
+      #   run: echo "Lambda Response: ${{ steps.invoke.outputs.lambda-invoke-response }}"
+
+      # - name: Run the database deploy lambda
+      #   id: database-deploy
+      #   uses: gagoar/invoke-aws-lambda@master
+      #   with:
+      #     FunctionName: ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl
+      #     LogType: Tail
+      #     Payload: "{ }"
+      # - name: Show the deploy status
+      #   run: echo "${{ fromJSON(steps.database-deploy.outputs.response).LogResult }}"
