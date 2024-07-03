@@ -28,14 +28,18 @@ export class DatabaseDeployFile {
   }
 
   public async readFile() {
+    console.log("1 readFile");
     const params = {
       Bucket: this.bucketName,
       Key: this.fileName,
     };
+    console.log("2 readFile");
 
     const command = new S3.GetObjectCommand(params);
+    console.log("3 readFile");
     const response = await client.send(command);
-
+    console.log("4 readFile");
+    console.log(response);
     const { Body } = response;
 
     return this.streamToString(Body);
