@@ -179,6 +179,8 @@ export class DatabaseStack extends Stack {
      * COMMENTED OUT ENDING HERE
      *
      * Also commented out secret / environments
+     *
+     * Hairy Mary
      */
 
     // Create lambda
