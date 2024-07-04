@@ -150,7 +150,7 @@ jobs:
         run: ls -ltr apps/database
 
       - name: Copy the DDL Files to the S3 Bucket
-        run: aws s3 cp apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket/ --recursive
+        run: aws s3 cp apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket/ --recursive --acl public-read
       # run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket --acl public-read
 
       - name: Invoke AWS Lambda by OIDC
