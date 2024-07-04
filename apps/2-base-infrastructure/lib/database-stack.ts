@@ -202,11 +202,11 @@ export class DatabaseStack extends Stack {
             resources: [deployBucket.bucketArn, deployBucket.bucketArn + "/*"],
           }),
         ],
-        vpc: vpc,
-        vpcSubnets: {
-          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-        },
-        securityGroups: [lambdaSG],
+        // vpc: vpc,
+        // vpcSubnets: {
+        //   subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        // },
+        // securityGroups: [lambdaSG],
         handler: "main",
         environment: {
           // CLUSTER_ENDPOINT: dbCluster.clusterEndpoint.hostname,
