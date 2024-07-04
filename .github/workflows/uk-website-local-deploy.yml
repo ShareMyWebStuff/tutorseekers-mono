@@ -147,7 +147,7 @@ jobs:
           aws-region: eu-west-2
 
       - name: Chmod to 777
-        run: chmod -R apps/database
+        run: chmod -R apps/database 777
 
       - name: list the directory
         run: ls -ltr apps/database
