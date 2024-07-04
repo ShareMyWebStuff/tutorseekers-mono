@@ -49,9 +49,10 @@ export class DatabaseStack extends Stack {
       `${projectPrefix}-${region}-${stage}-deploy-bucket`,
       {
         bucketName: `${projectPrefix}-${region}-${stage}-deploy-bucket`,
-        objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
-        accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
+        // objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
+        // blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+        // blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+        // accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
         removalPolicy: cdk.RemovalPolicy.DESTROY,
         autoDeleteObjects: true,
         versioned: false,
