@@ -146,6 +146,9 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-west-2
 
+      - name: Chmod to 777
+        run: chmod -R apps/database
+
       - name: list the directory
         run: ls -ltr apps/database
 
