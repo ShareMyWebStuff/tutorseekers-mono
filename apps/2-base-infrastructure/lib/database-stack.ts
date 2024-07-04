@@ -93,6 +93,10 @@ export class DatabaseStack extends Stack {
       },
     );
 
+    /**
+     * COMMENTED OUT STARTING HERE
+     */
+
     const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
     const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
 
@@ -171,6 +175,12 @@ export class DatabaseStack extends Stack {
       },
     );
 
+    /**
+     * COMMENTED OUT ENDING HERE
+     *
+     * Also commented out secret / environments
+     */
+
     // Create lambda
     const connectToAuroraLambda = new NodejsFunction(
       this,
@@ -181,11 +191,11 @@ export class DatabaseStack extends Stack {
         runtime: lambda.Runtime.NODEJS_20_X,
         initialPolicy: [
           // Access to the database secret
-          new iam.PolicyStatement({
-            effect: iam.Effect.ALLOW,
-            actions: ["secretsmanager:GetSecretValue"],
-            resources: [databaseCredentialsSecret.secretArn],
-          }),
+          // new iam.PolicyStatement({
+          //   effect: iam.Effect.ALLOW,
+          //   actions: ["secretsmanager:GetSecretValue"],
+          //   resources: [databaseCredentialsSecret.secretArn],
+          // }),
           new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             actions: ["s3:*"],
@@ -199,10 +209,10 @@ export class DatabaseStack extends Stack {
         securityGroups: [lambdaSG],
         handler: "main",
         environment: {
-          CLUSTER_ENDPOINT: dbCluster.clusterEndpoint.hostname,
-          CLUSTER_SOCKET: dbCluster.clusterEndpoint.socketAddress,
-          CLUSTER_SECRET_ARN: databaseCredentialsSecret.secretArn,
-          DB_NAME: dbName,
+          // CLUSTER_ENDPOINT: dbCluster.clusterEndpoint.hostname,
+          // CLUSTER_SOCKET: dbCluster.clusterEndpoint.socketAddress,
+          // CLUSTER_SECRET_ARN: databaseCredentialsSecret.secretArn,
+          // DB_NAME: dbName,
           BUCKET_NAME: deployBucket.bucketName,
         },
         timeout: cdk.Duration.seconds(600),
