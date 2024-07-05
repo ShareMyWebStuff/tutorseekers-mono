@@ -29,6 +29,8 @@ export async function ApiStack({ stack }: StackContext) {
   const domainName = "cameronguy.biz";
   const domainNameDash = domainName.replace(".", "-");
 
+  // console.log("Region");
+  // console.log(stack);
   // Lookup VPC
   const vpc = ec2.Vpc.fromLookup(stack, "Poop", {
     isDefault: false,
@@ -39,16 +41,25 @@ export async function ApiStack({ stack }: StackContext) {
     },
   });
 
-  const securityGroups = ec2.SecurityGroup.fromLookupByName(
+  // console.log("VPC +++++++++++++++++");
+  // console.log(vpc);
+
+  const securityGroup = ec2.SecurityGroup.fromLookupByName(
     stack,
     "PoopSecGrps",
     "tutorseekers-uk-lcl-lambda-sg",
     vpc,
   );
 
-  const subnets = vpc.selectSubnets({
+  // console.log("VPC +++++++++++++++++");
+  // console.log(vpc);
+
+  // const vpcSubnets = vpc.selectSubnets({
+  //   subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+  // }).subnetIds;
+  const vpcSubnets = {
     subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-  }).subnetIds;
+  };
 
   // Get the hosted zone
   const hostedZone = HostedZone.fromLookup(
@@ -122,8 +133,9 @@ export async function ApiStack({ stack }: StackContext) {
     handler: "handler",
     functionName: "get-version",
     entry: "src/service/api/version.ts",
-    vpc: vpc,
-    securityGroups: [securityGroups],
+    vpc,
+    securityGroups: [securityGroup],
+    vpcSubnets,
   });
 
   const templateLambdaIntegration = new HttpLambdaIntegration(
@@ -144,8 +156,9 @@ export async function ApiStack({ stack }: StackContext) {
     handler: "handler",
     functionName: "auth-signup",
     entry: "src/service/api/signup.ts",
-    vpc: vpc,
-    securityGroups: [securityGroups],
+    vpc,
+    securityGroups: [securityGroup],
+    vpcSubnets,
   });
 
   const authSignupIntegration = new HttpLambdaIntegration(
