@@ -53,10 +53,16 @@ export class DatabaseDeployFile {
       const response = await s3.getObject(s3Params).promise();
       console.log("response");
       console.log(response);
-      const fileContent = response.Body?.toString("utf-8");
+      const fileContent = response.Body?.toString("utf-8").replace(
+        new RegExp("\r", "g"),
+        "",
+      );
       console.log("fileContent");
       console.log(fileContent);
-      const tmpLines: string[] = !fileContent ? [] : fileContent?.split("\r\n");
+      const tmpLines: string[] = !fileContent ? [] : fileContent?.split("\n");
+
+      console.log("Line Count");
+      console.log(tmpLines.length);
 
       // Remove comments and blank lines
       const lines = tmpLines.filter(
