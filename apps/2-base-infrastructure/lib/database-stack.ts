@@ -56,7 +56,7 @@ export class DatabaseStack extends Stack {
         removalPolicy: cdk.RemovalPolicy.DESTROY,
         autoDeleteObjects: true,
         versioned: false,
-        publicReadAccess: true,
+        publicReadAccess: false,
         encryption: s3.BucketEncryption.S3_MANAGED,
       },
     );
