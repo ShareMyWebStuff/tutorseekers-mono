@@ -51,7 +51,11 @@ export class DatabaseDeployFile {
       console.log(s3Params);
 
       const response = await s3.getObject(s3Params).promise();
+      console.log("response");
+      console.log(response);
       const fileContent = response.Body?.toString("utf-8");
+      console.log("fileContent");
+      console.log(fileContent);
       const tmpLines: string[] = !fileContent ? [] : fileContent?.split("\r\n");
 
       // Remove comments and blank lines
