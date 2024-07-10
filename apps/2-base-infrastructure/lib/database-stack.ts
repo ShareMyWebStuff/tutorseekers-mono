@@ -213,12 +213,20 @@ export class DatabaseStack extends Stack {
 
     deployBucket.grantReadWrite(connectToAuroraLambda);
 
-    // // Stack outputs
-    // let exportName: string;
+    // Stack outputs
+    let exportName: string;
 
-    // // VPC
-    // exportName = `${prefix}-${region}-${stage}-vpc-arn`;
-    // new CfnOutput(this, exportName, { value: this.vpc.vpcArn, exportName });
+    // VPC
+    exportName = `${projectPrefix}-${region}-${stage}-cluster-arn`;
+    new CfnOutput(this, exportName, {
+      value: dbCluster.clusterArn,
+      exportName,
+    });
+    exportName = `${projectPrefix}-${region}-${stage}-cluster-id`;
+    new CfnOutput(this, exportName, {
+      value: dbCluster.clusterIdentifier,
+      exportName,
+    });
     // exportName = `${prefix}-${region}-${stage}-vpc-id`;
     // new CfnOutput(this, exportName, { value: this.vpc.vpcId, exportName });
     // exportName = `${prefix}-${region}-${stage}-vpc-ids`;

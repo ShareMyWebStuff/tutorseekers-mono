@@ -52,7 +52,7 @@ export async function ApiStack({ stack }: StackContext) {
   //   {
   //     secretName: `${instanceName}-credentials`,
 
-  // const clusterSecret = Secret.fromSecretNameV2(stack, "get-database-cluster-secret", "")
+  const clusterSecret = Secret.fromSecretNameV2(stack, "get-database-cluster-secret", "tutorseekers-uk-lcl-aurora-mysql-credentials")
 
   // const cluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(stack, "get-database-cluster", {
 
