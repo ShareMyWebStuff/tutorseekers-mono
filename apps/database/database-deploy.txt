@@ -34,6 +34,7 @@
 
 
 -- Populate the geo tables
+40   |Truncate the geo_countries table                             |table/geo/install/geo_countries_truncate.sql                                  |         |                                                         |                                                                          |         |                                                  |
 50   |Populate the geo_countries table                             |load-data-scripts/geo/install/geo_countries_00001_insert.sql                  |252      |Reverts the data loaded into geo_countries               |load-data-scripts/geo/uninstall/geo_countries_00001_delete.sql            |         |data/geo/geo_countries.csv                        |
 51   |Populate the geo_distances table                             |load-data-scripts/geo/install/geo_distances_00001_insert.sql                  |2615722  |Reverts the data loaded into geo_distances               |load-data-scripts/geo/uninstall/geo_distances_00001_delete.sql            |         |data/geo/geo_distances.csv                        |
 52   |Populate the geo_locations table                             |load-data-scripts/geo/install/geo_locations_00001_insert.sql                  |18959    |Reverts the data loaded into geo_locations               |load-data-scripts/geo/uninstall/geo_locations_00001_delete.sql            |         |data/geo/geo_locations.csv                        |
