@@ -9,16 +9,26 @@ import {
 // import { verifyGoogleToken } from "./helpers/verify-google-token";
 import { DbConnection } from "../../../utils/db-utils";
 import { signupCheckerValidation } from "./helpers/signup-checker-validation";
-
-// UNCOMMENT THOS
-const db = new DbConnection();
-db.connectToDB();
+import { DeployedItem } from "../../../types";
 
 async function handler(event: APIGatewayProxyEvent, context: Context) {
   // Validate body
   let body: unknown = !event.body ? {} : JSON.parse(event.body);
 
+  console.log("HERE I AM ....");
+  const db = new DbConnection();
+  console.log("HERE I AM 1 ....");
+  db.connectToDB();
+  console.log("HERE I AM 2 ....");
+
   const { success, data } = signupCheckerValidation(body);
+
+  const res = await db.query<DeployedItem[]>(
+    `SELECT * FROM util_database_deploy ORDER BY deploy_id ASC`,
+  );
+
+  console.log("res");
+  console.log(res);
 
   if (!success) {
     return {
@@ -27,6 +37,10 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
       errorMsgs: data,
     };
   }
+
+  db.query<DeployedItem[]>(
+    `SELECT * FROM util_database_deploy ORDER BY deploy_id ASC`,
+  );
 
   // If google then process google signin
   // if ( data.accountType === 'google') {

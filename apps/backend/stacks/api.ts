@@ -11,6 +11,7 @@ import { DomainName } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { ARecord, RecordTarget, IHostedZone } from "aws-cdk-lib/aws-route53";
 import { ApiGatewayv2DomainProperties } from "aws-cdk-lib/aws-route53-targets";
 import * as rds from "aws-cdk-lib/aws-rds";
+import * as iam from "aws-cdk-lib/aws-iam";
 import {
   HttpLambdaIntegration,
   HttpUrlIntegration,
@@ -43,8 +44,10 @@ export async function ApiStack({ stack }: StackContext) {
     },
   });
 
-  const clusterArn = Fn.importValue("tutorseekers-uk-lcl-cluster-arn");
+  const clusterSecretArn = Fn.importValue("tutorseekers-uk-lcl-cluster-secret");
 
+  console.log("ClusterSecret");
+  console.log(clusterSecretArn);
   // const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
   // const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
 
@@ -165,16 +168,24 @@ export async function ApiStack({ stack }: StackContext) {
 
   // Create a Lambda function
   const authSignup = new Function(stack, "signup-checker", {
-    functionName: "auth-signup",
+    functionName: "signup-checker",
     description:
       "Checks if the google credentials or email signup already exist",
     handler: "src/service/api/auth/signup-checker.handler",
     vpc,
     securityGroups: [securityGroup],
     vpcSubnets,
-    // environment: [
-    //   CLUSTER_SECRET_ARN:
-    // ]
+    initialPolicy: [
+      // Access to the database secret
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["secretsmanager:GetSecretValue"],
+        resources: [clusterSecretArn],
+      }),
+    ],
+    environment: {
+      CLUSTER_SECRET_ARN: clusterSecretArn,
+    },
   });
 
   const authSignupIntegration = new HttpLambdaIntegration(

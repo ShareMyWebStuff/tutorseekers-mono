@@ -37,6 +37,9 @@ export class DbConnection {
       );
       const secretValues = JSON.parse(secret.SecretString ?? "{}");
 
+      console.log("Secret +++++++++++++++++++++++++++++");
+      console.log(secretValues);
+
       this.connection = await createConnection({
         host: secretValues.host,
         user: secretValues.username,
@@ -46,6 +49,7 @@ export class DbConnection {
         multipleStatements: true,
       });
 
+      console.log("Ran connection .....");
       return this.connection;
     } catch (err) {
       console.log("Error connecting to the database", err);
@@ -62,14 +66,15 @@ export class DbConnection {
   >(sql: string) {
     // console.log ('Execute ...')
     if (!this.connection) {
-      console.log("Connection ...");
+      console.log("Before Connection ...");
       this.connection = await this.connectToDB();
+      console.log("After Connection ...");
     }
 
     try {
-      // console.log ('Query ===>', sql)
+      console.log("Query ===>", sql);
       const res = await this.connection.query<T>(sql);
-      // console.log ('Query Res ===>', res)
+      console.log("Query Res ===>", res);
 
       return res[0];
     } catch (error) {

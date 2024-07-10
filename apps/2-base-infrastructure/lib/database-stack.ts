@@ -212,6 +212,7 @@ export class DatabaseStack extends Stack {
     );
 
     deployBucket.grantReadWrite(connectToAuroraLambda);
+    dbCluster.grantDataApiAccess(connectToAuroraLambda);
 
     // Stack outputs
     let exportName: string;
