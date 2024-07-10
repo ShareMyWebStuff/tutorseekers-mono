@@ -200,10 +200,10 @@ export class DatabaseStack extends Stack {
         securityGroups: [lambdaSG],
         handler: "main",
         environment: {
-          CLUSTER_ENDPOINT: dbCluster.clusterEndpoint.hostname,
-          CLUSTER_SOCKET: dbCluster.clusterEndpoint.socketAddress,
+          // CLUSTER_ENDPOINT: dbCluster.clusterEndpoint.hostname,
+          // CLUSTER_SOCKET: dbCluster.clusterEndpoint.socketAddress,
           CLUSTER_SECRET_ARN: databaseCredentialsSecret.secretArn,
-          DB_NAME: dbName,
+          // DB_NAME: dbName,
           BUCKET_NAME: deployBucket.bucketName,
         },
         timeout: cdk.Duration.seconds(600),
@@ -217,6 +217,11 @@ export class DatabaseStack extends Stack {
     let exportName: string;
 
     // VPC
+    exportName = `${projectPrefix}-${region}-${stage}-cluster-secret`;
+    new CfnOutput(this, exportName, {
+      value: databaseCredentialsSecret.secretFullArn,
+      exportName,
+    });
     exportName = `${projectPrefix}-${region}-${stage}-cluster-arn`;
     new CfnOutput(this, exportName, {
       value: dbCluster.clusterArn,

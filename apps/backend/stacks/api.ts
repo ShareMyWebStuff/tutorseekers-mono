@@ -43,6 +43,8 @@ export async function ApiStack({ stack }: StackContext) {
     },
   });
 
+  const clusterArn = Fn.importValue("tutorseekers-uk-lcl-cluster-arn");
+
   // const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
   // const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
 
@@ -51,12 +53,6 @@ export async function ApiStack({ stack }: StackContext) {
   //   `${projectPrefix}-${region}-${stage}-db-credentials`,
   //   {
   //     secretName: `${instanceName}-credentials`,
-
-  const clusterSecret = Secret.fromSecretNameV2(stack, "get-database-cluster-secret", "tutorseekers-uk-lcl-aurora-mysql-credentials")
-
-  // const cluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(stack, "get-database-cluster", {
-
-  // })
 
   // console.log("VPC +++++++++++++++++");
   // console.log(vpc);
@@ -176,9 +172,9 @@ export async function ApiStack({ stack }: StackContext) {
     vpc,
     securityGroups: [securityGroup],
     vpcSubnets,
-    environment: [
-      CLUSTER_SECRET_ARN: 
-    ]
+    // environment: [
+    //   CLUSTER_SECRET_ARN:
+    // ]
   });
 
   const authSignupIntegration = new HttpLambdaIntegration(
