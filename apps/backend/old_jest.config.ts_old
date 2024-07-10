@@ -1,0 +1,17 @@
+// jest.config.ts
+import type { Config } from "@jest/types";
+
+const config: Config.InitialOptions = {
+  setupFiles: ["./.jest/env.js"],
+  globalSetup: "./.jest/global-setup.js",
+  preset: "ts-jest",
+  testEnvironment: "node",
+  verbose: true,
+  automock: true,
+
+  testPathIgnorePatterns: [
+    "<rootDir>/__tests__/support/*",
+    "<rootDir>/__tests__/factory/*",
+  ],
+};
+export default config;

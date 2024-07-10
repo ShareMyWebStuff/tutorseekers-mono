@@ -1,4 +1,4 @@
-import { StackContext, Api, EventBus } from "sst/constructs";
+import { StackContext, Function, use } from "sst/constructs";
 import { HostedZone } from "aws-cdk-lib/aws-route53";
 import {
   Certificate,
@@ -10,6 +10,7 @@ import { Fn } from "aws-cdk-lib";
 import { DomainName } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { ARecord, RecordTarget, IHostedZone } from "aws-cdk-lib/aws-route53";
 import { ApiGatewayv2DomainProperties } from "aws-cdk-lib/aws-route53-targets";
+import * as rds from "aws-cdk-lib/aws-rds";
 import {
   HttpLambdaIntegration,
   HttpUrlIntegration,
@@ -21,6 +22,7 @@ import {
 } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { Stack, StackProps, CfnOutput } from "aws-cdk-lib";
+import { Secret } from "aws-cdk-lib/aws-secretsmanager";
 
 export async function ApiStack({ stack }: StackContext) {
   // const resourceName = resourceNameGenerator(stack.stage, 'mastercard-adapter');
@@ -40,6 +42,21 @@ export async function ApiStack({ stack }: StackContext) {
       "aws:cloudformation:stack-name": `tutorseekers-uk-lcl-vpc`,
     },
   });
+
+  // const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
+  // const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
+
+  // const databaseCredentialsSecret = new Secret(
+  //   this,
+  //   `${projectPrefix}-${region}-${stage}-db-credentials`,
+  //   {
+  //     secretName: `${instanceName}-credentials`,
+
+  // const clusterSecret = Secret.fromSecretNameV2(stack, "get-database-cluster-secret", "")
+
+  // const cluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(stack, "get-database-cluster", {
+
+  // })
 
   // console.log("VPC +++++++++++++++++");
   // console.log(vpc);
@@ -151,14 +168,17 @@ export async function ApiStack({ stack }: StackContext) {
   });
 
   // Create a Lambda function
-  const authSignup = new NodejsFunction(stack, "AuthSignup", {
-    runtime: Runtime.NODEJS_20_X,
-    handler: "handler",
+  const authSignup = new Function(stack, "signup-checker", {
     functionName: "auth-signup",
-    entry: "src/service/api/signup.ts",
+    description:
+      "Checks if the google credentials or email signup already exist",
+    handler: "src/service/api/auth/signup-checker.handler",
     vpc,
     securityGroups: [securityGroup],
     vpcSubnets,
+    environment: [
+      CLUSTER_SECRET_ARN: 
+    ]
   });
 
   const authSignupIntegration = new HttpLambdaIntegration(
@@ -168,7 +188,7 @@ export async function ApiStack({ stack }: StackContext) {
 
   // Create a resource and method for the API
   httpApi.addRoutes({
-    path: "/auth/signup",
+    path: "/auth/signup-check",
     methods: [HttpMethod.POST],
     integration: authSignupIntegration,
   });

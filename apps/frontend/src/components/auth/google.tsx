@@ -115,7 +115,8 @@ const useFetch = (url: string) => {
 
 export const Google = ({ disabled }: GoogleProps) => {
   const { handleGoogle, loading, error } = useFetch(
-    "http://localhost:5152/signup",
+    // "http://localhost:5152/signup",
+    "https://api-dev.cameronguy.biz/auth/signup",
   );
 
   useEffect(() => {
