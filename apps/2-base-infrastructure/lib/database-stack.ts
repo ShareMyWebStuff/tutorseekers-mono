@@ -212,7 +212,7 @@ export class DatabaseStack extends Stack {
     );
 
     deployBucket.grantReadWrite(connectToAuroraLambda);
-    dbCluster.grantDataApiAccess(connectToAuroraLambda);
+    // dbCluster.grantDataApiAccess(connectToAuroraLambda);
 
     // Stack outputs
     let exportName: string;
@@ -231,6 +231,11 @@ export class DatabaseStack extends Stack {
     exportName = `${projectPrefix}-${region}-${stage}-cluster-id`;
     new CfnOutput(this, exportName, {
       value: dbCluster.clusterIdentifier,
+      exportName,
+    });
+    exportName = `${projectPrefix}-${region}-${stage}-cluster-resource-id`;
+    new CfnOutput(this, exportName, {
+      value: dbCluster.clusterResourceIdentifier,
       exportName,
     });
     // exportName = `${prefix}-${region}-${stage}-vpc-id`;

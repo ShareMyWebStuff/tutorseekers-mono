@@ -48,6 +48,16 @@ export async function ApiStack({ stack }: StackContext) {
 
   console.log("ClusterSecret");
   console.log(clusterSecretArn);
+
+  const dbCluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(
+    stack,
+    "ImportedDatabase",
+    {
+      clusterIdentifier: "tutorseekers-uk-lcl-cluster",
+      clusterResourceIdentifier: "cluster-U7FBH4V2AFC2X4XX47OJ7JB3GY",
+    },
+  );
+
   // const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
   // const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
 
@@ -167,11 +177,11 @@ export async function ApiStack({ stack }: StackContext) {
   });
 
   // Create a Lambda function
-  const authSignup = new Function(stack, "signup-checker", {
+  const authSignup = new NodejsFunction(stack, "signup-checker", {
+    runtime: Runtime.NODEJS_20_X,
+    handler: "handler",
     functionName: "signup-checker",
-    description:
-      "Checks if the google credentials or email signup already exist",
-    handler: "src/service/api/auth/signup-checker.handler",
+    entry: "src/service/api/auth/signup-checker.ts",
     vpc,
     securityGroups: [securityGroup],
     vpcSubnets,
@@ -187,6 +197,9 @@ export async function ApiStack({ stack }: StackContext) {
       CLUSTER_SECRET_ARN: clusterSecretArn,
     },
   });
+
+  // dbCluster.grantDataApiAccess(authSignup);
+  dbCluster.grantConnect(authSignup, "admin");
 
   const authSignupIntegration = new HttpLambdaIntegration(
     "TemplateIntegration",

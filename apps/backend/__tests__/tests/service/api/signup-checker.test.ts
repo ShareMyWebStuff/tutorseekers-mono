@@ -2,6 +2,7 @@ import nock from "nock";
 import { apiGatewayProxyEventFactory } from "../../../factory/api-gateway";
 import { lambdaContextFactory } from "../../../factory/lambda-context";
 import { handler } from "../../../../src/service/api/auth/signup-checker";
+import { DbConnection } from "../../../../src/utils/db-utils";
 
 /**
  * Tests
@@ -21,6 +22,16 @@ import { handler } from "../../../../src/service/api/auth/signup-checker";
  *
  */
 
+jest.mock("../../../../src/utils/db-utils", () => {
+  return {
+    DbConnection: function () {
+      connectToDB: async () => {
+        console.log("Mocked value");
+      };
+    },
+  };
+});
+
 describe("signup-checker", () => {
   afterAll((): void => {
     jest.clearAllMocks();
@@ -29,6 +40,8 @@ describe("signup-checker", () => {
   beforeEach((): void => {
     nock.disableNetConnect();
     nock.cleanAll();
+
+    // new DbConnection() .mockClear();
   });
 
   afterEach((): void => {
@@ -50,6 +63,8 @@ describe("signup-checker", () => {
       });
 
       const context = lambdaContextFactory.build();
+
+      // const spy = jest
 
       nock("https://ssm.eu-west-1.amazonaws.com:443")
         .post("/")

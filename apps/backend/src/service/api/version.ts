@@ -15,7 +15,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
       "Access-Control-Allow-Headers":
         "Origin, X-Requested-With, Content-Type, Accept",
     },
-    body: JSON.stringify(`Version 1.0.0`),
+    body: JSON.stringify(`Version 1.0.1`),
   };
 
   console.log(response);
