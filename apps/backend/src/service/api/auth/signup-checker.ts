@@ -131,6 +131,9 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
     console.log("create account");
     await createAccount("dave@harmonydata.co.uk");
 
+    console.log("check emai account");
+    await getAccountByEmail(data.email as string);
+
     console.log("update account");
     await updateAccount(1, false);
 
