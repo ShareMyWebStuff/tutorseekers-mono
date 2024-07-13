@@ -12,6 +12,12 @@ import { signupCheckerValidation } from "./helpers/signup-checker-validation";
 import {
   getAccountByGoogleId,
   getAccountByEmail,
+  getAllAccounts,
+  createAccount,
+  updateAccount,
+  // deleteAllAccounts,
+  truncateTable,
+  selectError,
 } from "../../../models/account";
 import { DeployedItem } from "../../../types";
 
@@ -19,25 +25,42 @@ import { DeployedItem } from "../../../types";
 //
 // 🎯 TODO:
 
+// 2024-07-13T10:44:48.776Z	f087e773-b243-4ac1-b8d9-0f748e7c963e	INFO	Error connecting to the database Error: connect ETIMEDOUT
+//     at createConnection2 (/var/task/index.js:32904:35)
+//     at DbConnection.connectToDB (/var/task/index.js:33257:67)
+//     at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+//   code: 'ETIMEDOUT',
+//   errno: undefined,
+//   sqlState: undefined
+
 const db = new DbConnection();
-db.connectToDB();
+// db.connectToDB();
 
 async function handler(event: APIGatewayProxyEvent, context: Context) {
+  console.log("Starting signup");
+
   // Validate body
   let body: unknown = !event.body ? {} : JSON.parse(event.body);
-
+  console.log("1 - Starting signup");
   const { success, data } = signupCheckerValidation(body);
+  console.log("2 - Starting signup");
+  console.log(success);
+  console.log(data);
 
   if (!success) {
     return {
       statusCode: 422,
-      msg: "Validation errors",
-      errorMsgs: data,
+      body: JSON.stringify({
+        msg: "Validation errors",
+        errorMsgs: data,
+      }),
     };
   }
+  console.log("3 - Starting signup");
 
   // If google account decipher google credential
   if (data.accountType === "google" && data.credential) {
+    console.log("4 - Starting signup");
     /**
      * 1. Verify google credentials sent to us - returns user structure form google
      *
@@ -50,38 +73,85 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
      *    2.2 If verified then return 200
      */
     const googleData = await verifyGoogleToken(data.credential);
+
+    if (googleData.error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          msg: "Error verifying google account",
+          errorMsgs: googleData.error,
+        }),
+      };
+    }
+
+    console.log("5 - Starting signup");
+    console.log(googleData);
     // Return an error if above fails
     // May need to add test
     if (!googleData.payload) {
+      console.log("6 - Starting signup");
       // 🎯 TODO: Create the return
       return;
     }
 
     // 🎯 TODO: getAccountByGoogleId needs to be changed to return a record and not an array
     const retrieveAccount = await getAccountByGoogleId(googleData.payload.iss);
+    console.log("7 - Starting signup");
     // 🎯 TODO: Should only return one row
 
-    if (retrieveAccount.length === 1 && retrieveAccount[0].validated) {
-      // Account already exists
+    // if (retrieveAccount.length === 1 && retrieveAccount[0].validated) {
+    //   // Account already exists
 
-      // Create JWT
+    //   // Create JWT
 
-      // Return that the user is logged on as this is google
-      return;
-    } else if (retrieveAccount.length === 1 && !retrieveAccount[0].validated) {
-      // Update login info
+    //   // Return that the user is logged on as this is google
+    //   return;
+    // } else if (retrieveAccount.length === 1 && !retrieveAccount[0].validated) {
+    //   // Update login info
 
-      // Create token
+    //   // Create token
 
-      // return
-      return;
-    } else {
-      // Insert login info
-      // Create token
-      // return
-    }
+    //   // return
+    //   return;
+    // } else {
+    //   // Insert login info
+    //   // Create token
+    //   // return
+    // }
   } else if (data.accountType === "email") {
+    console.log("email");
+    console.log("Email doesnt exist");
     const retrieveAccount = await getAccountByEmail(data.email as string);
+
+    console.log("get all account");
+    await getAllAccounts();
+
+    console.log("create account");
+    await createAccount("dave@harmonydata.co.uk");
+
+    console.log("update account");
+    await updateAccount(1, false);
+
+    console.log("get all account");
+    await getAllAccounts();
+
+    console.log("update account");
+    await updateAccount(1, false);
+
+    console.log("get all account");
+    await getAllAccounts();
+
+    console.log("create another account");
+    await createAccount("vickie@harmonydata.co.uk");
+
+    console.log("get all account");
+    await getAllAccounts();
+
+    console.log("get all account");
+    await truncateTable();
+
+    console.log("error");
+    await selectError();
 
     // If account validated return error
 
