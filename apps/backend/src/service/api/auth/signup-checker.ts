@@ -17,7 +17,6 @@ import {
   updateAccount,
   // deleteAllAccounts,
   truncateTable,
-  selectError,
 } from "../../../models/account";
 import { DeployedItem } from "../../../types";
 
@@ -119,6 +118,9 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
     //   // return
     // }
   } else if (data.accountType === "email") {
+    console.log("Truncate table");
+    await truncateTable();
+
     console.log("email");
     console.log("Email doesnt exist");
     const retrieveAccount = await getAccountByEmail(data.email as string);
@@ -146,12 +148,6 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
 
     console.log("get all account");
     await getAllAccounts();
-
-    console.log("get all account");
-    await truncateTable();
-
-    console.log("error");
-    await selectError();
 
     // If account validated return error
 
