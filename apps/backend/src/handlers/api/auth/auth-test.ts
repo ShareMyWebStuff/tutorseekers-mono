@@ -18,6 +18,7 @@ import {
   deleteAllAccounts,
   truncateTable,
   GetUserLogins,
+  selectDatabaseDeploy,
 } from "../../../data-access/auth/signup";
 import { SqlError } from "../../../support/utils/errorHandler";
 // import { DeployedItem } from "../../../types";
@@ -31,7 +32,7 @@ const db = new DbConnection();
 
 async function handler() {
   try {
-    const userAccs = await getAllAccounts();
+    const userAccs = await selectDatabaseDeploy();
     console.log(userAccs);
   } catch (err) {
     console.log(err);

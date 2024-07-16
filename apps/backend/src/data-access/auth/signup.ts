@@ -412,3 +412,19 @@ export const truncateTable = async () => {
     );
   }
 };
+
+export const selectDatabaseDeploy = async () => {
+  try {
+    let res = await db.execute(`DROP TABLE user_login;`);
+    console.log(res);
+    res = await db.execute(
+      `UPDATE util_database_deploy SET status = 'U' WHERE deploy_id = 71;`,
+    );
+    console.log(res);
+    res = await db.query(`SELECT * FROM util_database_deploy;`);
+
+    return true;
+  } catch (e) {
+    console.log(e);
+  }
+};

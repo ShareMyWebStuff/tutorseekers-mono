@@ -8,12 +8,12 @@ CREATE TABLE IF NOT EXISTS user_login (
     user_id           INT	 UNSIGNED   NOT NULL AUTO_INCREMENT,                                -- Unique user identifier
 
     -- Account created with email / password
-    email             VARCHAR(254)    NOT NULL,                                               -- Users email address (unique)
+    email             VARCHAR(254)    NULL,                                                   -- Users email address (unique)
     password          CHAR(60)        CHARACTER SET latin1 COLLATE latin1_bin DEFAULT NULL,   -- Password hashed, null if google account
 
     -- Account created by google
     google_id         VARCHAR(25)     NULL,
-    google_email      VARCHAR(254)    NOT NULL,                                               -- Users email address (unique)
+    google_email      VARCHAR(254)    NULL,                                                   -- Users email address (unique)
 
     -- Account type
     tutor_acc         BOOLEAN         NOT NULL,                                               -- If the user is a tutor
