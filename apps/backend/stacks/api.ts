@@ -181,7 +181,7 @@ export async function ApiStack({ stack }: StackContext) {
     runtime: Runtime.NODEJS_20_X,
     handler: "handler",
     functionName: "signup-checker",
-    entry: "src/service/api/auth/signup-checker.ts",
+    entry: "src/handlers/api/auth/signup-checker.ts",
     vpc,
     securityGroups: [securityGroup],
     vpcSubnets,
@@ -195,10 +195,10 @@ export async function ApiStack({ stack }: StackContext) {
     ],
     environment: {
       CLUSTER_SECRET_ARN: clusterSecretArn,
+      JWT_SECRET: process.env.JWT_SECRET!,
     },
   });
 
-  // dbCluster.grantDataApiAccess(authSignup);
   dbCluster.grantConnect(authSignup, "admin");
 
   const authSignupIntegration = new HttpLambdaIntegration(
@@ -212,6 +212,31 @@ export async function ApiStack({ stack }: StackContext) {
     methods: [HttpMethod.POST],
     integration: authSignupIntegration,
   });
+
+  // Create a Lambda function
+  const authTest = new NodejsFunction(stack, "auth-test", {
+    runtime: Runtime.NODEJS_20_X,
+    handler: "handler",
+    functionName: "auth-test",
+    entry: "src/handlers/api/auth/auth-test.ts",
+    vpc,
+    securityGroups: [securityGroup],
+    vpcSubnets,
+    initialPolicy: [
+      // Access to the database secret
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["secretsmanager:GetSecretValue"],
+        resources: [clusterSecretArn],
+      }),
+    ],
+    environment: {
+      CLUSTER_SECRET_ARN: clusterSecretArn,
+      JWT_SECRET: process.env.JWT_SECRET!,
+    },
+  });
+
+  dbCluster.grantConnect(authTest, "admin");
 
   // Output the API endpoint URL
   new CfnOutput(stack, "ApiEndpoint", {

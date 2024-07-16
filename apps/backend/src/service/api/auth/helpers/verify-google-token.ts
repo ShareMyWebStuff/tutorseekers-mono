@@ -14,6 +14,6 @@ export const verifyGoogleToken = async (token: string) => {
     });
     return { payload: ticket.getPayload() };
   } catch (error) {
-    return { error: "Invalid user detected. Please try again" };
+    return { errorMsg: "Invalid google credentials. Please try again" };
   }
 };

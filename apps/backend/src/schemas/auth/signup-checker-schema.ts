@@ -1,8 +1,7 @@
-// import { APIGatewayProxyEvent } from "aws-lambda";
 import { z } from "zod";
 
 // Define the signup checker schema
-const signupCheckerSchema = z
+export const signupCheckerSchema = z
   .object({
     accountType: z.enum(["google", "email"], {
       message: "Please enter a valid account type.",
@@ -89,32 +88,32 @@ const signupCheckerSchema = z
     }
   });
 
-type SignupCheckerSchema = z.infer<typeof signupCheckerSchema>;
+export type SignupCheckerSchema = z.infer<typeof signupCheckerSchema>;
 
-/**
- *
- * @param body
- * @returns
- */
-export const signupCheckerValidation = (body: unknown) => {
-  // Validate the event body against the schema
-  const res = signupCheckerSchema.safeParse(body);
+// /**
+//  *
+//  * @param body
+//  * @returns
+//  */
+// export const signupCheckerValidation = (body: unknown) => {
+//   // Validate the event body against the schema
+//   const res = signupCheckerSchema.safeParse(body);
 
-  if (!res.success) {
-    const errors: { [key: string]: string[] } = {};
-    if (res.error) {
-      res.error.issues.forEach((err) => {
-        err.path.forEach((path) => {
-          if (!errors[path]) {
-            errors[path] = [err.message];
-          } else {
-            errors[path].push(err.message);
-          }
-        });
-      });
-    }
-    return { success: res.success, data: errors };
-  }
+//   if (!res.success) {
+//     const errors: { [key: string]: string[] } = {};
+//     if (res.error) {
+//       res.error.issues.forEach((err) => {
+//         err.path.forEach((path) => {
+//           if (!errors[path]) {
+//             errors[path] = [err.message];
+//           } else {
+//             errors[path].push(err.message);
+//           }
+//         });
+//       });
+//     }
+//     return { success: res.success, data: errors };
+//   }
 
-  return { success: res.success, data: body as SignupCheckerSchema };
-};
+//   return { success: res.success, data: body as SignupCheckerSchema };
+// };

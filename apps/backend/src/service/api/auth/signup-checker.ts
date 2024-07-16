@@ -7,7 +7,7 @@ import {
 // import { OAuth2Client } from "google-auth-library";
 // import { sign } from "jsonwebtoken";
 import { verifyGoogleToken } from "./helpers/verify-google-token";
-import { DbConnection } from "../../../utils/db-utils";
+import { DbConnection } from "../../../support/utils/old-db-utils";
 import { signupCheckerValidation } from "./helpers/signup-checker-validation";
 import {
   getAccountByGoogleId,
@@ -40,11 +40,11 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
 
   // Validate body
   let body: unknown = !event.body ? {} : JSON.parse(event.body);
-  console.log("1 - Starting signup");
+
+  console.log("body");
+  console.log(body);
+
   const { success, data } = signupCheckerValidation(body);
-  console.log("2 - Starting signup");
-  console.log(success);
-  console.log(data);
 
   if (!success) {
     return {
@@ -55,11 +55,10 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
       }),
     };
   }
-  console.log("3 - Starting signup");
 
   // If google account decipher google credential
   if (data.accountType === "google" && data.credential) {
-    console.log("4 - Starting signup");
+    console.log("1 - Google check");
     /**
      * 1. Verify google credentials sent to us - returns user structure form google
      *
@@ -72,51 +71,66 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
      *    2.2 If verified then return 200
      */
     const googleData = await verifyGoogleToken(data.credential);
+    console.log("googleData");
+    console.log(googleData);
 
-    if (googleData.error) {
+    if (!googleData || googleData.errorMsg || !googleData.payload) {
       return {
         statusCode: 500,
         body: JSON.stringify({
           msg: "Error verifying google account",
-          errorMsgs: googleData.error,
+          errorMsgs: googleData.errorMsg
+            ? googleData.errorMsg
+            : "Issue authenticating google credentials.",
         }),
       };
     }
 
+    // Retrieve google account if it already exists
+    const googleAccount = getAccountByGoogleId(googleData.payload?.sub);
+
     console.log("5 - Starting signup");
     console.log(googleData);
-    // Return an error if above fails
-    // May need to add test
-    if (!googleData.payload) {
-      console.log("6 - Starting signup");
-      // 🎯 TODO: Create the return
-      return;
-    }
 
-    // 🎯 TODO: getAccountByGoogleId needs to be changed to return a record and not an array
-    const retrieveAccount = await getAccountByGoogleId(googleData.payload.iss);
-    console.log("7 - Starting signup");
-    // 🎯 TODO: Should only return one row
+    return {
+      statusCode: 201,
+      body: JSON.stringify({
+        msg: "Great job",
+      }),
+    };
 
-    // if (retrieveAccount.length === 1 && retrieveAccount[0].validated) {
-    //   // Account already exists
-
-    //   // Create JWT
-
-    //   // Return that the user is logged on as this is google
+    // // Return an error if above fails
+    // // May need to add test
+    // if (!googleData.payload) {
+    //   console.log("6 - Starting signup");
+    //   // 🎯 TODO: Create the return
     //   return;
-    // } else if (retrieveAccount.length === 1 && !retrieveAccount[0].validated) {
-    //   // Update login info
-
-    //   // Create token
-
-    //   // return
-    //   return;
-    // } else {
-    //   // Insert login info
-    //   // Create token
-    //   // return
     // }
+
+    // // 🎯 TODO: getAccountByGoogleId needs to be changed to return a record and not an array
+    // const retrieveAccount = await getAccountByGoogleId(googleData.payload.iss);
+    // console.log("7 - Starting signup");
+    // // 🎯 TODO: Should only return one row
+
+    // // if (retrieveAccount.length === 1 && retrieveAccount[0].validated) {
+    // //   // Account already exists
+
+    // //   // Create JWT
+
+    // //   // Return that the user is logged on as this is google
+    // //   return;
+    // // } else if (retrieveAccount.length === 1 && !retrieveAccount[0].validated) {
+    // //   // Update login info
+
+    // //   // Create token
+
+    // //   // return
+    // //   return;
+    // // } else {
+    // //   // Insert login info
+    // //   // Create token
+    // //   // return
+    // // }
   } else if (data.accountType === "email") {
     console.log("Truncate table");
     await truncateTable();

@@ -6,7 +6,7 @@ import {
 } from "aws-lambda";
 import { OAuth2Client } from "google-auth-library";
 import { sign } from "jsonwebtoken";
-import { DbConnection } from "../../../utils/db-utils";
+import { DbConnection } from "../../../support/utils/old-db-utils";
 import { z } from "zod";
 
 export interface Credential {
