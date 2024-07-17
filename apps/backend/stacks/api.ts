@@ -233,6 +233,8 @@ export async function ApiStack({ stack }: StackContext) {
     environment: {
       CLUSTER_SECRET_ARN: clusterSecretArn,
       JWT_SECRET: process.env.JWT_SECRET!,
+      JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET!,
+      CORSSERVER: process.env.CORSSERVER!,
     },
   });
 

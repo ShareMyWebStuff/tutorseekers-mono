@@ -302,12 +302,13 @@ export const getAllAccounts = async () => {
 export const createAccount = async (
   googleAcc: boolean,
   email: string | null,
+  password: string | null,
   googleId: string | null,
   googleEmail: string | null,
 ) => {
   try {
     const res = await db.execute<ResultSetHeader>(
-      `INSERT INTO user_login ( email, password, google_id, google_email, tutor_acc, student_acc, parent_acc, google_acc ) VALUES ( ${email}, '', ${googleId}, ${googleEmail}, false, false, false, ${googleAcc})`,
+      `INSERT INTO user_login ( email, password, google_id, google_email, tutor_acc, student_acc, parent_acc, google_acc ) VALUES ( ${email}, ${password}, ${googleId}, ${googleEmail}, false, false, false, ${googleAcc})`,
     );
 
     const { affectedRows, insertId } = res;
@@ -337,12 +338,13 @@ export const updateAccount = async (
   userId: number,
   googleAcc: boolean,
   email: string | null,
+  password: string | null,
   googleId: string | null,
   googleEmail: string | null,
 ) => {
   try {
     const res = await db.execute<ResultSetHeader>(
-      `UPDATE user_login SET google_acc = ${googleAcc}, email = ${email}, googleId = ${googleId}, googleEmail=${googleEmail} WHERE user_id = ${userId}`,
+      `UPDATE user_login SET google_acc = ${googleAcc}, email = ${email}, password = ${password}, google_id = ${googleId}, google_email=${googleEmail} WHERE user_id = ${userId}`,
     );
     const { affectedRows } = res;
 
@@ -415,13 +417,15 @@ export const truncateTable = async () => {
 
 export const selectDatabaseDeploy = async () => {
   try {
-    let res = await db.execute(`DROP TABLE user_login;`);
-    console.log(res);
-    res = await db.execute(
-      `UPDATE util_database_deploy SET status = 'U' WHERE deploy_id = 71;`,
-    );
-    console.log(res);
-    res = await db.query(`SELECT * FROM util_database_deploy;`);
+    // let res = await db.execute(`DROP TABLE user_login;`);
+    // console.log(res);
+    // res = await db.execute(
+    //   `UPDATE util_database_deploy SET status = 'U' WHERE deploy_id = 71;`,
+    // );
+    // console.log(res);
+    // res = await db.query(`SELECT * FROM util_database_deploy;`);
+
+    let res = await db.query(`SELECT * FROM user_login;`);
 
     return true;
   } catch (e) {
