@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "sst dev",
+    "dev": "sst dev ",
     "build": "sst build",
     "deploy": "sst deploy",
+    "shieldpay-deploy": "sst deploy  --stage $STAGE --verbose",
     "remove": "sst remove",
     "console": "sst console",
     "typecheck": "tsc --noEmit",

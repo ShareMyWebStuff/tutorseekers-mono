@@ -7,8 +7,12 @@ import { App } from "aws-cdk-lib";
 export const getParameters = (app: App) => {
   // Read in the command line configurations
   const stage: string = app.node.tryGetContext("stage");
-  const lclStageName: string = app.node.tryGetContext("lclStage");
+  let lclStageName: string = app.node.tryGetContext("lclStage");
   let region: string = app.node.tryGetContext("region");
+
+  if (lclStageName) {
+    lclStageName = lclStageName.toLocaleLowerCase();
+  }
 
   if (!region || !["all", "uk", "usa", "ie"].includes(region)) {
     console.log("");
