@@ -128,10 +128,10 @@ jobs:
         run: yarn
 
       - name: Synth Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-lcl-create-database"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-${{github.actor}}-create-database"
 
       - name: Deploy Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-lcl-create-database"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-${{github.actor}}-create-database"
 
   deploy_database_ddl:
     if: ${{ inputs.deploy_database_ddl }}
