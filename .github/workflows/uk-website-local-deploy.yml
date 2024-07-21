@@ -15,6 +15,9 @@ on:
         description: "Deploy Database DDL"
         required: false
         type: boolean
+      lcl_stage:
+        description: Local stage name
+        default: "dave"
 
 env:
   REGION: uk
@@ -125,10 +128,10 @@ jobs:
         run: yarn
 
       - name: Synth Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl "$PROJECT-uk-lcl-create-database"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-lcl-create-database"
 
       - name: Deploy Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl "$PROJECT-uk-lcl-create-database"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-lcl-create-database"
 
   deploy_database_ddl:
     if: ${{ inputs.deploy_database_ddl }}
@@ -153,11 +156,11 @@ jobs:
         run: ls -ltr apps/database
 
       - name: Copy the DDL Files to the S3 Bucket
-        run: aws s3 cp apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket/ --recursive
+        run: aws s3 cp apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{github.actor}}-deploy-bucket/ --recursive
       # run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket --acl public-read
 
       - name: Invoke AWS Lambda by OIDC
-        run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-database-ddl output.txt
+        run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-${{github.actor}}-deploy-database-ddl output.txt
       #   uses: y5347M/invoke-aws-lambda-oidc@v1
       #   with:
       #     aws-region: 'us-west-2'

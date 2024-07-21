@@ -75,7 +75,7 @@ export function RegisterForm() {
 
   useEffect(() => {
     dispatch(resetRegister());
-  }, []);
+  }, [dispatch]);
 
   const {
     register,

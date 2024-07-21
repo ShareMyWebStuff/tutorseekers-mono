@@ -1,6 +1,34 @@
-change env to either stage or region
+# Creates the Base Infrastructure
 
-items created should have region in them
+Creates the base infrastructure by running the following stacks in.
+
+- vpc-stack
+- database-stack
+- bucket-stack
+
+##
+
+# Deploy Database DDL
+
+This documents how loading the database ddl works. This loads all the database items from the apps/database project.
+
+In the root directory there is a file called **database-deploy.txt**. This contains what needs to be deployed
+
+Main
+
+The file status below shows that if you set it to R in th4e file, it will rooll the database release back
+
+if ( fileStatus === '' && dbStatus === '' ) runListStatus = 'U';
+else if ( fileStatus === '' && dbStatus === 'P' ) runListStatus = 'P';
+else if ( fileStatus === '' && dbStatus === 'U' ) runListStatus = 'F';
+else if ( fileStatus === 'R' && dbStatus === '' ) runListStatus = 'R';
+else if ( fileStatus === 'R' && dbStatus === 'P' ) runListStatus = 'RP';
+else if ( fileStatus === 'R' && dbStatus === 'U' ) runListStatus = 'RU';
+else runListStatus = 'X';
+
+# Stacks
+
+##
 
 tutorseekers-uk-lcl-vpc
 tutorseekers-uk-dev-vpc

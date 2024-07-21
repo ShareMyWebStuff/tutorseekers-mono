@@ -71,7 +71,7 @@ const main = async () => {
       stackName,
       PROJECT_PREFIX,
       params.region,
-      params.stage,
+      params.stage === "lcl" ? params.lclStageName : params.stage,
       vpc.vpc,
       vpc.databaseSG,
       vpc.lambdaSG,
