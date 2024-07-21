@@ -77,10 +77,10 @@ jobs:
         run: yarn
 
       - name: Synth Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl "$PROJECT-uk-lcl-vpc"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=$(echo ${{ github.actor }} | awk '{print tolower($0)}') "$PROJECT-uk-lcl-vpc"
 
       - name: Deploy Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=lcl "$PROJECT-uk-lcl-vpc"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk deploy -c region=uk -c stage=$(echo ${{ github.actor }} | awk '{print tolower($0)}') "$PROJECT-uk-lcl-vpc"
 
   create-database:
     if: ${{ inputs.create_database }}

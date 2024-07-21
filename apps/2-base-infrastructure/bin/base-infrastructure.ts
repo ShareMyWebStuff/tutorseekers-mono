@@ -55,7 +55,7 @@ const main = async () => {
     "-" +
     params.region +
     "-" +
-    params.stage +
+    (params.stage === "lcl" ? params.lclStageName : params.stage) +
     "-create-database";
 
   console.log("Create database has been commented out");

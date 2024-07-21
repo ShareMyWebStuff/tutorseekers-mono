@@ -12,10 +12,14 @@ const resourceNameGenerator = (stage: string, prefix?: string) => {
 };
 
 export default async function main(app: App) {
+  // const ourStage = app.mode === 'dev'
   const resourceName = resourceNameGenerator(app.stage, PROJECT_PREFIX);
+  const lclResourceName = resourceNameGenerator(app.stage, PROJECT_PREFIX);
 
   console.log("App +++++++");
   console.log(app);
+  // app.region = eu-west-2
+  // app.stage = sharemywebstuff
 
   // 👇 Set default Lambda props, regardless of stack.
   app.setDefaultFunctionProps({
