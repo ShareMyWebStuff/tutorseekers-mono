@@ -14,6 +14,9 @@ const resourceNameGenerator = (stage: string, prefix?: string) => {
 export default async function main(app: App) {
   const resourceName = resourceNameGenerator(app.stage, PROJECT_PREFIX);
 
+  console.log("App +++++++");
+  console.log(app);
+
   // 👇 Set default Lambda props, regardless of stack.
   app.setDefaultFunctionProps({
     runtime: "nodejs20.x",

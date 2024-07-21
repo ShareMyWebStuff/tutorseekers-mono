@@ -35,7 +35,7 @@ export async function ApiStack({ stack }: StackContext) {
   // console.log("Region");
   // console.log(stack);
   // Lookup VPC
-  const vpc = ec2.Vpc.fromLookup(stack, "Poop", {
+  const vpc = ec2.Vpc.fromLookup(stack, "backendApiVpcLookup", {
     isDefault: false,
     region: stack.region,
     tags: {
@@ -44,7 +44,7 @@ export async function ApiStack({ stack }: StackContext) {
     },
   });
 
-  const clusterSecretArn = Fn.importValue("tutorseekers-uk-lcl-cluster-secret");
+  const clusterSecretArn = Fn.importValue(`tutorseekers-uk-lcl-cluster-secret`);
 
   console.log("ClusterSecret");
   console.log(clusterSecretArn);
