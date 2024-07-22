@@ -25,11 +25,57 @@ import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { Stack, StackProps, CfnOutput } from "aws-cdk-lib";
 import { Secret } from "aws-cdk-lib/aws-secretsmanager";
 
-export async function ApiStack({ stack }: StackContext) {
+import {
+  AWS_ACCOUNT_ID,
+  PROJECT_PREFIX,
+  getVpcRegions,
+  REGIONS,
+  WEBSITE_SETUP,
+} from "@tutorseekers/project-config";
+
+export async function ApiStack({ app, stack }: StackContext) {
+  // console.log("Api Stack +++++++++++++++++++++++++++++++++++++++");
+
+  // Get region from the aws regions.
+  // e.g. eu-west-2 should return uk
+  // let region: string = "";
+  // for (const key in REGIONS) {
+  //   if (REGIONS[key].awsRegion === app.region) {
+  //     region = key;
+  //   }
+  // }
+
+  // if (region === "") {
+  //   console.log(`Cannot find region ${app.region} in config configuration`);
+  // }
+
+  // Now look at the websites backend configuration
+  // WEBSITE_SETUP[region].
+
+  // aws region
+  // stagename
+
+  // THIS +++++++++++++++++++++++++
+  // THIS +++++++++++++++++++++++++
+  // THIS +++++++++++++++++++++++++
+  // NEED TO GET THIS SO VPC LOOKS FOR lcl|dev|stg|prd
+  // NEED other to be dev| stg|prd or sharemywebstuff
+  // THIS +++++++++++++++++++++++++
+  // THIS +++++++++++++++++++++++++
+  // THIS +++++++++++++++++++++++++
+  // THIS +++++++++++++++++++++++++
+
+  const stage = ["dev", "tst", "prd"].includes(app.stage);
+
+  const lclStage = app.mode === "dev" ? "lcl" : app.stage;
+
   // const resourceName = resourceNameGenerator(stack.stage, 'mastercard-adapter');
   // const normalisedStage = normaliseStage(stack.stage);
 
-  const domainName = "cameronguy.biz";
+  console.log("stack~~~~~~~~~~~~~~~~~~~~");
+  console.log(stack);
+
+  const domainName = process.env.APP_DOMAIN_NAME!;
   const domainNameDash = domainName.replace(".", "-");
 
   // console.log("Region");
@@ -39,12 +85,14 @@ export async function ApiStack({ stack }: StackContext) {
     isDefault: false,
     region: stack.region,
     tags: {
-      Stage: "lcl",
-      "aws:cloudformation:stack-name": `tutorseekers-uk-lcl-vpc`,
+      Stage: lclStage,
+      "aws:cloudformation:stack-name": `tutorseekers-uk-${lclStage}-vpc`,
     },
   });
 
-  const clusterSecretArn = Fn.importValue(`tutorseekers-uk-lcl-cluster-secret`);
+  const clusterSecretArn = Fn.importValue(
+    `tutorseekers-uk-${app.stage}-cluster-secret`,
+  );
 
   console.log("ClusterSecret");
   console.log(clusterSecretArn);
@@ -53,8 +101,8 @@ export async function ApiStack({ stack }: StackContext) {
     stack,
     "ImportedDatabase",
     {
-      clusterIdentifier: "tutorseekers-uk-lcl-cluster",
-      clusterResourceIdentifier: "cluster-U7FBH4V2AFC2X4XX47OJ7JB3GY",
+      clusterIdentifier: `tutorseekers-uk-${app.stage}-cluster`,
+      // clusterResourceIdentifier: "cluster-U7FBH4V2AFC2X4XX47OJ7JB3GY",
     },
   );
 
@@ -73,7 +121,7 @@ export async function ApiStack({ stack }: StackContext) {
   const securityGroup = ec2.SecurityGroup.fromLookupByName(
     stack,
     "PoopSecGrps",
-    "tutorseekers-uk-lcl-lambda-sg",
+    `tutorseekers-uk-${lclStage}-lambda-sg`,
     vpc,
   );
 
@@ -96,23 +144,25 @@ export async function ApiStack({ stack }: StackContext) {
     },
   );
 
-  const certArn = Fn.importValue(
-    "tutorseekers-uk-certificate-cameronguy-biz-arn",
-  );
+  const certArn = Fn.importValue(process.env.APP_CERTIFICATE_ARN!);
 
-  const cert = Certificate.fromCertificateArn(stack, "poo", certArn);
+  const cert = Certificate.fromCertificateArn(
+    stack,
+    "readCertificate",
+    certArn,
+  );
 
   const devSubDomain = new DomainName(
     stack,
-    "ts" + "-api-dev-" + domainNameDash,
+    "ts" + "-api-" + app.stage + "-" + domainNameDash,
     {
-      domainName: "api-dev." + domainName,
+      domainName: "api-" + app.stage + "." + domainName,
       certificate: cert,
     },
   );
 
   // Create the subdomain route 53 records
-  new ARecord(stack, "ts" + "-api-dev-route53-" + domainNameDash, {
+  new ARecord(stack, "ts" + `-api-${app.stage}-route53-` + domainNameDash, {
     zone: hostedZone,
     recordName: "api-dev." + domainName,
     target: RecordTarget.fromAlias(
@@ -124,7 +174,7 @@ export async function ApiStack({ stack }: StackContext) {
   });
 
   // Create an API Gateway
-  const httpApi = new HttpApi(stack, "MyApi", {
+  const httpApi = new HttpApi(stack, "createHttpGateway", {
     defaultDomainMapping: {
       domainName: devSubDomain,
     },
@@ -138,7 +188,7 @@ export async function ApiStack({ stack }: StackContext) {
         CorsHttpMethod.DELETE,
       ],
       allowCredentials: true,
-      allowOrigins: ["http://localhost:3000"],
+      allowOrigins: [process.env.APP_CORS_ORIGIN!],
       allowHeaders: [
         "Content-Type",
         "X-Amz-Date",

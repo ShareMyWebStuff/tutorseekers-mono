@@ -5,19 +5,80 @@ import { ApiStack } from "./api.js";
 // import { EventStack } from './event.js';
 // import { DatabaseStack } from './database.js';
 // import { StorageStack } from './storage.js';
-import { PROJECT_PREFIX } from "@tutorseekers/project-config";
+import {
+  PROJECT_PREFIX,
+  WEBSITE_SETUP,
+  REGIONS,
+  DOMAINS,
+} from "@tutorseekers/project-config";
 
 const resourceNameGenerator = (stage: string, prefix?: string) => {
   return (name: string) => `${prefix ? `${prefix}--` : ""}${name}--${stage}`;
 };
 
 export default async function main(app: App) {
-  // const ourStage = app.mode === 'dev'
-  const resourceName = resourceNameGenerator(app.stage, PROJECT_PREFIX);
-  const lclResourceName = resourceNameGenerator(app.stage, PROJECT_PREFIX);
+  // console.log("ENV VARIABLES ");
+  // console.log(process.env);
 
   console.log("App +++++++");
   console.log(app);
+
+  // Check the env variables are correctly set
+  const appRegion = process.env.APP_REGION;
+  const appAwsRegion = process.env.APP_AWS_REGION;
+  const appDomainName = process.env.APP_DOMAIN_NAME;
+
+  if (!appRegion || !appAwsRegion || !appDomainName) {
+    console.log(
+      "Please set the env file for the APP_REGION | APP_AWS_REGION | APP_DOMAIN_NAME",
+    );
+    process.exit();
+  }
+
+  // Check the region and aws_region match
+  if (REGIONS[appRegion].awsRegion !== appAwsRegion) {
+    console.log("Env region in not setup in config file to match.");
+    process.exit();
+  }
+
+  // Check the region is setup on the website config
+  if (!WEBSITE_SETUP[appRegion]) {
+    console.log("Env region was not found in config.");
+    process.exit();
+  }
+
+  // Check the domain name exists
+  let domainNameId = 0;
+  for (const [key, value] of Object.entries(DOMAINS)) {
+    if (value.domainName === appDomainName) {
+      domainNameId = parseInt(key);
+    }
+  }
+  if (domainNameId === 0) {
+    console.log(`Domain name is not configured ${appDomainName}.`);
+    process.exit();
+  }
+
+  // Check domain is setup
+  let matched = false;
+  WEBSITE_SETUP[appRegion].frontend.forEach((fe) => {
+    fe.backend.forEach((be) => {
+      if (be.domainNameId === domainNameId && be.region === appRegion) {
+        matched = true;
+      }
+    });
+  });
+
+  if (!matched) {
+    console.log(`Region / domain name setup does not match config file.`);
+    process.exit();
+  }
+
+  // const stageName = app.mode === 'dev' ? app.stage :
+  const resourceName = resourceNameGenerator(app.stage, PROJECT_PREFIX);
+
+  // console.log("App +++++++");
+  // console.log(app);
   // app.region = eu-west-2
   // app.stage = sharemywebstuff
 
