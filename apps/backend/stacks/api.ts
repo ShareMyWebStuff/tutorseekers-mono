@@ -97,12 +97,26 @@ export async function ApiStack({ app, stack }: StackContext) {
   console.log("ClusterSecret");
   console.log(clusterSecretArn);
 
+  // const dbCluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(
+  //   stack,
+  //   "ImportedDatabase",
+  //   {
+  //     clusterIdentifier: `tutorseekers-uk-${app.stage}-cluster`,
+  //     clusterResourceIdentifier: "cluster-U7FBH4V2AFC2X4XX47OJ7JB3GY",
+  //   },
+  // );
+
+  //       ${projectPrefix}-${region}-${stage}-cluster-id
   const dbCluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(
     stack,
     "ImportedDatabase",
     {
-      clusterIdentifier: `tutorseekers-uk-${app.stage}-cluster`,
-      // clusterResourceIdentifier: "cluster-U7FBH4V2AFC2X4XX47OJ7JB3GY",
+      clusterIdentifier: Fn.importValue(
+        `tutorseekers-uk-${app.stage}-cluster-id`,
+      ),
+      clusterResourceIdentifier: Fn.importValue(
+        `tutorseekers-uk-${app.stage}-cluster-resource-id`,
+      ),
     },
   );
 
@@ -164,7 +178,7 @@ export async function ApiStack({ app, stack }: StackContext) {
   // Create the subdomain route 53 records
   new ARecord(stack, "ts" + `-api-${app.stage}-route53-` + domainNameDash, {
     zone: hostedZone,
-    recordName: "api-dev." + domainName,
+    recordName: `api-${app.stage}.` + domainName,
     target: RecordTarget.fromAlias(
       new ApiGatewayv2DomainProperties(
         devSubDomain.regionalDomainName,
@@ -197,7 +211,7 @@ export async function ApiStack({ app, stack }: StackContext) {
       ],
     },
 
-    apiName: "TutorSeekersApi",
+    apiName: process.env.APP_NAME!,
 
     // Not working
     // disableExecuteApiEndpoint: true,
