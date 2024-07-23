@@ -15,9 +15,9 @@ on:
         description: "Deploy Database DDL"
         required: false
         type: boolean
-      lcl_stage:
-        description: Local stage name
-        default: "dave"
+      # lcl_stage:
+      #   description: Local stage name
+      #   default: "dave"
 
 env:
   REGION: uk
