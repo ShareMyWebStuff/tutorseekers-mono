@@ -3,21 +3,14 @@ name: "Local :: Teardown"
 on:
   workflow_dispatch:
     inputs:
-      deploy_vpc:
-        description: "Deploy VPC resources"
+      delete_vpc:
+        description: "Delete VPC resources"
         required: false
         type: boolean
-      create_database:
-        description: "Create Database"
+      delete_database:
+        description: "Delete Database"
         required: false
         type: boolean
-      deploy_database_ddl:
-        description: "Deploy Database DDL"
-        required: false
-        type: boolean
-      # lcl_stage:
-      #   description: Local stage name
-      #   default: "dave"
 
 env:
   REGION: uk
@@ -32,8 +25,8 @@ permissions:
   packages: read
 
 jobs:
-  teardown-database:
-    if: ${{ inputs.create_database }}
+  delete_database:
+    # if: ${{ inputs.delete_database }}
     name: Teardown database
     runs-on: ubuntu-latest
     # timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
@@ -84,7 +77,7 @@ jobs:
         run: ls && cd apps/2-base-infrastructure && ls && yarn cdk destroy -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-$(echo ${{ github.actor }} | awk '{print tolower($0)}')-create-database"
 
   teardown-vpc-resources:
-    if: ${{ inputs.deploy_vpc }}
+    # if: ${{ inputs.delete_vpc }}
     name: Teardown vpc-resources
     runs-on: ubuntu-latest
     # timeout-minutes: ${{ fromJSON(vars.DEFAULT_GHA_TIMEOUT_MIN) }}
