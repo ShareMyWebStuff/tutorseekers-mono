@@ -74,7 +74,7 @@ jobs:
         run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-$(echo ${{ github.actor }} | awk '{print tolower($0)}')-create-database"
 
       - name: Destroy Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk destroy -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-$(echo ${{ github.actor }} | awk '{print tolower($0)}')-create-database"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk destroy -c region=uk -c stage=lcl -c lclStage=${{github.actor}}  "$PROJECT-uk-$(echo ${{ github.actor }} | awk '{print tolower($0)}')-create-database" --force
 
   teardown-vpc-resources:
     # if: ${{ inputs.delete_vpc }}
@@ -124,4 +124,4 @@ jobs:
         run: ls && cd apps/2-base-infrastructure && ls && yarn cdk synth -c region=uk -c stage=lcl -c lclStage=$(echo ${{ github.actor }} | awk '{print tolower($0)}') "$PROJECT-uk-lcl-vpc"
 
       - name: Teardown Stack
-        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk destroy -c region=uk -c stage=lcl -c lclStage=$(echo ${{ github.actor }} | awk '{print tolower($0)}') "$PROJECT-uk-lcl-vpc"
+        run: ls && cd apps/2-base-infrastructure && ls && yarn cdk destroy -c region=uk -c stage=lcl -c lclStage=$(echo ${{ github.actor }} | awk '{print tolower($0)}') "$PROJECT-uk-lcl-vpc" --force
