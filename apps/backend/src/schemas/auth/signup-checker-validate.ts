@@ -14,6 +14,9 @@ export const signupCheckerValidation = (body: unknown) => {
   // Validate the event body against the schema
   const res = signupCheckerSchema.safeParse(body);
 
+  console.log("signupCheckerValidation");
+  console.log(res);
+
   if (!res.success) {
     const errors: { [key: string]: string[] } = {};
     if (res.error) {
@@ -39,6 +42,6 @@ export const signupCheckerValidation = (body: unknown) => {
     );
     // return { success: res.success, data: null, errors };
   }
-
-  return body as SignupCheckerSchema;
+  return res.data;
+  // return body as SignupCheckerSchema;
 };

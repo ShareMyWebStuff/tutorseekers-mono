@@ -9,6 +9,7 @@ import {
 } from "../../data-access/auth/refresh_token";
 import { Secret, verify, sign } from "jsonwebtoken";
 import { genSalt, hash, compare } from "bcryptjs";
+import { genSaltSync, hashSync } from "bcryptjs";
 //
 // Function : createToken
 //
@@ -25,6 +26,7 @@ export const createToken = (
     const token = sign(payload, secret, { expiresIn: expire });
     return token;
   } catch (err) {
+    console.log(err);
     throw { statusCode: 500, msg: "Cannot create JWT token." };
   }
 };
@@ -43,6 +45,7 @@ export const comparePasswords = async (
   try {
     return await compare(password, encryptPassword);
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };
@@ -55,14 +58,42 @@ export const comparePasswords = async (
 // ReturnValues :
 //
 export const hashPassword = async (password: string) => {
+  console.log("Here I am 124");
   try {
+    console.log("Here I am 125");
+    console.log(password);
+    console.log(typeof password);
+    // const salt = await genSalt(10);
     const salt = await genSalt(10);
+    console.log("Here I am 126");
+    console.log(salt);
+    console.log(password);
     const hashedPwd = await hash(password, salt);
+    console.log("Here I am 127");
     return hashedPwd;
   } catch (err) {
+    console.log(err);
     throw err;
   }
 };
+
+// export const hashPassword = async (password: string) => {
+//   console.log("Here I am 124");
+//   try {
+//     console.log("Here I am 125");
+//     // const salt = await genSalt(10);
+//     const salt = await genSalt(10);
+//     console.log("Here I am 126");
+//     console.log(salt);
+//     console.log(password);
+//     const hashedPwd = await hash(password, salt);
+//     console.log("Here I am 127");
+//     return hashedPwd;
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   }
+// };
 
 //
 // handleAuthCookies

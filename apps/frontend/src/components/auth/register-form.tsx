@@ -9,6 +9,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Google } from "./google";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import axios, {
+  AxiosResponse,
+  AxiosRequestConfig,
+  RawAxiosRequestHeaders,
+} from "axios";
 import {
   setRegisterEmail,
   resetRegister,
@@ -91,29 +96,56 @@ export function RegisterForm() {
     },
   });
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+  const onSubmit: SubmitHandler<FormFields> = async (formData) => {
     // console.log("HERE - onsubmit**");
     // console.log(data);
     // console.log("errors");
     // console.log(errors);
     try {
-      // Can check if the email address has been used
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // setError("email", {
-      //   message: "This email is already taken.",
-      // });
-      dispatch(
-        setRegisterEmail({
-          email: data.email,
-          password: data.password,
-          confirm: data.confirm,
-          googleEmail: null,
-          googleAcc: false,
-          googleId: null,
-          token: "SET THIS LATER",
+      console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
+      const client = axios.create({
+        baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+      });
+
+      const config: AxiosRequestConfig = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      };
+
+      const res = await client.post(
+        "/auth/signup-check",
+        JSON.stringify({
+          accountType: "email",
+          email: formData.email,
+          password: formData.password,
         }),
+        config,
       );
-      router.push("/auth/register-account-type");
+
+      const { status, data } = res;
+      console.log("status");
+      console.log(status);
+      console.log("data");
+      console.log(data);
+
+      console.log("Calling if");
+      if (data) {
+        console.log("Dispatching");
+        dispatch(
+          setRegisterEmail({
+            googleAcc: false,
+            token: data.token,
+            firstname: "",
+            lastname: "",
+            preferredName: "",
+            emailVerify: false,
+          }),
+        );
+        console.log("Router");
+        router.push("/auth/register-account-type");
+      }
     } catch (error) {
       setError("root", {
         message: "This email is already taken.",

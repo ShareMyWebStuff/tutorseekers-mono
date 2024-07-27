@@ -34,37 +34,6 @@ import {
 } from "@tutorseekers/project-config";
 
 export async function ApiStack({ app, stack }: StackContext) {
-  // console.log("Api Stack +++++++++++++++++++++++++++++++++++++++");
-
-  // Get region from the aws regions.
-  // e.g. eu-west-2 should return uk
-  // let region: string = "";
-  // for (const key in REGIONS) {
-  //   if (REGIONS[key].awsRegion === app.region) {
-  //     region = key;
-  //   }
-  // }
-
-  // if (region === "") {
-  //   console.log(`Cannot find region ${app.region} in config configuration`);
-  // }
-
-  // Now look at the websites backend configuration
-  // WEBSITE_SETUP[region].
-
-  // aws region
-  // stagename
-
-  // THIS +++++++++++++++++++++++++
-  // THIS +++++++++++++++++++++++++
-  // THIS +++++++++++++++++++++++++
-  // NEED TO GET THIS SO VPC LOOKS FOR lcl|dev|stg|prd
-  // NEED other to be dev| stg|prd or sharemywebstuff
-  // THIS +++++++++++++++++++++++++
-  // THIS +++++++++++++++++++++++++
-  // THIS +++++++++++++++++++++++++
-  // THIS +++++++++++++++++++++++++
-
   const stage = ["dev", "tst", "prd"].includes(app.stage);
 
   const lclStage = app.mode === "dev" ? "lcl" : app.stage;
@@ -81,21 +50,21 @@ export async function ApiStack({ app, stack }: StackContext) {
   // console.log("Region");
   // console.log(stack);
   // Lookup VPC
-  const vpc = ec2.Vpc.fromLookup(stack, "backendApiVpcLookup", {
-    isDefault: false,
-    region: stack.region,
-    tags: {
-      Stage: lclStage,
-      "aws:cloudformation:stack-name": `tutorseekers-uk-${lclStage}-vpc`,
-    },
-  });
+  // const vpc = ec2.Vpc.fromLookup(stack, "backendApiVpcLookup", {
+  //   isDefault: false,
+  //   region: stack.region,
+  //   tags: {
+  //     Stage: lclStage,
+  //     "aws:cloudformation:stack-name": `tutorseekers-uk-${lclStage}-vpc`,
+  //   },
+  // });
 
-  const clusterSecretArn = Fn.importValue(
-    `tutorseekers-uk-${app.stage}-cluster-secret`,
-  );
+  // const clusterSecretArn = Fn.importValue(
+  //   `tutorseekers-uk-${app.stage}-cluster-secret`,
+  // );
 
-  console.log("ClusterSecret");
-  console.log(clusterSecretArn);
+  // console.log("ClusterSecret");
+  // console.log(clusterSecretArn);
 
   // const dbCluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(
   //   stack,
@@ -107,18 +76,18 @@ export async function ApiStack({ app, stack }: StackContext) {
   // );
 
   //       ${projectPrefix}-${region}-${stage}-cluster-id
-  const dbCluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(
-    stack,
-    "ImportedDatabase",
-    {
-      clusterIdentifier: Fn.importValue(
-        `tutorseekers-uk-${app.stage}-cluster-id`,
-      ),
-      clusterResourceIdentifier: Fn.importValue(
-        `tutorseekers-uk-${app.stage}-cluster-resource-id`,
-      ),
-    },
-  );
+  // const dbCluster = rds.DatabaseCluster.fromDatabaseClusterAttributes(
+  //   stack,
+  //   "ImportedDatabase",
+  //   {
+  //     clusterIdentifier: Fn.importValue(
+  //       `tutorseekers-uk-${app.stage}-cluster-id`,
+  //     ),
+  //     clusterResourceIdentifier: Fn.importValue(
+  //       `tutorseekers-uk-${app.stage}-cluster-resource-id`,
+  //     ),
+  //   },
+  // );
 
   // const instanceName = `${projectPrefix}-${region}-${stage}-aurora-mysql`;
   // const clusterName = `${projectPrefix}-${region}-${stage}-cluster-aurora-mysql`;
@@ -132,12 +101,12 @@ export async function ApiStack({ app, stack }: StackContext) {
   // console.log("VPC +++++++++++++++++");
   // console.log(vpc);
 
-  const securityGroup = ec2.SecurityGroup.fromLookupByName(
-    stack,
-    "PoopSecGrps",
-    `tutorseekers-uk-${lclStage}-lambda-sg`,
-    vpc,
-  );
+  // const securityGroup = ec2.SecurityGroup.fromLookupByName(
+  //   stack,
+  //   "PoopSecGrps",
+  //   `tutorseekers-uk-${lclStage}-lambda-sg`,
+  //   vpc,
+  // );
 
   // console.log("VPC +++++++++++++++++");
   // console.log(vpc);
@@ -145,9 +114,9 @@ export async function ApiStack({ app, stack }: StackContext) {
   // const vpcSubnets = vpc.selectSubnets({
   //   subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
   // }).subnetIds;
-  const vpcSubnets = {
-    subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
-  };
+  // const vpcSubnets = {
+  //   subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+  // };
 
   // Get the hosted zone
   const hostedZone = HostedZone.fromLookup(
@@ -221,14 +190,12 @@ export async function ApiStack({ app, stack }: StackContext) {
   const myLambda = new NodejsFunction(stack, "MyLambda", {
     runtime: Runtime.NODEJS_20_X,
     handler: "handler",
-    // functionName: "get-version",
-    // entry: "src/handlers/api/version.ts",
     functionName: "bcrypt",
     entry: "src/handlers/api/bcrypt.ts",
     timeout: Duration.minutes(3),
-    vpc,
-    securityGroups: [securityGroup],
-    vpcSubnets,
+    // vpc,
+    // securityGroups: [securityGroup],
+    // vpcSubnets,
   });
 
   const templateLambdaIntegration = new HttpLambdaIntegration(
@@ -238,77 +205,47 @@ export async function ApiStack({ app, stack }: StackContext) {
 
   // Create a resource and method for the API
   httpApi.addRoutes({
-    // path: "/version",
-    // methods: [HttpMethod.GET],
     path: "/bcrypt",
     methods: [HttpMethod.POST],
     integration: templateLambdaIntegration,
   });
 
-  // Create a Lambda function
-  const authSignup = new NodejsFunction(stack, "signup-checker", {
-    runtime: Runtime.NODEJS_20_X,
-    handler: "handler",
-    functionName: "signup-checker",
-    entry: "src/handlers/api/auth/signup-checker.ts",
-    vpc,
-    securityGroups: [securityGroup],
-    vpcSubnets,
-    timeout: Duration.seconds(5),
-    initialPolicy: [
-      // Access to the database secret
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ["secretsmanager:GetSecretValue"],
-        resources: [clusterSecretArn],
-      }),
-    ],
-    environment: {
-      CLUSTER_SECRET_ARN: clusterSecretArn,
-      JWT_SECRET: process.env.JWT_SECRET!,
-    },
-  });
+  // // Create a Lambda function
+  // const authSignup = new NodejsFunction(stack, "signup-checker", {
+  //   runtime: Runtime.NODEJS_20_X,
+  //   handler: "handler",
+  //   functionName: "signup-checker",
+  //   entry: "src/handlers/api/auth/signup-checker.ts",
+  //   vpc,
+  //   securityGroups: [securityGroup],
+  //   vpcSubnets,
+  //   initialPolicy: [
+  //     // Access to the database secret
+  //     new iam.PolicyStatement({
+  //       effect: iam.Effect.ALLOW,
+  //       actions: ["secretsmanager:GetSecretValue"],
+  //       resources: [clusterSecretArn],
+  //     }),
+  //   ],
+  //   environment: {
+  //     CLUSTER_SECRET_ARN: clusterSecretArn,
+  //     JWT_SECRET: process.env.JWT_SECRET!,
+  //   },
+  // });
 
-  dbCluster.grantConnect(authSignup, "admin");
+  // dbCluster.grantConnect(authSignup, "admin");
 
-  const authSignupIntegration = new HttpLambdaIntegration(
-    "TemplateIntegration",
-    authSignup,
-  );
+  // const authSignupIntegration = new HttpLambdaIntegration(
+  //   "TemplateIntegration",
+  //   authSignup,
+  // );
 
-  // Create a resource and method for the API
-  httpApi.addRoutes({
-    path: "/auth/signup-check",
-    methods: [HttpMethod.POST],
-    integration: authSignupIntegration,
-  });
-
-  // Create a Lambda function
-  const authTest = new NodejsFunction(stack, "auth-test", {
-    runtime: Runtime.NODEJS_20_X,
-    handler: "handler",
-    functionName: "auth-test",
-    entry: "src/handlers/api/auth/auth-test.ts",
-    vpc,
-    securityGroups: [securityGroup],
-    vpcSubnets,
-    initialPolicy: [
-      // Access to the database secret
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ["secretsmanager:GetSecretValue"],
-        resources: [clusterSecretArn],
-      }),
-    ],
-    environment: {
-      CLUSTER_SECRET_ARN: clusterSecretArn,
-      JWT_SECRET: process.env.JWT_SECRET!,
-      JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET!,
-      CORSSERVER: process.env.CORSSERVER!,
-    },
-  });
-
-  dbCluster.grantConnect(authTest, "admin");
+  // // Create a resource and method for the API
+  // httpApi.addRoutes({
+  //   path: "/auth/signup-check",
+  //   methods: [HttpMethod.POST],
+  //   integration: authSignupIntegration,
+  // });
 
   // Output the API endpoint URL
   new CfnOutput(stack, "ApiEndpoint", {

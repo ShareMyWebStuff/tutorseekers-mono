@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IRegisterEmail {
-  email: string | null;
-  password: string;
-  confirm: string;
-  googleEmail: string | null;
+  // email: string | null;
+  // password: string | null;
+  // confirm: string | null;
+  // googleEmail: string | null;
   googleAcc: boolean;
-  googleId: string | null;
+  // googleId: string | null;
   token: string | null;
+  firstname: string;
+  lastname: string;
+  preferredName: string;
+  emailVerify: boolean;
 }
 
 export interface IRegisterAccountType {
@@ -68,12 +72,12 @@ export interface IRegisterState
 
 const initialState: IRegisterState = {
   token: null,
-  email: "",
-  password: "",
-  confirm: "",
-  googleEmail: "",
+  // email: "",
+  // password: "",
+  // confirm: "",
+  // googleEmail: "",
   googleAcc: false,
-  googleId: "",
+  // googleId: "",
 
   accountType: "Select account type",
   title: "ns",
@@ -103,14 +107,11 @@ export const registerSlice = createSlice({
   reducers: {
     setRegisterEmail: (state, action: PayloadAction<IRegisterEmail>) => {
       state.token = action.payload.token;
-      state.email = action.payload.email;
-      state.password = action.payload.password;
-      state.confirm = action.payload.confirm;
-      state.googleEmail = action.payload.googleEmail;
       state.googleAcc = action.payload.googleAcc;
-      state.googleId = action.payload.googleId;
-      // state.firstname = action.payload.firstname;
-      // state.lastname = action.payload.lastname;
+      state.firstname = action.payload.firstname;
+      state.lastname = action.payload.lastname;
+      state.preferredName = action.payload.preferredName;
+      state.emailVerify = action.payload.emailVerify;
     },
     setAccountType: (state, action: PayloadAction<IRegisterAccountType>) => {
       state.accountType = action.payload.accountType;
@@ -183,13 +184,13 @@ export const registerSlice = createSlice({
     // },
     resetRegister: (state) => {
       state.token = null;
-      (state.email = ""),
-        (state.password = ""),
-        (state.confirm = ""),
-        (state.googleEmail = ""),
-        (state.googleAcc = false),
-        (state.googleId = "");
-      (state.accountType = "Select account type"),
+      // (state.email = ""),
+      // (state.password = ""),
+      // (state.confirm = ""),
+      // (state.googleEmail = ""),
+      (state.googleAcc = false),
+        // (state.googleId = "");
+        (state.accountType = "Select account type"),
         (state.title = "ns"),
         (state.firstname = ""),
         (state.lastname = ""),

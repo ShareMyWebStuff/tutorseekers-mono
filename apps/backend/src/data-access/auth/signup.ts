@@ -307,8 +307,12 @@ export const createAccount = async (
   googleEmail: string | null,
 ) => {
   try {
+    console.log("Create Account");
+    console.log(
+      `INSERT INTO user_login ( email, password, google_id, google_email, tutor_acc, student_acc, parent_acc, google_acc ) VALUES ( ${email}, '${password}', ${googleId}, ${googleEmail}, false, false, false, ${googleAcc})`,
+    );
     const res = await db.execute<ResultSetHeader>(
-      `INSERT INTO user_login ( email, password, google_id, google_email, tutor_acc, student_acc, parent_acc, google_acc ) VALUES ( ${email}, ${password}, ${googleId}, ${googleEmail}, false, false, false, ${googleAcc})`,
+      `INSERT INTO user_login ( email, password, google_id, google_email, tutor_acc, student_acc, parent_acc, google_acc ) VALUES ( ${email}, '${password}', ${googleId}, ${googleEmail}, false, false, false, ${googleAcc})`,
     );
 
     const { affectedRows, insertId } = res;
@@ -317,6 +321,8 @@ export const createAccount = async (
       insertId,
     };
   } catch (e) {
+    console.log("ERROR");
+    console.log(e);
     if (e instanceof SqlError) {
       console.log(e);
     }
@@ -426,6 +432,7 @@ export const selectDatabaseDeploy = async () => {
     // res = await db.query(`SELECT * FROM util_database_deploy;`);
 
     let res = await db.query(`SELECT * FROM user_login;`);
+    console.log("res");
 
     return true;
   } catch (e) {

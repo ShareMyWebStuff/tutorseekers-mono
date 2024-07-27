@@ -7,7 +7,6 @@ export default {
     return {
       name: PROJECT_PREFIX,
       region: "eu-west-2",
-      poo: "wee wee",
     };
   },
   async stacks(app) {

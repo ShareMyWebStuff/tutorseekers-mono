@@ -6,7 +6,7 @@ import {
 } from "aws-cdk-lib/aws-certificatemanager";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
-import { Fn, Duration } from "aws-cdk-lib";
+import { Fn } from "aws-cdk-lib";
 import { DomainName } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { ARecord, RecordTarget, IHostedZone } from "aws-cdk-lib/aws-route53";
 import { ApiGatewayv2DomainProperties } from "aws-cdk-lib/aws-route53-targets";
@@ -221,11 +221,8 @@ export async function ApiStack({ app, stack }: StackContext) {
   const myLambda = new NodejsFunction(stack, "MyLambda", {
     runtime: Runtime.NODEJS_20_X,
     handler: "handler",
-    // functionName: "get-version",
-    // entry: "src/handlers/api/version.ts",
-    functionName: "bcrypt",
-    entry: "src/handlers/api/bcrypt.ts",
-    timeout: Duration.minutes(3),
+    functionName: "get-version",
+    entry: "src/handlers/api/auth/version.ts",
     vpc,
     securityGroups: [securityGroup],
     vpcSubnets,
@@ -238,10 +235,8 @@ export async function ApiStack({ app, stack }: StackContext) {
 
   // Create a resource and method for the API
   httpApi.addRoutes({
-    // path: "/version",
-    // methods: [HttpMethod.GET],
-    path: "/bcrypt",
-    methods: [HttpMethod.POST],
+    path: "/version",
+    methods: [HttpMethod.GET],
     integration: templateLambdaIntegration,
   });
 
@@ -254,7 +249,6 @@ export async function ApiStack({ app, stack }: StackContext) {
     vpc,
     securityGroups: [securityGroup],
     vpcSubnets,
-    timeout: Duration.seconds(5),
     initialPolicy: [
       // Access to the database secret
       new iam.PolicyStatement({

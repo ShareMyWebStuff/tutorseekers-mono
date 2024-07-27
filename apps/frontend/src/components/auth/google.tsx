@@ -1,10 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import axios, {
+  AxiosResponse,
+  AxiosRequestConfig,
+  RawAxiosRequestHeaders,
+} from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useRouter, redirect } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import {
+  setRegisterEmail,
+  resetRegister,
+} from "@/lib/features/register/registerSlice";
 // import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 // import { jwtDecode } from 'jwt-decode';
 import Link from "next/link";
@@ -65,6 +75,8 @@ interface GoogleProps {
 }
 
 const useFetch = (url: string) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -83,32 +95,85 @@ const useFetch = (url: string) => {
     // 4. Add account to redux
     // 5. Goto next page
 
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({ credential: response.credential }),
-    })
-      .then((res) => {
-        setLoading(false);
-
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Data +++++");
-        console.log(data);
-        if (data?.user) {
-          localStorage.setItem("user", JSON.stringify(data?.user));
-          window.location.reload();
-        }
-
-        throw new Error(data?.message || data);
-      })
-      .catch((error) => {
-        setError(error?.message);
+    try {
+      console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
+      const client = axios.create({
+        baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
       });
+
+      const config: AxiosRequestConfig = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      };
+
+      const res = await client.post(
+        "/auth/signup-check",
+        JSON.stringify({
+          accountType: "google",
+          credential: response.credential,
+        }),
+        config,
+      );
+
+      const { status, data } = res;
+      console.log("status");
+      console.log(status);
+      console.log("data");
+      console.log(data);
+      setLoading(false);
+
+      console.log("Calling if");
+      if (data) {
+        console.log("Dispatching");
+        dispatch(
+          setRegisterEmail({
+            googleAcc: true,
+            token: data.token,
+            firstname: data.firstName,
+            lastname: data.lastName,
+            preferredName: data.preferredName,
+            emailVerify: true,
+          }),
+        );
+        console.log("Router");
+        router.push("/auth/register-account-type");
+      }
+    } catch (err: any) {
+      setLoading(false);
+      setError(err);
+    }
+
+    // fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+
+    //   body: JSON.stringify({
+    //     accountType: "google",
+    //     credential: response.credential,
+    //   }),
+    // })
+    //   .then((res) => {
+    //     setLoading(false);
+
+    //     return res.json();
+    //   })
+    //   .then((data) => {
+    //     console.log("Data +++++");
+    //     console.log(data);
+    //     if (data?.user) {
+    //       localStorage.setItem("user", JSON.stringify(data?.user));
+    //       window.location.reload();
+    //     }
+
+    //     throw new Error(data?.message || data);
+    //   })
+    //   .catch((error) => {
+    //     setError(error?.message);
+    //   });
   };
   return { loading, error, handleGoogle };
 };
@@ -116,7 +181,7 @@ const useFetch = (url: string) => {
 export const Google = ({ disabled }: GoogleProps) => {
   const { handleGoogle, loading, error } = useFetch(
     // "http://localhost:5152/signup",
-    "https://api-dev.cameronguy.biz/auth/signup",
+    "https://api-sharemywebstuff.cameronguy.biz/auth/signup-check",
   );
 
   useEffect(() => {
@@ -146,7 +211,7 @@ export const Google = ({ disabled }: GoogleProps) => {
 
       // google.accounts.id.prompt()
     }
-  }, [handleGoogle]);
+  }, []);
 
   return (
     <div>
