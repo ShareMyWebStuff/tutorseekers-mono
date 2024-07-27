@@ -4150,11 +4150,14 @@ __metadata:
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "npm:^2.114.1-alpha.0"
     "@tsconfig/node20": "npm:^20.1.4"
     "@tutorseekers/project-config": "workspace:^"
-    "@types/bcryptjs": "npm:^2"
+    "@types/bcrypt": "npm:^5"
+    "@types/bcryptjs": "npm:^2.4.6"
     "@types/ejs": "npm:^3"
     "@types/jest": "npm:^29.5.12"
     "@types/jsonwebtoken": "npm:^9.0.6"
+    "@types/node": "npm:^20.14.12"
     aws-cdk-lib: "npm:2.142.1"
+    axios: "npm:^1.7.2"
     bcryptjs: "npm:^2.4.3"
     constructs: "npm:10.3.0"
     ejs: "npm:^3.1.10"
@@ -6779,7 +6782,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bcryptjs@npm:^2":
+"@types/bcrypt@npm:^5":
+  version: 5.0.2
+  resolution: "@types/bcrypt@npm:5.0.2"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/dd7f05e183b9b1fc08ec499069febf197ab8e9c720766b5bbb5628395082e248f9a444c60882fe7788361fcadc302e21e055ab9c26a300f100e08791c353e6aa
+  languageName: node
+  linkType: hard
+
+"@types/bcryptjs@npm:^2.4.6":
   version: 2.4.6
   resolution: "@types/bcryptjs@npm:2.4.6"
   checksum: 10c0/1182663f0c081c5c58760019459cd309335e9b5fc6552780b0fd21b6c5f25661a844709e46218796f4bdbebe6736e11cfc5af0729bc2cdb0160943650aceb3da
@@ -6882,6 +6894,15 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/dce80d63a3b91892b321af823d624995c61e39c6a223cc0ac481a44d337640cc46931d33efb3beeed75f5c85c3bda1d97cef4c5cd4ec333caf5dee59cff6eca0
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^20.14.12":
+  version: 20.14.12
+  resolution: "@types/node@npm:20.14.12"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10c0/59bc5fa11fdd23fd517f859063118f54a1ab53d3399ef63c926f8902429d7453abc0db22ef4b0a6110026b6ab81b6472fee894e1d235c24b01a0b3e10cfae0bb
   languageName: node
   linkType: hard
 
@@ -8091,6 +8112,17 @@ __metadata:
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10c0/0f22da6f490335479a89878bc7d5a1419484fbb437b564a80c34888fc36759ae4f56ea28d55a191695e5ed327f0bad56e7ff60fb6770c14d1be6501505d47ab9
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.7.2":
+  version: 1.7.2
+  resolution: "axios@npm:1.7.2"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/cbd47ce380fe045313364e740bb03b936420b8b5558c7ea36a4563db1258c658f05e40feb5ddd41f6633fdd96d37ac2a76f884dad599c5b0224b4c451b3fa7ae
   languageName: node
   linkType: hard
 
