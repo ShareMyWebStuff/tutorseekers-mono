@@ -1,5 +1,6 @@
 import { DbConnection } from "../../foundation/db/db-utils";
 import { ApiResponseError, SqlError } from "../../support/errors/errorHandler";
+import { RegisterCompleteSchema } from "../../schemas/auth/registration-schema";
 import { ResultSetHeader, RowDataPacket, ProcedureCallPacket } from "mysql2";
 
 export interface UserLogin {
@@ -51,6 +52,50 @@ export interface UserRecordDB extends RowDataPacket {
   refs_verified: number;
 
   create_date: string;
+}
+
+export interface UserDetailsRecordDB extends RowDataPacket {
+  user_id: number;
+  title: number;
+  prefered_name: string;
+  firstname: string | null;
+  lastname: string | null;
+  gender: number | null;
+  address1: string | null;
+  address2: string | null;
+  town: string;
+  county: string | null;
+  postcode: string;
+  country_id: number;
+  phone: string | null;
+  mobile: string | null;
+  profile_title: string | null;
+  photo_media_id: number | null;
+  video_media_id: number | null;
+
+  search_location_id: number | null;
+
+  avg_rating: number | null;
+  no_ratings: number | null;
+
+  tutors_home: number;
+  tutor_travels: number;
+  tutor_online: number;
+
+  teacher: number;
+  in_education: number;
+
+  has_degree: number;
+  dbs: number;
+  dbs_verified: number;
+
+  avg_response: number | null;
+
+  last_online: string;
+  create_date: string;
+
+  profile_title_verified: boolean;
+  verified_by: number | null;
 }
 
 export interface GetUserLogins {
@@ -357,8 +402,70 @@ export const updateAccount = async (
     return { affectedRows };
   } catch (e) {
     if (e instanceof SqlError) {
+      console.log("SqlError");
       console.log(e);
     }
+    console.log("Outside SqlError");
+    console.log(e);
+
+    throw new ApiResponseError(
+      "500",
+      "Database issue",
+      JSON.stringify({
+        message: "Internal server error - database",
+        errorMsgs: {
+          message: "Error updating account. Please try again.",
+        },
+      }),
+    );
+  }
+};
+/**
+ *
+ * @param userId
+ * @param data
+ * @returns
+ */
+export const setRegisterComplete = async (
+  userId: number,
+  verifyToken: string | null,
+  data: RegisterCompleteSchema,
+) => {
+  let insertDets = false;
+
+  // Check if user details have already been
+  try {
+    // 🎯 TODO: Select user_details row
+    const userDetsRS = await db.query<UserDetailsRecordDB[]>(
+      `SELECT * FROM user_details WHERE user_id = ${userId};`,
+    );
+
+    const insertDets = userDetsRS.length === 0;
+
+    // 🎯 TODO: Update the user_login - should error if no row exists
+
+    if (userDetsRC === 1) {
+      // 🎯 TODO: Update the user details
+    } else {
+      // 🎯 TODO: Insert the user details
+    }
+
+    // 🎯 TODO: If email verified false
+
+    // Delete
+    const res = await db.execute<ResultSetHeader>(
+      `UPDATE user_login SET google_acc = ${googleAcc}, email = ${email}, password = ${password}, google_id = ${googleId}, google_email=${googleEmail} WHERE user_id = ${userId}`,
+    );
+    const { affectedRows } = res;
+
+    return { affectedRows };
+  } catch (e) {
+    if (e instanceof SqlError) {
+      console.log("SqlError");
+      console.log(e);
+    }
+    console.log("Outside SqlError");
+    console.log(e);
 
     throw new ApiResponseError(
       "500",

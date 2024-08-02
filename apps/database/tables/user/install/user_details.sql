@@ -7,15 +7,16 @@ Description : This table contains the personal details for our users.
 CREATE TABLE IF NOT EXISTS user_details (
 	user_id					INT UNSIGNED		NOT NULL,
     title           		SMALLINT UNSIGNED	NOT NULL,
-	firstname				VARCHAR(50)			NOT NULL,
+	firstname				VARCHAR(50)			NULL,
 	lastname				VARCHAR(50)			NULL,
+	preferred_name			VARCHAR(50)			NOT NULL,
 	gender					SMALLINT UNSIGNED	NULL,
 	address1				VARCHAR(80)			NULL,
 	address2				VARCHAR(80)			NULL,
 	town					VARCHAR(80)			NOT NULL,
 	county					VARCHAR(80)			NULL,
 	postcode				VARCHAR(11)			NOT NULL,
-	country_id      		SMALLINT UNSIGNED	NULL,
+	country_id      		SMALLINT UNSIGNED	NOT NULL,
 	phone					VARCHAR(20)			NULL,
 	mobile					VARCHAR(20)			NULL,
 	profile_title			VARCHAR(80)			NULL,
@@ -24,6 +25,12 @@ CREATE TABLE IF NOT EXISTS user_details (
 	video_media_id			INT UNSIGNED		NULL,
 
 	search_location_id		INT UNSIGNED		NULL,
+
+	read_safeguarding		TINYINT UNSIGNED	NOT NULL	DEFAULT 0,
+	over_18					TINYINT UNSIGNED	NOT NULL	DEFAULT 0,
+	right_to_work			TINYINT UNSIGNED	NOT NULL	DEFAULT 0,
+	only_account			TINYINT UNSIGNED	NOT NULL	DEFAULT 0,
+	agree_terms				TINYINT UNSIGNED	NOT NULL	DEFAULT 0,
 
 	avg_rating				DECIMAL(3,2)		NULL,
 	no_ratings				SMALLINT UNSIGNED	NULL,

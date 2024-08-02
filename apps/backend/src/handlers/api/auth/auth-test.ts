@@ -8,7 +8,7 @@ import {
 // import { sign } from "jsonwebtoken";
 import { verifyGoogleToken } from "../../../support/helpers/verify-google-token";
 import { DbConnection } from "../../../foundation/db/db-utils";
-import { signupCheckerValidation } from "../../../schemas/auth/signup-checker-validate";
+import { signupCheckerValidation } from "../../../schemas/auth/registration-validate";
 import {
   getAccountByGoogleId,
   getAccountByEmail,

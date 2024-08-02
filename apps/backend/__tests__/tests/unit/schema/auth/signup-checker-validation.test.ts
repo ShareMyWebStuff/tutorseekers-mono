@@ -1,4 +1,5 @@
-import { signupCheckerValidation } from "../../../../../src/schemas/auth/signup-checker-validate";
+import { signupCheckerValidation } from "../../../../../src/schemas/auth/registration-validate";
+import { ApiResponseError } from "../../../../../src/support/errors/errorHandler";
 
 /**
  * Validates the signup-checker-validation
@@ -15,11 +16,8 @@ describe("signup-checker-validation", () => {
     describe("When the payload is validated", () => {
       const res = signupCheckerValidation(payload);
 
-      it("Then success should be true", () => {
-        expect(res.success).toBeTruthy();
-      });
-      it("And the payload should be returned as data", () => {
-        expect(res.data).toEqual(payload);
+      it("Then the payload should be returned as data", () => {
+        expect(res).toEqual(payload);
       });
     });
   });
@@ -32,28 +30,8 @@ describe("signup-checker-validation", () => {
       };
 
       const res = signupCheckerValidation(payload);
-      it("Then success should be true", () => {
-        expect(res.success).toBeTruthy();
-      });
-      it("And the payload should be returned as data", () => {
-        expect(res.data).toEqual(payload);
-      });
-    });
-  });
-
-  describe("Given we receive an empty payload", () => {
-    describe("When the payload is validated", () => {
-      const payload = {};
-
-      const res = signupCheckerValidation(payload);
-      console.log(res);
-      it("Then success should be false", () => {
-        expect(res.success).toBeFalsy();
-      });
-      it("And an error message should be generated", () => {
-        expect(res.data).toEqual({
-          accountType: ["Please enter a valid account type."],
-        });
+      it("Then the payload should be returned as data", () => {
+        expect(res).toEqual(payload);
       });
     });
   });
@@ -63,32 +41,34 @@ describe("signup-checker-validation", () => {
       describe("When the payload is validated", () => {
         const payload = {};
 
-        const res = signupCheckerValidation(payload);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            accountType: ["Please enter a valid account type."],
-          });
-        });
-      });
-    });
-  });
 
-  describe("Given we receive an invalid payload", () => {
-    describe("And the account type is missing", () => {
-      describe("When the payload is validated", () => {
-        const payload = {};
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
 
-        const res = signupCheckerValidation(payload);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            accountType: ["Please enter a valid account type."],
-          });
+
+        it("And the body should have an accountType validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"accountType":["Please enter a valid account type."]}}',
+          );
         });
       });
     });
@@ -101,14 +81,34 @@ describe("signup-checker-validation", () => {
           accountType: "google",
         };
 
-        const res = signupCheckerValidation(payload);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            credential: ["Please enter a valid google token."],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should have a google credentials validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"credential":["Please enter a valid google token."]}}',
+          );
         });
       });
     });
@@ -122,14 +122,34 @@ describe("signup-checker-validation", () => {
           credential: "ABCDEF123456",
         };
 
-        const res = signupCheckerValidation(payload);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            credential: ["Please enter a valid google token."],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should have a google credentials validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"credential":["Please enter a valid google token."]}}',
+          );
         });
       });
     });
@@ -143,14 +163,34 @@ describe("signup-checker-validation", () => {
           password: "Example01!",
         };
 
-        const res = signupCheckerValidation(payload);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            email: ["Please enter a valid email."],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should have an email validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"email":["Please enter a valid email."]}}',
+          );
         });
       });
     });
@@ -165,14 +205,34 @@ describe("signup-checker-validation", () => {
           password: "Example01!",
         };
 
-        const res = signupCheckerValidation(payload);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            email: ["Please enter a valid email."],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should have an email validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"email":["Please enter a valid email."]}}',
+          );
         });
       });
     });
@@ -186,20 +246,34 @@ describe("signup-checker-validation", () => {
           email: "dave@example.co.uk",
         };
 
-        const res = signupCheckerValidation(payload);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            password: [
-              "Password must be at least 8 characters.",
-              "Password must contain an uppercase letter.",
-              "Password must contain an lowercase letter.",
-              "Password must contain a number.",
-              "Password must contain a special character.",
-            ],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should list all the validation issues", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"password":["Password must be at least 8 characters.","Password must contain an uppercase letter.","Password must contain an lowercase letter.","Password must contain a number.","Password must contain a special character."]}}',
+          );
         });
       });
     });
@@ -214,16 +288,34 @@ describe("signup-checker-validation", () => {
           password: "Exa01!",
         };
 
-        const res = signupCheckerValidation(payload);
-
-        console.log(res);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            password: ["Password must be at least 8 characters."],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should have a password too short validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"password":["Password must be at least 8 characters."]}}',
+          );
         });
       });
     });
@@ -238,16 +330,34 @@ describe("signup-checker-validation", () => {
           password: "Exa01adfafafafafafafadfadfafafa!",
         };
 
-        const res = signupCheckerValidation(payload);
-
-        console.log(res);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            password: ["Password cannot be more than 20 characters."],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should have a password too long validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"password":["Password cannot be more than 20 characters."]}}',
+          );
         });
       });
     });
@@ -262,16 +372,34 @@ describe("signup-checker-validation", () => {
           password: "EXAMPLE01!",
         };
 
-        const res = signupCheckerValidation(payload);
-
-        console.log(res);
-        it("Then success should be false", () => {
-          expect(res.success).toBeFalsy();
+        it("Then an ApiResponseError should be thrown", () => {
+          expect(() => {
+            const res = signupCheckerValidation(payload);
+          }).toThrow(ApiResponseError);
         });
-        it("And an error message should be generated", () => {
-          expect(res.data).toEqual({
-            password: ["Password must contain an lowercase letter."],
-          });
+
+        it("And the statuscode should be 422", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.statusCode).toEqual("422");
+        });
+
+        it("And the body should have a password missing lowercase letter validation message", () => {
+          let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+          try {
+            const res = signupCheckerValidation(payload);
+          } catch (e) {
+            error = e as ApiResponseError;
+          }
+          expect(error.body).toEqual(
+            '{"message":"Validation errors","errorMsgs":{"password":["Password must contain an lowercase letter."]}}',
+          );
         });
       });
     });
@@ -285,16 +413,34 @@ describe("signup-checker-validation", () => {
             password: "example01!",
           };
 
-          const res = signupCheckerValidation(payload);
-
-          console.log(res);
-          it("Then success should be false", () => {
-            expect(res.success).toBeFalsy();
+          it("Then an ApiResponseError should be thrown", () => {
+            expect(() => {
+              const res = signupCheckerValidation(payload);
+            }).toThrow(ApiResponseError);
           });
-          it("And an error message should be generated", () => {
-            expect(res.data).toEqual({
-              password: ["Password must contain an uppercase letter."],
-            });
+
+          it("And the statuscode should be 422", () => {
+            let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+            try {
+              const res = signupCheckerValidation(payload);
+            } catch (e) {
+              error = e as ApiResponseError;
+            }
+            expect(error.statusCode).toEqual("422");
+          });
+
+          it("And the body should have a password missing uppercase letter validation message", () => {
+            let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+            try {
+              const res = signupCheckerValidation(payload);
+            } catch (e) {
+              error = e as ApiResponseError;
+            }
+            expect(error.body).toEqual(
+              '{"message":"Validation errors","errorMsgs":{"password":["Password must contain an uppercase letter."]}}',
+            );
           });
         });
       });
@@ -309,16 +455,34 @@ describe("signup-checker-validation", () => {
             password: "Exampleaa!",
           };
 
-          const res = signupCheckerValidation(payload);
-
-          console.log(res);
-          it("Then success should be false", () => {
-            expect(res.success).toBeFalsy();
+          it("Then an ApiResponseError should be thrown", () => {
+            expect(() => {
+              const res = signupCheckerValidation(payload);
+            }).toThrow(ApiResponseError);
           });
-          it("And an error message should be generated", () => {
-            expect(res.data).toEqual({
-              password: ["Password must contain a number."],
-            });
+
+          it("And the statuscode should be 422", () => {
+            let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+            try {
+              const res = signupCheckerValidation(payload);
+            } catch (e) {
+              error = e as ApiResponseError;
+            }
+            expect(error.statusCode).toEqual("422");
+          });
+
+          it("And the body should have a password missing a number validation message", () => {
+            let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+            try {
+              const res = signupCheckerValidation(payload);
+            } catch (e) {
+              error = e as ApiResponseError;
+            }
+            expect(error.body).toEqual(
+              '{"message":"Validation errors","errorMsgs":{"password":["Password must contain a number."]}}',
+            );
           });
         });
       });
@@ -333,16 +497,34 @@ describe("signup-checker-validation", () => {
             password: "Example01",
           };
 
-          const res = signupCheckerValidation(payload);
-
-          console.log(res);
-          it("Then success should be false", () => {
-            expect(res.success).toBeFalsy();
+          it("Then an ApiResponseError should be thrown", () => {
+            expect(() => {
+              const res = signupCheckerValidation(payload);
+            }).toThrow(ApiResponseError);
           });
-          it("And an error message should be generated", () => {
-            expect(res.data).toEqual({
-              password: ["Password must contain a special character."],
-            });
+
+          it("And the statuscode should be 422", () => {
+            let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+            try {
+              const res = signupCheckerValidation(payload);
+            } catch (e) {
+              error = e as ApiResponseError;
+            }
+            expect(error.statusCode).toEqual("422");
+          });
+
+          it("And the body should have a password missing a special character validation message", () => {
+            let error: ApiResponseError = new ApiResponseError("200", "", "");
+
+            try {
+              const res = signupCheckerValidation(payload);
+            } catch (e) {
+              error = e as ApiResponseError;
+            }
+            expect(error.body).toEqual(
+              '{"message":"Validation errors","errorMsgs":{"password":["Password must contain a special character."]}}',
+            );
           });
         });
       });

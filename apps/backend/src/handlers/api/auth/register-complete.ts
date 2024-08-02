@@ -5,7 +5,7 @@ import {
 } from "aws-lambda";
 import { verifyGoogleToken } from "../../../support/helpers/verify-google-token";
 import { DbConnection } from "../../../foundation/db/db-utils";
-import { signupCheckerValidation } from "../../../schemas/auth/signup-checker-validate";
+import { registerCompleteValidation } from "../../../schemas/auth/registration-validate";
 import {
   getAccountByGoogleId,
   getAccountByEmail,
@@ -13,13 +13,19 @@ import {
   updateAccount,
   GetUserLogins,
   truncateTable,
+  setRegisterComplete,
 } from "../../../data-access/auth/signup";
 import {
   createToken,
   comparePasswords,
   hashPassword,
+  decipherToken,
 } from "../../../support/utils/tokens"; // "../../../support/utils/tokens";
 import { ApiResponseError } from "../../../support/errors/errorHandler";
+
+type SignupToken = {
+  userId: number;
+};
 
 // 🧠 Brain
 //
@@ -46,329 +52,341 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
     // Validate body
     let body: unknown = !event.body ? {} : JSON.parse(event.body);
 
-    // console.log("REMOVE THE TRUNCATE");
-    // console.log("REMOVE THE TRUNCATE");
-    // console.log("REMOVE THE TRUNCATE");
-    // console.log("REMOVE THE TRUNCATE");
-    // console.log("REMOVE THE TRUNCATE");
-    // await truncateTable();
-
     console.log("body");
     console.log(body);
 
     // Validate the payload
-    const validateData = signupCheckerValidation(body);
+    const validatedData = registerCompleteValidation(body);
 
-    // If google signup check, verify the google credential sent to us
-    let userAccs: GetUserLogins;
-    if (validateData.accountType === "google") {
-      googleData = await verifyGoogleToken(validateData.credential!);
-      console.log("Google Data");
-      console.log(googleData);
-      if (!googleData.email_verified) {
-        response.statusCode = 401;
-        response.body = JSON.stringify({
-          msg: "Validation errors",
-          errorMsgs: {
-            google: ["Please verify your email in google to continue."],
-          },
-        });
-        return response;
-      }
+    // Decipher token
+    const tokenDets = decipherToken<SignupToken>(
+      validatedData.token,
+      process.env.JWT_SECRET!,
+    );
 
-      // Retrieve google account if already used
-      userAccs = await getAccountByGoogleId(googleData.sub);
-    } else if (validateData.accountType === "email") {
-      // Retrieve email account if already used
-      userAccs = await getAccountByEmail(validateData.email!);
-    } else {
-      response.statusCode = 422;
-      response.body = JSON.stringify({
-        msg: "Validation errors",
-        errorMsgs: {
-          accountType: ["Please enter a valid accountType."],
-        },
-      });
-      return response;
+    // Create email verification token
+    const verifyToken: string | null = null;
+
+    if (!validatedData.emailVerify) {
+      console.log("Validate account");
+      // 🎯 TODO: Create verify token
     }
 
-    console.log("UserAccs");
-    console.log(userAccs);
+    // Add the user details to the database, save verify token
+    await setRegisterComplete(tokenDets.userId, verifyToken, validatedData);
 
-    const email =
-      validateData.accountType === "email" ? `'${validateData.email}'` : "null";
-    const googleId =
-      validateData.accountType === "google" ? `'${googleData?.sub}'` : "null";
-    const googleEmail =
-      validateData.accountType === "google" ? `'${googleData?.email}'` : "null";
+    // 🎯 TODO: Return the ApiResponse
 
-    console.log(validateData.password);
-    console.log(`hello 123`);
+    // // If google signup check, verify the google credential sent to us
+    // let userAccs: GetUserLogins;
+    // if (validateData.accountType === "google") {
+    //   googleData = await verifyGoogleToken(validateData.credential!);
+    //   console.log("Google Data");
+    //   console.log(googleData);
+    //   if (!googleData.email_verified) {
+    //     response.statusCode = 401;
+    //     response.body = JSON.stringify({
+    //       msg: "Validation errors",
+    //       errorMsgs: {
+    //         google: ["Please verify your email in google to continue."],
+    //       },
+    //     });
+    //     return response;
+    //   }
 
-    let hashedPwd: string | null = "";
-    if (validateData.password && validateData.password.length > 0) {
-      const pwd1 = validateData.password;
-      console.log("Password");
-      console.log(pwd1);
-      console.log("HERE ++++1");
-      hashedPwd = await hashPassword(pwd1);
-      console.log("HERE ++++2");
-      console.log("hash 4", hashedPwd);
-    }
+    //   // Retrieve google account if already used
+    //   userAccs = await getAccountByGoogleId(googleData.sub);
+    // } else if (validateData.accountType === "email") {
+    //   // Retrieve email account if already used
+    //   userAccs = await getAccountByEmail(validateData.email!);
+    // } else {
+    //   response.statusCode = 422;
+    //   response.body = JSON.stringify({
+    //     msg: "Validation errors",
+    //     errorMsgs: {
+    //       accountType: ["Please enter a valid accountType."],
+    //     },
+    //   });
+    //   return response;
+    // }
 
-    // const salt = await genSalt(10);
-    console.log("Here I am 126");
-    // const hashedPwd =
-    //   validateData.accountType === "google"
-    //     ? "null"
-    //     : await hash(validateData.password!, salt); // await hashPassword(validateData.password!);
-    // const hashedPwd = await hash(password, salt);
+    // console.log("UserAccs");
+    // console.log(userAccs);
 
-    // const hashedPwd =
-    //   validateData.accountType === "google"
-    //     ? "null"
-    //     : await hashPassword(validateData.password!);
-    // : `'${await hashPassword(validateData.password!)}`;
-    console.log(`hello 124`);
-    console.log(hashedPwd);
-    console.log(email);
-    console.log(googleId);
+    // const email =
+    //   validateData.accountType === "email" ? `'${validateData.email}'` : "null";
+    // const googleId =
+    //   validateData.accountType === "google" ? `'${googleData?.sub}'` : "null";
+    // const googleEmail =
+    //   validateData.accountType === "google" ? `'${googleData?.email}'` : "null";
 
-    console.log(`email       : ${email}`);
-    console.log(`googleId    : ${googleId}`);
-    console.log(`googleEmail : ${googleEmail}`);
-    //
-    if (userAccs.rows === 0) {
-      console.log("Here 20");
-      // Create account
-      const createdAcc = await createAccount(
-        validateData.accountType === "google",
-        email,
-        validateData.accountType === "google" ? null : hashedPwd,
-        googleId,
-        googleEmail,
-      );
+    // console.log(validateData.password);
+    // console.log(`hello 123`);
 
-      console.log("Here 21");
-      console.log(createdAcc);
-      // Create token for user id
-      const token = createToken(
-        {
-          userId: createdAcc.insertId,
-        },
-        process.env.JWT_SECRET!,
-        "60m",
-      );
+    // let hashedPwd: string | null = "";
+    // if (validateData.password && validateData.password.length > 0) {
+    //   const pwd1 = validateData.password;
+    //   console.log("Password");
+    //   console.log(pwd1);
+    //   console.log("HERE ++++1");
+    //   hashedPwd = await hashPassword(pwd1);
+    //   console.log("HERE ++++2");
+    //   console.log("hash 4", hashedPwd);
+    // }
 
-      console.log("Here 22");
-      response.statusCode = 201;
-      console.log("Here 23");
-      console.log(
-        validateData.accountType === "google" ? googleData?.given_name : "",
-      );
-      console.log("Here 24");
-      console.log(
-        validateData.accountType === "google" ? googleData?.family_name : "",
-      );
-      console.log("Here 25");
-      response.body = JSON.stringify({
-        msg: "Account created",
-        token,
-        firstName:
-          validateData.accountType === "google" ? googleData?.given_name : "",
-        lastName:
-          validateData.accountType === "google" ? googleData?.family_name : "",
-        preferredName:
-          validateData.accountType === "google" ? googleData?.name : "",
-      });
-      console.log(response);
-      return response;
+    // // const salt = await genSalt(10);
+    // console.log("Here I am 126");
+    // // const hashedPwd =
+    // //   validateData.accountType === "google"
+    // //     ? "null"
+    // //     : await hash(validateData.password!, salt); // await hashPassword(validateData.password!);
+    // // const hashedPwd = await hash(password, salt);
 
-      // Return successful code
-    } else if (userAccs.rows > 1) {
-      console.log("Here 23");
-      throw new ApiResponseError(
-        "500",
-        "Duplicate accounts",
-        JSON.stringify({
-          message: "Duplicate accounts",
-          errorMsgs: {
-            message: `Duplicate accounts retrieved. Notify support quoting ${validateData.accountType === "google" ? googleData?.sub : validateData.email}.`,
-          },
-        }),
-      );
-    } else {
-      // A record for the user already exists
-      // Not validated
-      console.log("Here 24");
-      if (!userAccs.userAccs[0].validated) {
-        console.log("Here 25");
+    // // const hashedPwd =
+    // //   validateData.accountType === "google"
+    // //     ? "null"
+    // //     : await hashPassword(validateData.password!);
+    // // : `'${await hashPassword(validateData.password!)}`;
+    // console.log(`hello 124`);
+    // console.log(hashedPwd);
+    // console.log(email);
+    // console.log(googleId);
 
-        // Update login details
-        const createdAcc = await updateAccount(
-          userAccs.userAccs[0].userId,
-          validateData.accountType === "google",
-          email,
-          hashedPwd,
-          googleId,
-          googleEmail,
-        );
+    // console.log(`email       : ${email}`);
+    // console.log(`googleId    : ${googleId}`);
+    // console.log(`googleEmail : ${googleEmail}`);
+    // //
+    // if (userAccs.rows === 0) {
+    //   console.log("Here 20");
+    //   // Create account
+    //   const createdAcc = await createAccount(
+    //     validateData.accountType === "google",
+    //     email,
+    //     validateData.accountType === "google" ? null : hashedPwd,
+    //     googleId,
+    //     googleEmail,
+    //   );
 
-        console.log("Here 26");
+    //   console.log("Here 21");
+    //   console.log(createdAcc);
+    //   // Create token for user id
+    //   const token = createToken(
+    //     {
+    //       userId: createdAcc.insertId,
+    //     },
+    //     process.env.JWT_SECRET!,
+    //     "60m",
+    //   );
 
-        // Create token for user id
-        const token = createToken(
-          {
-            userId: userAccs.userAccs[0].userId,
-          },
-          process.env.JWT_SECRET!,
-          "60m",
-        );
+    //   console.log("Here 22");
+    //   response.statusCode = 201;
+    //   console.log("Here 23");
+    //   console.log(
+    //     validateData.accountType === "google" ? googleData?.given_name : "",
+    //   );
+    //   console.log("Here 24");
+    //   console.log(
+    //     validateData.accountType === "google" ? googleData?.family_name : "",
+    //   );
+    //   console.log("Here 25");
+    //   response.body = JSON.stringify({
+    //     msg: "Account created",
+    //     token,
+    //     firstName:
+    //       validateData.accountType === "google" ? googleData?.given_name : "",
+    //     lastName:
+    //       validateData.accountType === "google" ? googleData?.family_name : "",
+    //     preferredName:
+    //       validateData.accountType === "google" ? googleData?.name : "",
+    //   });
+    //   console.log(response);
+    //   return response;
 
-        response.statusCode = 201;
-        response.body = JSON.stringify({
-          msg: "Account created",
-          token,
-          firstName:
-            validateData.accountType === "google" ? googleData?.given_name : "",
-          lastName:
-            validateData.accountType === "google"
-              ? googleData?.family_name
-              : "",
-          preferredName:
-            validateData.accountType === "google" ? googleData?.name : "",
-        });
-        return response;
-      } else {
-        console.log("Here 30");
+    //   // Return successful code
+    // } else if (userAccs.rows > 1) {
+    //   console.log("Here 23");
+    //   throw new ApiResponseError(
+    //     "500",
+    //     "Duplicate accounts",
+    //     JSON.stringify({
+    //       message: "Duplicate accounts",
+    //       errorMsgs: {
+    //         message: `Duplicate accounts retrieved. Notify support quoting ${validateData.accountType === "google" ? googleData?.sub : validateData.email}.`,
+    //       },
+    //     }),
+    //   );
+    // } else {
+    //   // A record for the user already exists
+    //   // Not validated
+    //   console.log("Here 24");
+    //   if (!userAccs.userAccs[0].validated) {
+    //     console.log("Here 25");
 
-        // If google and verified then log user on
-        if (
-          validateData.accountType === "google" &&
-          userAccs.userAccs[0].validated
-        ) {
-          console.log("Here 31");
-          const { tutorAcc, studentAcc, parentAcc, adminAcc } =
-            userAccs.userAccs[0];
-          const accType =
-            (tutorAcc ? 2 : 0) +
-            (studentAcc ? 8 : 0) +
-            (parentAcc ? 32 : 0) +
-            (adminAcc ? 64 : 0);
+    //     // Update login details
+    //     const createdAcc = await updateAccount(
+    //       userAccs.userAccs[0].userId,
+    //       validateData.accountType === "google",
+    //       email,
+    //       hashedPwd,
+    //       googleId,
+    //       googleEmail,
+    //     );
 
-          const payload = {
-            userId: userAccs.userAccs[0].userId,
-            accountType: accType,
-            access: "T",
-          };
-          console.log("Here 32");
+    //     console.log("Here 26");
 
-          const accessToken = createToken(
-            payload,
-            process.env.JWT_SECRET!,
-            "48h",
-          );
-          const refreshToken = createToken(
-            payload,
-            process.env.JWT_REFRESH_SECRET!,
-            "48h",
-          );
+    //     // Create token for user id
+    //     const token = createToken(
+    //       {
+    //         userId: userAccs.userAccs[0].userId,
+    //       },
+    //       process.env.JWT_SECRET!,
+    //       "60m",
+    //     );
 
-          // Add to header
-          console.log("Here 33");
+    //     response.statusCode = 201;
+    //     response.body = JSON.stringify({
+    //       msg: "Account created",
+    //       token,
+    //       firstName:
+    //         validateData.accountType === "google" ? googleData?.given_name : "",
+    //       lastName:
+    //         validateData.accountType === "google"
+    //           ? googleData?.family_name
+    //           : "",
+    //       preferredName:
+    //         validateData.accountType === "google" ? googleData?.name : "",
+    //     });
+    //     return response;
+    //   } else {
+    //     console.log("Here 30");
 
-          response["multiValueHeaders"] = {
-            "Set-Cookie": [
-              `refreshToken=${refreshToken}; Path=/; HttpOnly;`,
-              `accessToken=${accessToken}; Path=/; HttpOnly;`,
-            ],
-          };
+    //     // If google and verified then log user on
+    //     if (
+    //       validateData.accountType === "google" &&
+    //       userAccs.userAccs[0].validated
+    //     ) {
+    //       console.log("Here 31");
+    //       const { tutorAcc, studentAcc, parentAcc, adminAcc } =
+    //         userAccs.userAccs[0];
+    //       const accType =
+    //         (tutorAcc ? 2 : 0) +
+    //         (studentAcc ? 8 : 0) +
+    //         (parentAcc ? 32 : 0) +
+    //         (adminAcc ? 64 : 0);
 
-          // Return 308 - Permanently redirect
-          response.statusCode = 308;
-          response.body = JSON.stringify({
-            msg: "Successfully signed in",
-            userId: userAccs.userAccs[0].userId,
-            accountType: accType,
-          });
-          return response;
-        } else {
-          console.log("Here 40");
+    //       const payload = {
+    //         userId: userAccs.userAccs[0].userId,
+    //         accountType: accType,
+    //         access: "T",
+    //       };
+    //       console.log("Here 32");
 
-          // NEED TO WORK THIS OUT.
-          // Either email accounts or unvalidated google accounts
-          // ACTUALLY DO WE WANT
-          // else if google unvaklidated
-          // else if email
+    //       const accessToken = createToken(
+    //         payload,
+    //         process.env.JWT_SECRET!,
+    //         "48h",
+    //       );
+    //       const refreshToken = createToken(
+    //         payload,
+    //         process.env.JWT_REFRESH_SECRET!,
+    //         "48h",
+    //       );
 
-          // Check password
-          console.log("Here 41");
+    //       // Add to header
+    //       console.log("Here 33");
 
-          const matched = await comparePasswords(
-            validateData.password!,
-            userAccs.userAccs[0].password!,
-          );
+    //       response["multiValueHeaders"] = {
+    //         "Set-Cookie": [
+    //           `refreshToken=${refreshToken}; Path=/; HttpOnly;`,
+    //           `accessToken=${accessToken}; Path=/; HttpOnly;`,
+    //         ],
+    //       };
 
-          console.log("Here 42");
-          if (matched) {
-            console.log("Matched !!!!");
-            const { tutorAcc, studentAcc, parentAcc, adminAcc } =
-              userAccs.userAccs[0];
-            const accType =
-              (tutorAcc ? 2 : 0) +
-              (studentAcc ? 8 : 0) +
-              (parentAcc ? 32 : 0) +
-              (adminAcc ? 64 : 0);
+    //       // Return 308 - Permanently redirect
+    //       response.statusCode = 308;
+    //       response.body = JSON.stringify({
+    //         msg: "Successfully signed in",
+    //         userId: userAccs.userAccs[0].userId,
+    //         accountType: accType,
+    //       });
+    //       return response;
+    //     } else {
+    //       console.log("Here 40");
 
-            const payload = {
-              userId: userAccs.userAccs[0].userId,
-              accountType: accType,
-              access: "T",
-            };
-            const accessToken = createToken(
-              payload,
-              process.env.JWT_SECRET!,
-              "48h",
-            );
-            const refreshToken = createToken(
-              payload,
-              process.env.JWT_REFRESH_SECRET!,
-              "48h",
-            );
+    //       // NEED TO WORK THIS OUT.
+    //       // Either email accounts or unvalidated google accounts
+    //       // ACTUALLY DO WE WANT
+    //       // else if google unvaklidated
+    //       // else if email
 
-            // Add to header
-            response["multiValueHeaders"] = {
-              "Set-Cookie": [
-                `refreshToken=${refreshToken}; Path=/; HttpOnly;`,
-                `accessToken=${accessToken}; Path=/; HttpOnly;`,
-              ],
-            };
+    //       // Check password
+    //       console.log("Here 41");
 
-            // Return 308 - Permanently redirect
-            response.statusCode = 308;
-            response.body = JSON.stringify({
-              msg: "Successfully signed in",
-              userId: userAccs.userAccs[0].userId,
-              accountType: accType,
-            });
-            return response;
-          } else {
-            console.log("Here 43");
+    //       const matched = await comparePasswords(
+    //         validateData.password!,
+    //         userAccs.userAccs[0].password!,
+    //       );
 
-            throw new ApiResponseError(
-              "401",
-              "Account exists",
-              JSON.stringify({
-                message: "Account exists",
-                errorMsgs: {
-                  message: `Account already exists. If this is your account please reset password.`,
-                },
-              }),
-            );
-          }
-        }
-      }
-    }
+    //       console.log("Here 42");
+    //       if (matched) {
+    //         console.log("Matched !!!!");
+    //         const { tutorAcc, studentAcc, parentAcc, adminAcc } =
+    //           userAccs.userAccs[0];
+    //         const accType =
+    //           (tutorAcc ? 2 : 0) +
+    //           (studentAcc ? 8 : 0) +
+    //           (parentAcc ? 32 : 0) +
+    //           (adminAcc ? 64 : 0);
+
+    //         const payload = {
+    //           userId: userAccs.userAccs[0].userId,
+    //           accountType: accType,
+    //           access: "T",
+    //         };
+    //         const accessToken = createToken(
+    //           payload,
+    //           process.env.JWT_SECRET!,
+    //           "48h",
+    //         );
+    //         const refreshToken = createToken(
+    //           payload,
+    //           process.env.JWT_REFRESH_SECRET!,
+    //           "48h",
+    //         );
+
+    //         // Add to header
+    //         response["multiValueHeaders"] = {
+    //           "Set-Cookie": [
+    //             `refreshToken=${refreshToken}; Path=/; HttpOnly;`,
+    //             `accessToken=${accessToken}; Path=/; HttpOnly;`,
+    //           ],
+    //         };
+
+    //         // Return 308 - Permanently redirect
+    //         response.statusCode = 308;
+    //         response.body = JSON.stringify({
+    //           msg: "Successfully signed in",
+    //           userId: userAccs.userAccs[0].userId,
+    //           accountType: accType,
+    //         });
+    //         return response;
+    //       } else {
+    //         console.log("Here 43");
+
+    //         throw new ApiResponseError(
+    //           "401",
+    //           "Account exists",
+    //           JSON.stringify({
+    //             message: "Account exists",
+    //             errorMsgs: {
+    //               message: `Account already exists. If this is your account please reset password.`,
+    //             },
+    //           }),
+    //         );
+    //       }
+    //     }
+    //   }
+    // }
   } catch (e) {
     console.log(e);
     if (e instanceof ApiResponseError) {

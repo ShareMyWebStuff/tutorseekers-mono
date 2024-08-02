@@ -4,7 +4,7 @@ Table       : user_login
 Description : This table contains the user login details
 
 **/
-CREATE TABLE IF NOT EXISTS user_login (
+CREATE TABLE IF NOT EXISTS user_login_2 (
     user_id           INT	 UNSIGNED   NOT NULL AUTO_INCREMENT,                                -- Unique user identifier
 
     -- Account created with email / password

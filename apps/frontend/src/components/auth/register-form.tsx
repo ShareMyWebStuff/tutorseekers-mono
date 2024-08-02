@@ -98,7 +98,7 @@ export function RegisterForm() {
 
   const onSubmit: SubmitHandler<FormFields> = async (formData) => {
     // console.log("HERE - onsubmit**");
-    // console.log(data);
+    // console.log(formData);
     // console.log("errors");
     // console.log(errors);
     try {

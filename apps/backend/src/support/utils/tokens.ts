@@ -31,6 +31,16 @@ export const createToken = (
   }
 };
 
+export const decipherToken = <T>(token: string, secret: Secret) => {
+  let decoded;
+  try {
+    decoded = verify(token, secret);
+  } catch (err) {
+    throw { statusCode: 401, errorMsgs: { msg: "User is not signed in." } };
+  }
+  return decoded as T;
+};
+
 //
 // Function : comparePasswords
 //

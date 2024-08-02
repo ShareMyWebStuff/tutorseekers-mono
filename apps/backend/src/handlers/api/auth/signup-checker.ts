@@ -5,7 +5,7 @@ import {
 } from "aws-lambda";
 import { verifyGoogleToken } from "../../../support/helpers/verify-google-token";
 import { DbConnection } from "../../../foundation/db/db-utils";
-import { signupCheckerValidation } from "../../../schemas/auth/signup-checker-validate";
+import { signupCheckerValidation } from "../../../schemas/auth/registration-validate";
 import {
   getAccountByGoogleId,
   getAccountByEmail,
@@ -209,7 +209,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context) {
           userAccs.userAccs[0].userId,
           validateData.accountType === "google",
           email,
-          hashedPwd,
+          validateData.accountType === "google" ? null : hashedPwd,
           googleId,
           googleEmail,
         );

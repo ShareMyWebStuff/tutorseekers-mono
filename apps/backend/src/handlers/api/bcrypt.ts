@@ -9,7 +9,7 @@ import {
   comparePasswords,
   hashPassword,
 } from "../../support/utils/tokens";
-import { signupCheckerValidation } from "../../schemas/auth/signup-checker-validate";
+import { signupCheckerValidation } from "../../schemas/auth/registration-validate";
 
 async function handler(event: APIGatewayProxyEvent, context: Context) {
   let body: unknown = !event.body ? {} : JSON.parse(event.body);
