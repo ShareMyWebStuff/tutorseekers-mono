@@ -213,12 +213,12 @@ export class DatabaseStack extends Stack {
 
     deployBucket.grantReadWrite(connectToAuroraLambda);
 
-    const dbShowXDeploymentState = new NodejsFunction(
+    const dbShowDeploymentState = new NodejsFunction(
       this,
-      `${projectPrefix}-${region}-${stage}-db-show_deployment-state`,
+      `${projectPrefix}-${region}-${stage}-db-show-deployment-state`,
       {
-        functionName: `${projectPrefix}-${region}-${stage}-db-show_deployment-state`,
-        entry: path.join(__dirname, `../src/db-show_deployment-state/index.ts`),
+        functionName: `${projectPrefix}-${region}-${stage}-db-show-deployment-state`,
+        entry: path.join(__dirname, `../src/db-show-deployment-state/index.ts`),
         runtime: lambda.Runtime.NODEJS_20_X,
         initialPolicy: [
           // Access to the database secret
@@ -247,7 +247,7 @@ export class DatabaseStack extends Stack {
       },
     );
 
-    deployBucket.grantReadWrite(dbShowXDeploymentState);
+    deployBucket.grantReadWrite(dbShowDeploymentState);
 
     // Stack outputs
     let exportName: string;
