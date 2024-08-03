@@ -507,7 +507,7 @@ export const deleteAllAccounts = async () => {
 
 export const truncateTable = async () => {
   try {
-    const res = await db.execute(`TRUNCATE TABLE user_login;`);
+    const res = await db.execute(`TRUNCATE TABLE util_database_deploy;`);
 
     return true;
   } catch (e) {
@@ -538,7 +538,7 @@ export const selectDatabaseDeploy = async () => {
     // console.log(res);
     // res = await db.query(`SELECT * FROM util_database_deploy;`);
 
-    let res = await db.query(`SELECT * FROM user_login;`);
+    let res = await db.query(`SELECT * FROM util_database_deploy;`);
     console.log("res");
 
     return true;

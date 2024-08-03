@@ -32,6 +32,8 @@ const db = new DbConnection();
 
 async function handler() {
   try {
+    const trunc = await truncateTable();
+    console.log(trunc);
     const userAccs = await selectDatabaseDeploy();
     console.log(userAccs);
   } catch (err) {
