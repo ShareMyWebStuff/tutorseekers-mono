@@ -175,10 +175,10 @@ export class DatabaseStack extends Stack {
     // Create lambda
     const connectToAuroraLambda = new NodejsFunction(
       this,
-      `${projectPrefix}-${region}-${stage}-deploy-database-ddl`,
+      `${projectPrefix}-${region}-${stage}-db-deploy-database-ddl`,
       {
-        functionName: `${projectPrefix}-${region}-${stage}-deploy-database-ddl`,
-        entry: path.join(__dirname, `../src/deploy-database-ddl/index.ts`),
+        functionName: `${projectPrefix}-${region}-${stage}-db-deploy-database-ddl`,
+        entry: path.join(__dirname, `../src/db-deploy-database-ddl/index.ts`),
         runtime: lambda.Runtime.NODEJS_20_X,
         initialPolicy: [
           // Access to the database secret
@@ -212,7 +212,42 @@ export class DatabaseStack extends Stack {
     );
 
     deployBucket.grantReadWrite(connectToAuroraLambda);
-    // dbCluster.grantDataApiAccess(connectToAuroraLambda);
+
+    const dbShowXDeploymentState = new NodejsFunction(
+      this,
+      `${projectPrefix}-${region}-${stage}-db-show_deployment-state`,
+      {
+        functionName: `${projectPrefix}-${region}-${stage}-db-show_deployment-state`,
+        entry: path.join(__dirname, `../src/db-show_deployment-state/index.ts`),
+        runtime: lambda.Runtime.NODEJS_20_X,
+        initialPolicy: [
+          // Access to the database secret
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ["secretsmanager:GetSecretValue"],
+            resources: [databaseCredentialsSecret.secretArn],
+          }),
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ["s3:*"],
+            resources: [deployBucket.bucketArn, deployBucket.bucketArn + "/*"],
+          }),
+        ],
+        vpc: vpc,
+        vpcSubnets: {
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+        },
+        securityGroups: [lambdaSG],
+        handler: "main",
+        environment: {
+          CLUSTER_SECRET_ARN: databaseCredentialsSecret.secretArn,
+        },
+        timeout: cdk.Duration.seconds(600),
+        memorySize: 512,
+      },
+    );
+
+    deployBucket.grantReadWrite(dbShowXDeploymentState);
 
     // Stack outputs
     let exportName: string;

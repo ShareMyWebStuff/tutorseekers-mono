@@ -356,6 +356,7 @@ export async function main(): Promise<boolean> {
   } catch (error) {
     console.log("ERROR");
     console.log(error);
+    return false;
   }
 
   return true;

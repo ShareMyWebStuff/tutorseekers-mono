@@ -433,51 +433,51 @@ export const setRegisterComplete = async (
 ) => {
   let insertDets = false;
 
-  // Check if user details have already been
-  try {
-    // 🎯 TODO: Select user_details row
-    const userDetsRS = await db.query<UserDetailsRecordDB[]>(
-      `SELECT * FROM user_details WHERE user_id = ${userId};`,
-    );
+  // // Check if user details have already been
+  // try {
+  //   // 🎯 TODO: Select user_details row
+  //   const userDetsRS = await db.query<UserDetailsRecordDB[]>(
+  //     `SELECT * FROM user_details WHERE user_id = ${userId};`,
+  //   );
 
-    const insertDets = userDetsRS.length === 0;
+  //   const insertDets = userDetsRS.length === 0;
 
-    // 🎯 TODO: Update the user_login - should error if no row exists
+  //   // 🎯 TODO: Update the user_login - should error if no row exists
 
-    if (userDetsRC === 1) {
-      // 🎯 TODO: Update the user details
-    } else {
-      // 🎯 TODO: Insert the user details
-    }
+  //   if (userDetsRC === 1) {
+  //     // 🎯 TODO: Update the user details
+  //   } else {
+  //     // 🎯 TODO: Insert the user details
+  //   }
 
-    // 🎯 TODO: If email verified false
+  //   // 🎯 TODO: If email verified false
 
-    // Delete
-    const res = await db.execute<ResultSetHeader>(
-      `UPDATE user_login SET google_acc = ${googleAcc}, email = ${email}, password = ${password}, google_id = ${googleId}, google_email=${googleEmail} WHERE user_id = ${userId}`,
-    );
-    const { affectedRows } = res;
+  //   // Delete
+  //   const res = await db.execute<ResultSetHeader>(
+  //     `UPDATE user_login SET google_acc = ${googleAcc}, email = ${email}, password = ${password}, google_id = ${googleId}, google_email=${googleEmail} WHERE user_id = ${userId}`,
+  //   );
+  //   const { affectedRows } = res;
 
-    return { affectedRows };
-  } catch (e) {
-    if (e instanceof SqlError) {
-      console.log("SqlError");
-      console.log(e);
-    }
-    console.log("Outside SqlError");
-    console.log(e);
+  //   return { affectedRows };
+  // } catch (e) {
+  //   if (e instanceof SqlError) {
+  //     console.log("SqlError");
+  //     console.log(e);
+  //   }
+  //   console.log("Outside SqlError");
+  //   console.log(e);
 
-    throw new ApiResponseError(
-      "500",
-      "Database issue",
-      JSON.stringify({
-        message: "Internal server error - database",
-        errorMsgs: {
-          message: "Error updating account. Please try again.",
-        },
-      }),
-    );
-  }
+  //   throw new ApiResponseError(
+  //     "500",
+  //     "Database issue",
+  //     JSON.stringify({
+  //       message: "Internal server error - database",
+  //       errorMsgs: {
+  //         message: "Error updating account. Please try again.",
+  //       },
+  //     }),
+  //   );
+  // }
 };
 
 export const deleteAllAccounts = async () => {
