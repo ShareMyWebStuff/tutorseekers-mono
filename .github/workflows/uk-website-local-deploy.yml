@@ -1,4 +1,4 @@
-name: "Deploy :: Local"
+name: "Local :: Deploy"
 
 on:
   workflow_dispatch:
@@ -160,7 +160,7 @@ jobs:
       # run: aws s3 sync apps/database s3://${{env.PROJECT}}-${{env.REGION}}-${{env.STAGE}}-deploy-bucket --acl public-read
 
       - name: Invoke AWS Lambda by OIDC
-        run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-$(echo ${{ github.actor }} | awk '{print tolower($0)}')-deploy-database-ddl output.txt
+        run: aws lambda invoke --function-name ${{env.PROJECT}}-${{env.REGION}}-$(echo ${{ github.actor }} | awk '{print tolower($0)}')-db-deploy-database-ddl output.txt
       #   uses: y5347M/invoke-aws-lambda-oidc@v1
       #   with:
       #     aws-region: 'us-west-2'
