@@ -89,14 +89,3 @@
 600  |Create the sp_registration_complete procedure                |procedures/helpers/install/sp_registration_complete.sql                       |         |Drop the sp_registration_complete procedure              |procedures/helpers/uninstall/sp_registration_complete_drop.sql            |         |                                                  |
 601  |Create the sp_user_ip_ins procedure                          |procedures/helpers/install/sp_user_ip_ins.sql                                 |         |Drop the sp_user_ip_ins procedure                        |procedures/helpers/uninstall/sp_user_ip_ins_drop.sql                      |         |                                                  |
 602  |Create the sp_user_verification_code_ins procedure           |procedures/helpers/install/sp_user_verification_code_ins.sql                  |         |Drop the sp_user_verification_code_ins procedure         |procedures/helpers/uninstall/sp_user_verification_code_ins_drop.sql       |         |                                                  |
-
-
-
-
-ADD THE IP PROCERDURE AND THE OTHER ONES JUST ADDED
-
-
-
-
-
-
