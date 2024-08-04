@@ -73,10 +73,10 @@ BEGIN
 		SET v_country_found = true;
 		SET    v_location_id = sf_geo_location_nearest_location_id_get( p_address2, p_town, p_county, p_postcode, v_country_id );
 
-		SELECT user_id, profile_title INTO v_user_id, @pt FROM user_details_2 WHERE user_id = p_user_id;
+		SELECT user_id, profile_title INTO v_user_id, @pt FROM user_details WHERE user_id = p_user_id;
 
 		IF ( v_user_id IS NULL) THEN
-			INSERT INTO user_details_2 ( 
+			INSERT INTO user_details ( 
 				user_id, 
 				title, 
 				firstname, 
@@ -112,7 +112,7 @@ BEGIN
 			SET v_user_id = p_user_id, v_affected_rows = row_count(), v_changed_rows = 0, v_success = CASE WHEN row_count() = 1 THEN true ELSE false END;
 			
 		ELSE
-			UPDATE	user_details_2
+			UPDATE	user_details
 			SET		title				= p_title,
 					firstname			= p_firstname,
 					lastname			= p_lastname,
@@ -134,7 +134,7 @@ BEGIN
 		DELETE FROM user_details_unverified WHERE user_id = v_user_id;
 
 		IF ( v_success = true) THEN
-			UPDATE	user_login_2
+			UPDATE	user_login
 			SET		tutor_acc = p_tutor,
 					parent_acc = p_parent,
 					student_acc = p_student,
