@@ -1,6 +1,6 @@
 /*
-Drop index on user_login (email).
+Drop index on user_verifications (outstanding).
 
 **/
 
-DROP INDEX IF EXISTS user_verifications__outstanding ON user_verifications;
+CALL DeleteIndex( 'user_verifications', 'user_verifications__outstanding' );
