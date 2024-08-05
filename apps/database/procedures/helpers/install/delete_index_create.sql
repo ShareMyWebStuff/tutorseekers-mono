@@ -1,7 +1,7 @@
 CREATE PROCEDURE DeleteIndex
 (
     tablename    VARCHAR(64),
-    indexname    VARCHAR(64),
+    indexname    VARCHAR(64)
 )
 BEGIN
 
@@ -19,7 +19,7 @@ BEGIN
         PREPARE st FROM @sqlstmt;
         EXECUTE st;
         DEALLOCATE PREPARE st;
-        SELECT CONCAT('Created index ',indexname,' on table ', tablename) CreateIndexRes;
+        SELECT CONCAT('Dropped index ',indexname,' on table ', tablename) CreateIndexRes;
 
     END IF;
         
