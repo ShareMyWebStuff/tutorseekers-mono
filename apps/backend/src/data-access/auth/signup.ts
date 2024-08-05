@@ -431,8 +431,33 @@ export const setRegisterComplete = async (
   verifyToken: string | null,
   data: RegisterCompleteSchema,
 ) => {
-  let insertDets = false;
+  // try {
+  console.log("Hello, please write this code.");
+  //   const res = await db.execute<ResultSetHeader>(
+  //     `UPDATE user_login SET google_acc = ${googleAcc}, email = ${email}, password = ${password}, google_id = ${googleId}, google_email=${googleEmail} WHERE user_id = ${userId}`,
+  //   );
+  //   const { affectedRows } = res;
 
+  //   return { affectedRows };
+  // } catch (e) {
+  //   if (e instanceof SqlError) {
+  //     console.log("SqlError");
+  //     console.log(e);
+  //   }
+  //   console.log("Outside SqlError");
+  //   console.log(e);
+
+  //   throw new ApiResponseError(
+  //     "500",
+  //     "Database issue",
+  //     JSON.stringify({
+  //       message: "Internal server error - database",
+  //       errorMsgs: {
+  //         message: "Error updating account. Please try again.",
+  //       },
+  //     }),
+  //   );
+  // }
   // // Check if user details have already been
   // try {
   //   // 🎯 TODO: Select user_details row
@@ -536,10 +561,18 @@ export const selectDatabaseDeploy = async () => {
     //   `UPDATE util_database_deploy SET status = 'U' WHERE deploy_id = 71;`,
     // );
     // console.log(res);
-    // res = await db.query(`SELECT * FROM util_database_deploy;`);
+    // res = await db.query(`SELECT * FROM util_database_deploy;`);s
 
-    let res = await db.query(`SELECT * FROM util_database_deploy;`);
+    let res = await db.query(
+      `SELECT * FROM util_database_deploy WHERE deploy_id > 300;`,
+    );
     console.log("res");
+
+    let idx = await db.query(
+      `SELECT DISTINCT TABLE_NAME, INDEX_NAME FROM INFORMATION_SCHEMA.STATISTICS;`,
+    );
+    console.log("idx");
+    console.log(idx);
 
     return true;
   } catch (e) {
